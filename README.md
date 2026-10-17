@@ -14,7 +14,7 @@ Gracze będą przechodzić gry w osobnej aplikacji mobilnej na Androida (przysz�
 | 7 | API dla aplikacji Android: lista i szczegóły gier, gracze bez logowania (token), rozgrywka z GPS, odpowiedzi, zdjęcia i filmy, rankingi – [docs/API-android.md](docs/API-android.md) | ✅ gotowe |
 | 7b | Publikacja gier w edytorze, ochrona postępu graczy przy edycji, punkty po kolei, limit 2 gier dziennie, sklep punktów połączony z **Kreatorem nagród** (kody z puli trafiają do graczy) | ✅ gotowe |
 | 4+ | Wyszukiwarka adresów, obszar gry, zdjęcia, podgląd, publikacja, filtry listy, konto, FAQ, ocena materiałów graczy w panelu | ⏳ w kolejnych etapach |
-| Android | Aplikacja mobilna w Kotlinie (`android/`) | ⏳ w trakcie |
+| Android | Aplikacja mobilna w Kotlinie – [android/README.md](android/README.md) | ✅ gotowe |
 
 Pozycje menu z przyszłych etapów są widoczne w panelu z etykietą „wkrótce” i nie da się ich kliknąć.
 

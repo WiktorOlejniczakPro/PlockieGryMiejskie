@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Wygląd ekranów robi Compose (ui/theme/Theme.kt); to tylko tło okna przy starcie. -->
+    <style name="Theme.PGM" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

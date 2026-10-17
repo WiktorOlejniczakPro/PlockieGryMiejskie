@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  XAMPP na komputerze działa po zwykłym HTTP (bez https), więc pozwalamy na
+  połączenia bez szyfrowania. Na prawdziwym serwerze używaj HTTPS i usuń
+  cleartextTrafficPermitted="true".
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
