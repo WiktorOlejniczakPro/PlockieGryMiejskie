@@ -36,6 +36,14 @@ return [
         'geocoder'    => env('GEOCODER_URL', 'https://nominatim.openstreetmap.org/search'),
     ],
 
+    // Aplikacja mobilna (gracze)
+    'player' => [
+        'upload_max_bytes'           => (int) env('PLAYER_UPLOAD_MAX_MB', 30) * 1024 * 1024,
+        'max_new_players_per_ip_hour' => (int) env('PLAYER_MAX_NEW_PER_IP_HOUR', 30),
+        // ile metrów niedokładności GPS doliczamy do promienia punktu (najwyżej)
+        'gps_tolerance_max_m'        => (int) env('PLAYER_GPS_TOLERANCE_MAX_M', 30),
+    ],
+
     'uploads' => [
         'path'      => BASE_PATH . '/storage/uploads',
         'max_bytes' => (int) env('UPLOAD_MAX_MB', 5) * 1024 * 1024,

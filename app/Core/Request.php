@@ -77,6 +77,35 @@ final class Request
         return str_starts_with($this->path, '/api/');
     }
 
+    /**
+     * API aplikacji mobilnej (/api/v1/... poza /api/v1/admin/).
+     * Uwierzytelnia się tokenem w nagłówku Authorization, a nie ciasteczkiem
+     * sesji – dlatego nie korzysta z sesji PHP ani z tokenów CSRF.
+     */
+    public function isPlayerApi(): bool
+    {
+        return str_starts_with($this->path, '/api/v1/') && !str_starts_with($this->path, '/api/v1/admin/')
+            && $this->path !== '/api/v1/admin';
+    }
+
+    /** Token z nagłówka "Authorization: Bearer <token>" albo null. */
+    public function bearerToken(): ?string
+    {
+        $header = $this->header('Authorization') ?? (string) ($_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '');
+        if ($header === '' && function_exists('getallheaders')) {
+            $headers = array_change_key_case((array) getallheaders(), CASE_LOWER);
+            $header = (string) ($headers['authorization'] ?? '');
+        }
+        return preg_match('/^Bearer\s+([A-Za-z0-9]{20,128})$/', trim($header), $m) ? $m[1] : null;
+    }
+
+    /** Przesłany plik z formularza multipart (pole $key) albo null. */
+    public function file(string $key): ?array
+    {
+        $file = $_FILES[$key] ?? null;
+        return is_array($file) && isset($file['error']) && !is_array($file['error']) ? $file : null;
+    }
+
     public function isSafeMethod(): bool
     {
         return in_array($this->method, ['GET', 'HEAD', 'OPTIONS'], true);

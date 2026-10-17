@@ -20,6 +20,8 @@ final class HttpException extends RuntimeException
             403 => 'Nie masz uprawnień do tej operacji.',
             404 => 'Nie znaleziono strony.',
             405 => 'Ta operacja nie jest dostępna pod tym adresem.',
+            409 => 'Operacja koliduje z bieżącym stanem danych.',
+            413 => 'Przesłany plik jest za duży.',
             419 => 'Sesja formularza wygasła. Odśwież stronę i spróbuj ponownie.',
             422 => 'Przesłane dane są nieprawidłowe.',
             429 => 'Zbyt wiele żądań. Spróbuj ponownie za chwilę.',

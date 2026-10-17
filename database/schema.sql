@@ -19,6 +19,11 @@ USE pgm;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS submission_media;
+DROP TABLE IF EXISTS task_submissions;
+DROP TABLE IF EXISTS session_waypoints;
+DROP TABLE IF EXISTS game_sessions;
+DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS streets;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS place_categories;
@@ -453,4 +458,130 @@ CREATE TABLE streets (
   PRIMARY KEY (id),
   UNIQUE KEY uq_streets_ulic (ulic_code),
   KEY idx_streets_name (name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- =====================================================================
+--  APLIKACJA MOBILNA – gracze i rozgrywki
+-- =====================================================================
+
+-- ---------------------------------------------------------------------
+-- 15. PLAYERS – konta graczy aplikacji mobilnej (osobne od users).
+--     Aplikacja przy pierwszym uruchomieniu sama zakłada konto i dostaje
+--     token API – gracz nie musi się logować. W bazie trzymamy wyłącznie
+--     skrót SHA-256 tokenu. created_ip służy do limitu zakładania kont.
+-- ---------------------------------------------------------------------
+CREATE TABLE players (
+  id              INT UNSIGNED   NOT NULL AUTO_INCREMENT,
+  nickname        VARCHAR(40)    NOT NULL,
+  api_token_hash  CHAR(64)       NOT NULL,
+  created_ip      VARBINARY(16)  NULL,
+  created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_seen_at    DATETIME       NULL,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_players_token (api_token_hash),
+  KEY idx_players_created_ip (created_ip, created_at),
+  CONSTRAINT chk_players_nickname CHECK (CHAR_LENGTH(TRIM(nickname)) >= 3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 16. GAME_SESSIONS – jedno przejście gry przez gracza.
+--     score – suma przyznanych punktów (+ completion_points gry po
+--     ukończeniu). Gracz może mieć tylko jedną rozgrywkę „w trakcie”
+--     danej gry; po ukończeniu może zagrać ponownie (ranking bierze
+--     najlepszy wynik).
+-- ---------------------------------------------------------------------
+CREATE TABLE game_sessions (
+  id            INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  game_id       INT UNSIGNED       NOT NULL,
+  player_id     INT UNSIGNED       NOT NULL,
+  status        ENUM('in_progress','completed') NOT NULL DEFAULT 'in_progress',
+  score         SMALLINT UNSIGNED  NOT NULL DEFAULT 0,
+  started_at    DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  finished_at   DATETIME           NULL,
+
+  PRIMARY KEY (id),
+  KEY idx_sessions_player (player_id, status, started_at),
+  KEY idx_sessions_ranking (game_id, status, score),
+  CONSTRAINT fk_sessions_game
+    FOREIGN KEY (game_id) REFERENCES games (id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_sessions_player
+    FOREIGN KEY (player_id) REFERENCES players (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 17. SESSION_WAYPOINTS – dotarcie gracza do punktu trasy (pozycja GPS
+--     zgłoszona przez aplikację i sprawdzona przez serwer).
+-- ---------------------------------------------------------------------
+CREATE TABLE session_waypoints (
+  session_id   INT UNSIGNED       NOT NULL,
+  waypoint_id  INT UNSIGNED       NOT NULL,
+  latitude     DECIMAL(10,7)      NOT NULL,
+  longitude    DECIMAL(10,7)      NOT NULL,
+  accuracy_m   SMALLINT UNSIGNED  NULL,
+  distance_m   SMALLINT UNSIGNED  NOT NULL,
+  reached_at   DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (session_id, waypoint_id),
+  KEY idx_session_waypoints_wp (waypoint_id),
+  CONSTRAINT fk_sw_session
+    FOREIGN KEY (session_id) REFERENCES game_sessions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_sw_waypoint
+    FOREIGN KEY (waypoint_id) REFERENCES waypoints (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 18. TASK_SUBMISSIONS – odpowiedź gracza na zadanie (jedna na zadanie
+--     w danej rozgrywce). review_status:
+--       auto       – oceniona automatycznie (pytania zamknięte, odpowiedź
+--                    otwarta z wpisaną oczekiwaną odpowiedzią, info)
+--       unverified – zaliczona bez sprawdzania (zdjęcie, film, odpowiedź
+--                    otwarta bez wzorca); organizator może ją zweryfikować
+--       rejected   – odrzucona przez organizatora (przyszła funkcja panelu)
+-- ---------------------------------------------------------------------
+CREATE TABLE task_submissions (
+  id                   INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  session_id           INT UNSIGNED       NOT NULL,
+  task_id              INT UNSIGNED       NOT NULL,
+  answer_text          TEXT               NULL,
+  selected_option_ids  JSON               NULL,
+  is_correct           TINYINT(1)         NULL,
+  points_awarded       SMALLINT UNSIGNED  NOT NULL DEFAULT 0,
+  review_status        ENUM('auto','unverified','rejected') NOT NULL DEFAULT 'auto',
+  submitted_at         DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_submissions_session_task (session_id, task_id),
+  KEY idx_submissions_task (task_id, review_status),
+  CONSTRAINT fk_submissions_session
+    FOREIGN KEY (session_id) REFERENCES game_sessions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_submissions_task
+    FOREIGN KEY (task_id) REFERENCES tasks (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 19. SUBMISSION_MEDIA – zdjęcia i filmy przesłane przez graczy.
+--     Pliki leżą w storage/uploads/submissions/ (poza katalogiem public).
+-- ---------------------------------------------------------------------
+CREATE TABLE submission_media (
+  id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  submission_id  INT UNSIGNED  NOT NULL,
+  storage_path   VARCHAR(255)  NOT NULL,
+  mime_type      VARCHAR(50)   NOT NULL,
+  file_size      INT UNSIGNED  NOT NULL,
+  sha256         CHAR(64)      NOT NULL,
+  created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_submission_media_path (storage_path),
+  KEY idx_submission_media_submission (submission_id),
+  CONSTRAINT fk_submission_media_submission
+    FOREIGN KEY (submission_id) REFERENCES task_submissions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;

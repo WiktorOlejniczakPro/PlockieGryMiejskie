@@ -122,8 +122,8 @@ erDiagram
 | `login_attempts (email_hash, …)`, `(ip_address, …)` | limit prób logowania na konto i na adres IP |
 | indeksy na każdym kluczu obcym | szybkie złączenia i kaskady |
 
-**Przyszła aplikacja mobilna – planowane tabele (jeszcze ich nie tworzymy):**
-`players` (konta graczy, osobne od `users`), `game_sessions` (przejście gry: start, koniec, wynik), `task_submissions` (odpowiedź na zadanie + punkty + stan oceny), `submission_media` (zdjęcia i filmy graczy), a ranking jako widok liczony z `game_sessions`. Wszystkie odwołają się do istniejących `games`, `waypoints` i `tasks`, więc obecny schemat nie będzie wymagał przebudowy.
+**Aplikacja mobilna – tabele utworzone w etapie 7 (opis API: `docs/API-android.md`):**
+`players` (konta graczy, osobne od `users`), `game_sessions` (przejście gry: start, koniec, wynik), `session_waypoints` (dotarcie do punktu z pozycją GPS), `task_submissions` (odpowiedź na zadanie + punkty + stan oceny), `submission_media` (zdjęcia i filmy graczy). Ranking jest liczony zapytaniem z `game_sessions`. Tabele odwołują się do istniejących `games`, `waypoints` i `tasks` – wcześniejszy schemat nie wymagał przebudowy.
 
 ## 5. Import bazy (XAMPP, Windows)
 
@@ -131,7 +131,7 @@ erDiagram
 2. Otwórz `http://localhost/phpmyadmin`.
 3. Wybierz zakładkę **Import** (bez zaznaczania bazy po lewej) → plik `database/schema.sql` → **Importuj**. Skrypt sam utworzy bazę `pgm` z kodowaniem `utf8mb4_polish_ci`.
 4. Ponownie **Import** → `database/seed.sql` → **Importuj**.
-5. Kontrola: w bazie `pgm` powinno być 14 tabel, 11 kategorii, 4 gry z tytułami `[PRZYKŁAD] …`, 21 rodzajów miejsc, ok. 1300 miejsc i 504 ulice.
+5. Kontrola: w bazie `pgm` powinno być 19 tabel, 11 kategorii, 4 gry z tytułami `[PRZYKŁAD] …`, 21 rodzajów miejsc, ok. 1300 miejsc i 504 ulice.
 
 Z wiersza poleceń (`C:\xampp\mysql\bin`):
 

@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 
 use App\Controllers\Api\AdminGameApi;
+use App\Controllers\Api\PlayerApi;
+use App\Controllers\Api\PublicGameApi;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\GameController;
@@ -34,5 +36,23 @@ $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']
 $router->post('/api/v1/admin/games', [AdminGameApi::class, 'store'], ['auth']);
 $router->put('/api/v1/admin/games/{id}', [AdminGameApi::class, 'update'], ['auth']);
 
-// Kolejne etapy: podgląd, publikacja, duplikowanie, archiwizacja, zdjęcia,
-// konto, FAQ oraz publiczne API /api/v1/games dla aplikacji mobilnej.
+// --- API aplikacji mobilnej (JSON) ----------------------------------------
+// Publiczne: tylko gry opublikowane, bez poprawnych odpowiedzi.
+$router->get('/api/v1/categories', [PublicGameApi::class, 'categories']);
+$router->get('/api/v1/games', [PublicGameApi::class, 'index']);
+$router->get('/api/v1/games/{id}', [PublicGameApi::class, 'show']);
+$router->get('/api/v1/games/{id}/ranking', [PublicGameApi::class, 'ranking']);
+$router->get('/api/v1/ranking', [PublicGameApi::class, 'overallRanking']);
+
+// Gracz: konto zakładane automatycznie przez aplikację, dalej token w nagłówku
+// "Authorization: Bearer <token>" (middleware 'player'). Bez sesji i bez CSRF.
+$router->post('/api/v1/players', [PlayerApi::class, 'register']);
+$router->get('/api/v1/me', [PlayerApi::class, 'me'], ['player']);
+$router->put('/api/v1/me', [PlayerApi::class, 'rename'], ['player']);
+$router->post('/api/v1/games/{id}/sessions', [PlayerApi::class, 'startSession'], ['player']);
+$router->get('/api/v1/sessions/{id}', [PlayerApi::class, 'showSession'], ['player']);
+$router->post('/api/v1/sessions/{id}/waypoints/{waypointId}/arrival', [PlayerApi::class, 'arrive'], ['player']);
+$router->post('/api/v1/sessions/{id}/tasks/{taskId}/answer', [PlayerApi::class, 'answer'], ['player']);
+
+// Kolejne etapy panelu: podgląd, publikacja, duplikowanie, archiwizacja, zdjęcia,
+// konto, FAQ, ocena zdjęć i filmów przesłanych przez graczy.
