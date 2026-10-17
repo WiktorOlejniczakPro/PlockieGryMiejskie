@@ -183,17 +183,17 @@ INSERT INTO game_status_history (game_id, changed_by, from_status, to_status, no
 VALUES (@g2, NULL, NULL, 'draft', 'Dane demonstracyjne');
 
 -- =====================================================================
--- 3c. GRA 3 – ukryta, rodzinna/ekologiczna, kategoria „Inne”
+-- 3c. GRA 3 – szkic, rodzinna/ekologiczna, kategoria „Inne”
 -- =====================================================================
 INSERT INTO games (owner_id, title, short_description, description,
                    estimated_duration_minutes, difficulty, status,
-                   completion_points, custom_category, is_sample, published_at)
+                   completion_points, custom_category, is_sample)
 VALUES (
   @demo_owner,
   '[PRZYKŁAD] Nad Wisłą – spacer ekologiczny',
   'Rodzinna trasa wzdłuż nadwiślańskich bulwarów z zadaniami przyrodniczymi.',
-  'Gra demonstracyjna, tymczasowo ukryta. Przykład użycia własnej kategorii.',
-  45, 'easy', 'hidden', 5, 'Spacer z dziećmi', 1, NOW()
+  'Gra demonstracyjna w przygotowaniu. Przykład użycia własnej kategorii.',
+  45, 'easy', 'draft', 5, 'Spacer z dziećmi', 1
 );
 SET @g3 := LAST_INSERT_ID();
 
@@ -221,9 +221,7 @@ VALUES (@g3w2, 'Dbajmy o rzekę',
         'info', 0, 'on_arrival');
 
 INSERT INTO game_status_history (game_id, changed_by, from_status, to_status, note)
-VALUES (@g3, NULL, NULL,        'draft',     'Dane demonstracyjne'),
-       (@g3, NULL, 'draft',     'published', 'Dane demonstracyjne'),
-       (@g3, NULL, 'published', 'hidden',    'Dane demonstracyjne');
+VALUES (@g3, NULL, NULL, 'draft', 'Dane demonstracyjne');
 
 -- =====================================================================
 -- 3d. GRA 4 – zarchiwizowana, wydarzenie z terminem dostępności

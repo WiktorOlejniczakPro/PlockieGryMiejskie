@@ -31,9 +31,6 @@ $stats = [
       </li>
     <?php endforeach; ?>
   </ul>
-  <?php if ($counts['hidden'] > 0): ?>
-    <p class="muted">Ukryte: <?= e($counts['hidden']) ?></p>
-  <?php endif; ?>
 </section>
 
 <div class="dash-grid">

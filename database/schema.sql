@@ -111,9 +111,8 @@ CREATE TABLE images (
 -- ---------------------------------------------------------------------
 -- 3. GAMES – gry terenowe
 --    status:
---      draft     – szkic, widoczny tylko dla właściciela i adminów
---      published – opublikowana, dostępna w publicznym API
---      hidden    – tymczasowo ukryta (nie znika z panelu)
+--      draft     – szkic, widoczny tylko dla właściciela i adminów; tylko szkic można edytować
+--      published – opublikowana, dostępna w publicznym API; zablokowana do edycji
 --      archived  – zarchiwizowana, tylko do odczytu w panelu
 --    area_geojson – opcjonalny obszar gry jako GeoJSON Feature:
 --      wielokąt: {"type":"Feature","geometry":{"type":"Polygon",...},
@@ -136,7 +135,7 @@ CREATE TABLE games (
   cover_image_id              INT UNSIGNED       NULL,
   estimated_duration_minutes  SMALLINT UNSIGNED  NULL,
   difficulty                  ENUM('easy','medium','hard')                      NOT NULL DEFAULT 'medium',
-  status                      ENUM('draft','published','hidden','archived')     NOT NULL DEFAULT 'draft',
+  status                      ENUM('draft','published','archived')              NOT NULL DEFAULT 'draft',
   completion_points           SMALLINT UNSIGNED  NOT NULL DEFAULT 5,
   custom_category             VARCHAR(60)        NULL,
   area_geojson                JSON               NULL,
@@ -328,8 +327,8 @@ CREATE TABLE game_status_history (
   id           BIGINT UNSIGNED   NOT NULL AUTO_INCREMENT,
   game_id      INT UNSIGNED      NOT NULL,
   changed_by   INT UNSIGNED      NULL,
-  from_status  ENUM('draft','published','hidden','archived') NULL,
-  to_status    ENUM('draft','published','hidden','archived') NOT NULL,
+  from_status  ENUM('draft','published','archived') NULL,
+  to_status    ENUM('draft','published','archived') NOT NULL,
   note         VARCHAR(255)      NULL,
   created_at   DATETIME          NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

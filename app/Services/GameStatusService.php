@@ -9,19 +9,23 @@ use App\Models\Category;
 use PDO;
 
 /**
- * Zmiana statusu gry w panelu:
- *   draft / hidden → published  (publikacja – po sprawdzeniu kompletności),
- *   published      → hidden     (ukrycie – znika z aplikacji, rozgrywki zostają),
- *   hidden         → draft      (powrót do szkicu).
+ * Cykl życia gry – JEDNO miejsce, które decyduje, jakie zmiany statusu są dozwolone.
+ *
+ *   draft      (Szkic)          – gra w przygotowaniu, niewidoczna dla graczy; tylko szkic można edytować.
+ *   published  (Opublikowana)   – widoczna na stronie głównej i w aplikacji (w terminie dostępności);
+ *                                 zablokowana do edycji – żeby ją zmienić, trzeba ją cofnąć do szkicu.
+ *   archived   (Zarchiwizowana) – zakończona, tylko do odczytu; można ją przywrócić jako szkic.
+ *
  * Każda zmiana trafia do game_status_history i zwiększa lock_version
  * (otwarty edytor w innym oknie nie nadpisze nowego statusu starymi danymi).
  */
 final class GameStatusService
 {
-    private const ALLOWED = [
-        'draft'     => ['published'],
-        'hidden'    => ['published', 'draft'],
-        'published' => ['hidden'],
+    /** Dozwolone przejścia: obecny status => statusy docelowe. */
+    public const ALLOWED = [
+        'draft'     => ['published', 'archived'],
+        'published' => ['draft', 'archived'],
+        'archived'  => ['draft'],
     ];
 
     /**
@@ -57,10 +61,11 @@ final class GameStatusService
             $stmt = $pdo->prepare(
                 "UPDATE games
                     SET status = ?, lock_version = lock_version + 1,
-                        published_at = IF(? = 'published' AND published_at IS NULL, NOW(), published_at)
-                  WHERE id = ? AND lock_version = ?"
+                        published_at = IF(? = 'published' AND published_at IS NULL, NOW(), published_at),
+                        archived_at  = IF(? = 'archived', NOW(), NULL)
+                  WHERE id = ? AND lock_version = ? AND status = ?"
             );
-            $stmt->execute([$to, $to, $gameId, $lockVersion]);
+            $stmt->execute([$to, $to, $to, $gameId, $lockVersion, $from]);
             if ($stmt->rowCount() === 0) {
                 throw new HttpException(409, 'Gra została w międzyczasie zmieniona. Odśwież stronę i spróbuj ponownie.');
             }

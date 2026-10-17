@@ -19,7 +19,7 @@ use App\Services\GameValidationService;
  *   GET  /api/v1/admin/games/{id}  – pełne dane gry do edycji
  *   POST /api/v1/admin/games       – utworzenie gry (szkic)
  *   PUT  /api/v1/admin/games/{id}  – zapis zmian (z kontrolą lock_version)
- *   POST /api/v1/admin/games/{id}/status – publikacja / ukrycie / powrót do szkicu {status, lock_version}
+ *   POST /api/v1/admin/games/{id}/status – publikacja / powrót do szkicu / archiwizacja {status, lock_version}
  * Odpowiedzi: {"data": {...}} albo {"error": {"status", "message", "fields"?}}.
  */
 final class AdminGameApi
@@ -44,6 +44,10 @@ final class AdminGameApi
     public function update(Request $request, int $id): void
     {
         $game = GameAccess::editable($id);
+        // Edytować można tylko szkic. Opublikowaną grę trzeba najpierw cofnąć do szkicu.
+        if ($game['status'] === 'published') {
+            throw new HttpException(409, 'Opublikowanej gry nie można edytować. Cofnij ją do szkicu w zakładce „Podgląd i publikacja”.');
+        }
         if ($game['status'] === 'archived') {
             throw new HttpException(409, 'Zarchiwizowanej gry nie można edytować.');
         }
@@ -53,8 +57,7 @@ final class AdminGameApi
             throw new HttpException(422, 'Brak numeru wersji gry. Odśwież stronę edytora.');
         }
 
-        // Opublikowana gra musi pozostać kompletna także po edycji.
-        $data = $this->validated($request, $game['status'] === 'published');
+        $data = $this->validated($request, false);
 
         $userId = (int) Auth::id();
         (new GameSaveService())->save($id, (int) $game['owner_id'], $data, (int) $lockVersion, $userId);
@@ -68,7 +71,7 @@ final class AdminGameApi
         GameAccess::editable($id);
         $status = $request->input('status');
         $lockVersion = $request->input('lock_version');
-        if (!in_array($status, ['published', 'hidden', 'draft'], true) || !is_numeric($lockVersion)) {
+        if (!in_array($status, ['published', 'draft', 'archived'], true) || !is_numeric($lockVersion)) {
             throw new HttpException(422, 'Nieprawidłowy status gry.');
         }
 

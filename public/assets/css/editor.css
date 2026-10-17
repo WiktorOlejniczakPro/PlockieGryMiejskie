@@ -330,3 +330,13 @@
   .preview-grid { grid-template-columns: 1fr; }
   .status-help dl div { grid-template-columns: 1fr; }
 }
+
+/* ---------- Blokada edycji (opublikowana / zarchiwizowana) ---------- */
+.lock-note {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem;
+  margin-bottom: .9rem; padding: .75rem 1rem; border-radius: var(--radius-sm);
+  background: #eef4fb; border: 1px solid #c7dbf0; border-left: 4px solid var(--blue-500); color: #1a3a5c;
+}
+.lock-note[hidden] { display: none; }
+.lock-note .icon { flex: none; width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; }
+.lock-note p { flex: 1 1 18rem; margin: 0; font-size: .92rem; }

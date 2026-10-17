@@ -63,7 +63,7 @@ $isAdmin = $user['role'] === 'admin';
               <?php if ($isAdmin): ?><td><?= e($game['owner_name']) ?></td><?php endif; ?>
               <td class="nowrap"><?= e(format_datetime($game['updated_at'])) ?></td>
               <td class="table__actions">
-                <?php $archived = $game['status'] === 'archived'; ?>
+                <?php $archived = $game['status'] !== 'draft'; // edytować można tylko szkic ?>
                 <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry/' . (int) $game['id'] . '/edycja')) ?>"
                    aria-label="<?= $archived ? 'Otwórz' : 'Edytuj' ?> grę: <?= e(Game::displayTitle($game)) ?>"><?= $archived ? 'Otwórz' : 'Edytuj' ?></a>
               </td>

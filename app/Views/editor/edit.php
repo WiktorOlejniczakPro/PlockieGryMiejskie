@@ -26,16 +26,17 @@ $status = $game['status'] ?? 'draft';
       <p class="save-state" id="save-state" role="status" aria-live="polite" data-state="<?= $isNew ? 'new' : 'saved' ?>">
         <?= $isNew ? 'Gra nie jest jeszcze zapisana' : 'Wszystkie zmiany zapisane' ?>
       </p>
-      <span class="soon-actions" title="Dostępne w kolejnym etapie">
-        <button type="button" class="btn btn-outline btn-sm" disabled>Podgląd</button>
-        <span class="soon-tag">wkrótce</span>
-      </span>
-      <button type="button" class="btn btn-outline btn-sm" id="btn-status" hidden></button>
       <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry')) ?>" id="btn-cancel">Anuluj</a>
       <button type="button" class="btn btn-primary btn-sm" id="btn-save">
         <?= $status === 'draft' ? 'Zapisz szkic' : 'Zapisz zmiany' ?>
       </button>
     </div>
+  </div>
+
+  <div class="lock-note" id="lock-note" hidden>
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    <p><strong id="lock-note-title">Edycja zablokowana.</strong> <span id="lock-note-text"></span></p>
+    <button type="button" class="btn btn-outline btn-sm" data-goto-tab="preview">Przejdź do statusu gry</button>
   </div>
 
   <div class="save-errors" id="save-errors" role="alert" hidden>
@@ -211,11 +212,9 @@ $status = $game['status'] ?? 'draft';
               <summary>Co oznaczają statusy?</summary>
               <dl>
                 <div><dt><span class="status status--draft">Szkic</span></dt>
-                  <dd>Gra w przygotowaniu. Widzisz ją tylko w panelu, można ją zapisywać niekompletną.</dd></div>
+                  <dd>Gra w przygotowaniu, niewidoczna dla graczy. Tylko szkic można edytować; można go zapisywać niekompletnym.</dd></div>
                 <div><dt><span class="status status--published">Opublikowana</span></dt>
-                  <dd>Widoczna na stronie głównej (a później w aplikacji), jeśli trwa termin dostępności. Każdy zapis musi zostawić grę kompletną.</dd></div>
-                <div><dt><span class="status status--hidden">Ukryta</span></dt>
-                  <dd>Czasowo zdjęta ze strony – np. na czas remontu na trasie. Możesz ją poprawiać i opublikować ponownie.</dd></div>
+                  <dd>Widoczna na stronie głównej (a później w aplikacji), jeśli trwa termin dostępności. Zablokowana do edycji – aby coś zmienić, cofnij ją do szkicu.</dd></div>
                 <div><dt><span class="status status--archived">Zarchiwizowana</span></dt>
                   <dd>Gra zakończona, tylko do odczytu i niewidoczna. Można ją przywrócić jako szkic.</dd></div>
               </dl>

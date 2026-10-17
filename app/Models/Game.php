@@ -37,14 +37,14 @@ final class Game
     /**
      * Liczba gier według statusu. Administrator widzi wszystkie gry,
      * twórca – tylko własne.
-     * @return array{total:int, draft:int, published:int, hidden:int, archived:int}
+     * @return array{total:int, draft:int, published:int, archived:int}
      */
     public static function statusCounts(array $user): array
     {
         [$where, $params] = self::scope($user);
         $rows = Database::query("SELECT status, COUNT(*) AS n FROM games g {$where} GROUP BY status", $params)->fetchAll();
 
-        $counts = ['total' => 0, 'draft' => 0, 'published' => 0, 'hidden' => 0, 'archived' => 0];
+        $counts = ['total' => 0, 'draft' => 0, 'published' => 0, 'archived' => 0];
         foreach ($rows as $row) {
             $counts[$row['status']] = (int) $row['n'];
             $counts['total'] += (int) $row['n'];

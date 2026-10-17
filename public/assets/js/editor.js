@@ -37,7 +37,7 @@
     video: "Film",
     info: "Informacja"
   };
-  var STATUS_LABELS = { draft: "Szkic", published: "Opublikowana", hidden: "Ukryta", archived: "Zarchiwizowana" };
+  var STATUS_LABELS = { draft: "Szkic", published: "Opublikowana", archived: "Zarchiwizowana" };
   var CHOICE = ["single_choice", "multiple_choice"];
   var MAX_POINTS = 200;
   var MAX_OPTIONS = 10;
@@ -216,13 +216,7 @@
     badge.className = "status status--" + state.game.status;
     badge.textContent = STATUS_LABELS[state.game.status] || state.game.status;
     document.getElementById("btn-save").textContent = state.game.status === "draft" ? "Zapisz szkic" : "Zapisz zmiany";
-
-    // Publikacja / ukrycie – tylko dla zapisanej gry
-    var statusBtn = document.getElementById("btn-status");
-    if (statusBtn) {
-      statusBtn.hidden = !state.game.id;
-      statusBtn.textContent = state.game.status === "published" ? "Ukryj w aplikacji" : "Opublikuj";
-    }
+    applyStatusUi();
   }
 
   function updateCustomCategory() {
@@ -922,7 +916,7 @@
   /** Zapis gry. Zwraca Promise<boolean> – true, gdy zapis się udał. */
   function save() {
     if (state.saving) return Promise.resolve(false);
-    if (state.game.status === "archived") return Promise.resolve(false);
+    if (state.game.status !== "draft") return Promise.resolve(false); // edytować można tylko szkic
 
     // Szybka kontrola w przeglądarce – pełną walidację i tak wykonuje serwer
     if (!state.game.title.trim()) {
@@ -975,58 +969,6 @@
         applyStatusUi();
         return ok;
       });
-  }
-
-  /** Publikacja (draft/hidden → published) albo ukrycie (published → hidden). */
-  function changeStatus() {
-    if (state.saving || !state.game.id) return;
-    if (state.dirty) {
-      showErrors("Najpierw zapisz zmiany – publikowana jest zapisana wersja gry.", []);
-      return;
-    }
-    var publish = state.game.status !== "published";
-    var tasks = state.waypoints.filter(function (w) { return !!w.task; }).length;
-    var question = publish
-      ? "Opublikować grę „" + state.game.title + "”?\n\nPunkty trasy: " + state.waypoints.length +
-        ", zadania: " + tasks + ".\nGra od razu pojawi się w aplikacji mobilnej dla wszystkich graczy."
-      : "Ukryć grę „" + state.game.title + "” w aplikacji?\n\nNowi gracze nie będą jej widzieć, " +
-        "a rozpoczęte rozgrywki zostaną zachowane.";
-    if (!window.confirm(question)) return;
-
-    var btn = document.getElementById("btn-status");
-    state.saving = true;
-    btn.disabled = true;
-    setSaveState("saving", publish ? "Publikowanie…" : "Ukrywanie…");
-
-    fetch(boot.urls.status.replace("{id}", state.game.id), {
-      method: "POST",
-      credentials: "same-origin",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
-      },
-      body: JSON.stringify({ status: publish ? "published" : "hidden", lock_version: state.game.lock_version })
-    })
-      .then(function (res) {
-        return res.json().catch(function () { return {}; }).then(function (body) { return { res: res, body: body }; });
-      })
-      .then(function (r) {
-        state.saving = false;
-        if (r.res.ok && r.body.data) {
-          onSaved(r.body.data, false, findIndex(state.selectedKey));
-          setSaveState("saved", publish ? "Opublikowano – gra jest widoczna w aplikacji" : "Gra ukryta w aplikacji");
-          announce(publish ? "Gra została opublikowana." : "Gra została ukryta.");
-        } else {
-          onSaveError(r.res.status, r.body);
-        }
-      })
-      .catch(function () {
-        state.saving = false;
-        setSaveState("error", "Błąd");
-        showErrors("Brak połączenia z serwerem. Status gry nie został zmieniony.", []);
-      })
-      .then(function () { btn.disabled = false; });
   }
 
   function onSaved(game, isNew, selectedIndex) {
@@ -1136,9 +1078,7 @@
     if (target) target.focus();
   }
 
-  saveBtn.addEventListener("click", save);
-  var statusBtnEl = document.getElementById("btn-status");
-  if (statusBtnEl) statusBtnEl.addEventListener("click", changeStatus);
+  saveBtn.addEventListener("click", function () { save(); });
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();
@@ -1153,39 +1093,38 @@
   var DIFFICULTY_LABELS = { easy: "Łatwy", medium: "Średni", hard: "Trudny" };
   var UNLOCK_LABELS = { always: "od razu", on_arrival: "po dotarciu na miejsce", after_previous: "po poprzednim zadaniu" };
   var STATUS_DESC = {
-    draft: "Gra jest w przygotowaniu. Widzisz ją tylko w panelu – gracze jej nie widzą.",
-    published: "Gra jest opublikowana i dostępna dla graczy.",
-    hidden: "Gra jest czasowo ukryta – nie widać jej na stronie, ale możesz ją poprawiać i opublikować ponownie.",
+    draft: "Gra jest w przygotowaniu. Widzisz ją tylko w panelu – gracze jej nie widzą. Możesz ją edytować.",
+    published: "Gra jest opublikowana i dostępna dla graczy. Edycja jest zablokowana – aby coś zmienić, cofnij grę do szkicu.",
     archived: "Gra jest zarchiwizowana: tylko do odczytu i niewidoczna. Przywróć ją jako szkic, aby ją edytować."
   };
   // [status docelowy, napis, klasa przycisku, pytanie potwierdzające]
   var STATUS_ACTIONS = {
     draft: [["published", "Opublikuj grę", "btn-primary"],
             ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
-    published: [["hidden", "Ukryj grę", "btn-outline", "Ukryć grę? Zniknie ze strony głównej, dopóki jej ponownie nie opublikujesz."],
-                ["draft", "Cofnij do szkicu", "btn-outline", "Cofnąć grę do szkicu? Zniknie ze strony głównej."],
+    published: [["draft", "Cofnij do szkicu i edytuj", "btn-primary",
+                 "Cofnąć grę do szkicu? Zniknie ze strony głównej, a Ty odblokujesz edycję. Po poprawkach opublikuj ją ponownie."],
                 ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
-    hidden: [["published", "Opublikuj ponownie", "btn-primary"],
-             ["draft", "Cofnij do szkicu", "btn-outline"],
-             ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu."]],
     archived: [["draft", "Przywróć jako szkic", "btn-primary"]]
   };
-  var publishBtn = document.getElementById("btn-publish");
   var statusBusy = false;
 
-  /** Ustawia przyciski i blokadę edycji zgodnie z obecnym statusem. */
+  /** Ustawia blokadę edycji zgodnie z obecnym statusem – edytować można tylko szkic. */
   function applyStatusUi() {
     var st = state.game.status;
-    var archived = st === "archived";
-    publishBtn.hidden = !(st === "draft" || st === "hidden");
-    publishBtn.textContent = st === "hidden" ? "Opublikuj ponownie" : "Opublikuj";
-    publishBtn.disabled = statusBusy || state.saving;
-    saveBtn.disabled = archived || state.saving || statusBusy;
+    var locked = st !== "draft";
+    saveBtn.disabled = locked || state.saving || statusBusy;
+    saveBtn.hidden = locked;
     ["panel-info", "panel-route"].forEach(function (id) {
       var el = document.getElementById(id);
-      if (archived) el.setAttribute("inert", ""); else el.removeAttribute("inert");
-      el.classList.toggle("is-readonly", archived);
+      if (locked) el.setAttribute("inert", ""); else el.removeAttribute("inert");
+      el.classList.toggle("is-readonly", locked);
     });
+    document.getElementById("lock-note").hidden = !locked;
+    if (locked) {
+      document.getElementById("lock-note-text").textContent = st === "published"
+        ? "Gra jest opublikowana. Aby ją zmienić, cofnij ją do szkicu, wprowadź poprawki i opublikuj ponownie."
+        : "Gra jest zarchiwizowana. Aby ją zmienić, przywróć ją jako szkic.";
+    }
   }
 
   function dateTime(v) {
@@ -1406,10 +1345,6 @@
     });
   }
 
-  publishBtn.addEventListener("click", function () {
-    showTab("preview");
-    changeStatus("published");
-  });
 
   /* ================================================================
      9. Ochrona przed utratą zmian
@@ -1427,6 +1362,6 @@
   fillInfoForm();
   renderList();
   renderSummary();
-  showTab(!boot.game ? "info" : (boot.game.status === "archived" ? "preview" : "route"));
+  showTab(!boot.game ? "info" : (boot.game.status !== "draft" ? "preview" : "route"));
   if (!boot.game) document.getElementById("f-title").focus();
 })();
