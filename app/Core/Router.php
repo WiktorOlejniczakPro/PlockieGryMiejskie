@@ -6,12 +6,14 @@ namespace App\Core;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\CsrfMiddleware;
 use App\Middleware\GuestMiddleware;
+use App\Middleware\PlayerMiddleware;
 
 /**
  * Minimalny router: metoda + wzorzec ścieżki + kontroler + middleware.
  * Parametry w ścieżce: {id} (liczba całkowita).
  * Każde żądanie zmieniające dane (POST/PUT/PATCH/DELETE) automatycznie
- * przechodzi przez weryfikację tokenu CSRF.
+ * przechodzi przez weryfikację tokenu CSRF – poza API aplikacji mobilnej,
+ * które nie używa ciasteczek (token w nagłówku Authorization).
  */
 final class Router
 {
@@ -21,6 +23,7 @@ final class Router
     private const MIDDLEWARE = [
         'auth'  => AuthMiddleware::class,
         'guest' => GuestMiddleware::class,
+        'player' => PlayerMiddleware::class,
     ];
 
     public function get(string $path, array $handler, array $middleware = []): void
@@ -63,7 +66,8 @@ final class Router
                 continue;
             }
 
-            if (!$request->isSafeMethod()) {
+            // API aplikacji mobilnej używa tokenu zamiast ciasteczka – CSRF go nie dotyczy
+            if (!$request->isSafeMethod() && !$request->isPlayerApi()) {
                 (new CsrfMiddleware())->handle($request);
             }
             foreach ($route['middleware'] as $name) {

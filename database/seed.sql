@@ -13,6 +13,7 @@
 --       administratora tworzy się skryptem CLI (ETAP 3).
 --    3. Cztery gry DEMONSTRACYJNE w Płocku (is_sample = 1,
 --       tytuł zaczyna się od "[PRZYKŁAD]") w różnych statusach.
+--    3e. Nagrody PRZYKŁADOWE w sklepie punktów (is_sample = 1).
 --    4. Miejsca i ulice Płocka z otwartych danych miasta (dane
 --       docelowe): zabytki, szkoły, przystanki, rower miejski, obiekty
 --       komunalne, osiedla oraz słownik ulic TERYT. Sekcję generuje
@@ -258,6 +259,25 @@ INSERT INTO game_status_history (game_id, changed_by, from_status, to_status, no
 VALUES (@g4, NULL, NULL,        'draft',     'Dane demonstracyjne'),
        (@g4, NULL, 'draft',     'published', 'Dane demonstracyjne'),
        (@g4, NULL, 'published', 'archived',  'Dane demonstracyjne');
+
+-- =====================================================================
+-- 3e. NAGRODY PRZYKŁADOWE w sklepie punktów (is_sample = 1)
+--     Wyłącznie do testów i pokazu – BEZ wartości handlowej. Prawdziwe
+--     nagrody dodaje administrator w panelu (Nagrody).
+-- =====================================================================
+INSERT INTO rewards (title, description, reward_type, partner_name, cost_points, stock,
+                     redemption_instructions, is_active, is_sample)
+VALUES
+  ('[PRZYKŁAD] Naklejka PGM', 'Pamiątkowa naklejka Płockich Gier Miejskich.', 'item',
+   'Dane demonstracyjne PGM', 10, 50, 'Przykład – nagroda testowa, nie do odbioru.', 1, 1),
+  ('[PRZYKŁAD] Kupon 5%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
+   'Dane demonstracyjne PGM', 100, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
+  ('[PRZYKŁAD] Kupon 10%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
+   'Dane demonstracyjne PGM', 200, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
+  ('[PRZYKŁAD] Kupon 15%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
+   'Dane demonstracyjne PGM', 300, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
+  ('[PRZYKŁAD] Kupon 30%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
+   'Dane demonstracyjne PGM', 600, 10, 'Przykład – kod nie ma wartości handlowej.', 1, 1);
 
 -- =====================================================================
 -- 4. MIEJSCA I ULICE PŁOCKA – dane referencyjne do edytora gier

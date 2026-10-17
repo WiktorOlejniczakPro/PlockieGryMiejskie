@@ -21,8 +21,10 @@ final class App
                 throw new \RuntimeException('Brak pliku .env – skopiuj .env.example jako .env i uzupełnij dane bazy.');
             }
 
-            Session::start();
             $request = Request::capture();
+            if (!$request->isPlayerApi()) {
+                Session::start();
+            }
 
             $router = new Router();
             require BASE_PATH . '/routes/web.php';

@@ -58,6 +58,7 @@ final class GameController
             'urls' => [
                 'create'       => url('/api/v1/admin/games'),
                 'game'         => url('/api/v1/admin/games/{id}'),
+                'status'       => url('/api/v1/admin/games/{id}/status'),
                 'editPage'     => url('/panel/gry/{id}/edycja'),
                 'login'        => url('/logowanie'),
                 'route'        => url('/api/v1/admin/route'),

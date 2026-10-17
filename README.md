@@ -11,8 +11,10 @@ Gracze będą przechodzić gry w osobnej aplikacji mobilnej na Androida (przysz�
 | 1 | Architektura, schemat MySQL, dane przykładowe | ✅ gotowe |
 | 2 | Konfiguracja, routing, layouty, strona publiczna, sesje, logowanie, CSRF, konto administratora | ✅ gotowe |
 | 3 | Edytor gry: informacje podstawowe, mapa z punktami, kolejność, zadania, zapis do MySQL, lista gier | ✅ gotowe |
-| 3a | Kreator nagród: kody rabatowe i karty podarunkowe za punkty, pule kodów | ✅ gotowe |
-| 4+ | Wyszukiwarka adresów, obszar gry, zdjęcia, podgląd, publikacja, filtry listy, API dla Androida, konto, FAQ | ⏳ w kolejnych etapach |
+| 7 | API dla aplikacji Android: lista i szczegóły gier, gracze bez logowania (token), rozgrywka z GPS, odpowiedzi, zdjęcia i filmy, rankingi – [docs/API-android.md](docs/API-android.md) | ✅ gotowe |
+| 7b | Publikacja / ukrywanie gier w edytorze, ochrona postępu graczy przy edycji, punkty po kolei, limit 2 gier dziennie, sklep punktów (panel **Nagrody** + API) | ✅ gotowe |
+| 4+ | Wyszukiwarka adresów, obszar gry, zdjęcia, podgląd, publikacja, filtry listy, konto, FAQ, ocena materiałów graczy w panelu | ⏳ w kolejnych etapach |
+| Android | Aplikacja mobilna w Kotlinie (`android/`) | ⏳ w trakcie |
 
 Pozycje menu z przyszłych etapów są widoczne w panelu z etykietą „wkrótce” i nie da się ich kliknąć.
 
@@ -68,6 +70,7 @@ Otwórz **XAMPP Control Panel** i kliknij **Start** przy **Apache** i **MySQL**.
 3. **Import** → plik `database\seed.sql` → **Importuj**.
 
 > `schema.sql` usuwa i tworzy tabele od nowa – nie uruchamiaj go ponownie, gdy w bazie są już prawdziwe gry.
+> Aktualizacja istniejącej bazy bez utraty danych: skrypty z `database/migracje/` (phpMyAdmin → baza `pgm` → Import), w kolejności dat.
 
 `seed.sql` zawiera też **miejsca i ulice Płocka** z otwartych danych miasta (tabele `place_categories`, `places`, `streets`) – patrz sekcja [Dane miejskie](#dane-miejskie).
 

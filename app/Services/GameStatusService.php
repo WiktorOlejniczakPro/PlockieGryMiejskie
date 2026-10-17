@@ -9,71 +9,66 @@ use App\Models\Category;
 use PDO;
 
 /**
- * Cykl życia gry – JEDNO miejsce, które decyduje, jakie zmiany statusu są dozwolone.
- *
- *   draft      (Szkic)          – gra w przygotowaniu, niewidoczna dla graczy.
- *   published  (Opublikowana)   – widoczna na stronie głównej (i w przyszłej aplikacji),
- *                                 o ile mieści się w terminie dostępności.
- *   hidden     (Ukryta)         – czasowo zdjęta z publikacji; można ją poprawiać i opublikować ponownie.
- *   archived   (Zarchiwizowana) – zakończona, tylko do odczytu; można ją przywrócić jako szkic.
+ * Zmiana statusu gry w panelu:
+ *   draft / hidden → published  (publikacja – po sprawdzeniu kompletności),
+ *   published      → hidden     (ukrycie – znika z aplikacji, rozgrywki zostają),
+ *   hidden         → draft      (powrót do szkicu).
+ * Każda zmiana trafia do game_status_history i zwiększa lock_version
+ * (otwarty edytor w innym oknie nie nadpisze nowego statusu starymi danymi).
  */
 final class GameStatusService
 {
-    /** Dozwolone przejścia: obecny status => statusy docelowe. */
-    public const TRANSITIONS = [
-        'draft'     => ['published', 'archived'],
-        'published' => ['hidden', 'draft', 'archived'],
-        'hidden'    => ['published', 'draft', 'archived'],
-        'archived'  => ['draft'],
+    private const ALLOWED = [
+        'draft'     => ['published'],
+        'hidden'    => ['published', 'draft'],
+        'published' => ['hidden'],
     ];
 
     /**
-     * Sprawdza, czy zmiana jest możliwa. Niedozwolone przejście kończy się wyjątkiem,
-     * a braki w grze przed publikacją wracają jako lista błędów (format jak przy zapisie).
+     * @return list<array> błędy kompletności (pusta lista = OK); przy błędach status się nie zmienia
      */
-    public function check(array $game, string $target): array
+    public function change(int $gameId, string $to, int $lockVersion, int $userId): array
     {
-        $from = (string) $game['status'];
-        if (!isset(self::TRANSITIONS[$from])) {
-            throw new HttpException(422, 'Nieznany status gry.');
+        $game = Database::query('SELECT status, lock_version FROM games WHERE id = ?', [$gameId])->fetch();
+        if (!$game) {
+            throw new HttpException(404, 'Nie znaleziono gry.');
         }
-        if ($target === $from) {
-            throw new HttpException(409, 'Gra ma już ten status. Odśwież stronę edytora.');
+        $from = $game['status'];
+        if (!in_array($to, self::ALLOWED[$from] ?? [], true)) {
+            throw new HttpException(409, sprintf('Nie można zmienić statusu z „%s” na „%s”.', label('status', $from), label('status', $to)));
         }
-        if (!in_array($target, self::TRANSITIONS[$from], true)) {
-            throw new HttpException(422, 'Takiej zmiany statusu nie można wykonać.');
-        }
-        if ($target !== 'published') {
-            return [];
+        if ((int) $game['lock_version'] !== $lockVersion) {
+            throw new HttpException(409, 'Gra została w międzyczasie zmieniona w innym oknie. Odśwież stronę i spróbuj ponownie.');
         }
 
-        // Sprawdzamy grę dokładnie w takiej postaci, w jakiej jest zapisana w bazie.
-        $validator = new GameValidationService();
-        [$data, $errors] = $validator->normalize(GameSerializer::forEditor((int) $game['id']) ?? [], Category::allActive());
-        return $errors ?: $validator->forPublish($data);
-    }
+        if ($to === 'published') {
+            // walidujemy to, co JEST w bazie (a nie formularz) – publikujemy zapisaną wersję
+            $validator = new GameValidationService();
+            [$data, $errors] = $validator->normalize(GameSerializer::forEditor($gameId) ?? [], Category::allActive());
+            if (!$errors) {
+                $errors = $validator->forPublish($data);
+            }
+            if ($errors) {
+                return $errors;
+            }
+        }
 
-    /** Zmienia status w transakcji, zapisuje historię i podbija lock_version. */
-    public function change(array $game, string $target, int $lockVersion, int $userId): void
-    {
-        Database::transaction(function (PDO $pdo) use ($game, $target, $lockVersion, $userId): void {
+        Database::transaction(function (PDO $pdo) use ($gameId, $from, $to, $lockVersion, $userId): void {
             $stmt = $pdo->prepare(
                 "UPDATE games
-                    SET status = ?,
-                        published_at = CASE WHEN ? = 'published' THEN COALESCE(published_at, NOW()) ELSE published_at END,
-                        archived_at  = CASE WHEN ? = 'archived' THEN NOW() ELSE NULL END,
-                        lock_version = lock_version + 1
-                  WHERE id = ? AND lock_version = ? AND status = ?"
+                    SET status = ?, lock_version = lock_version + 1,
+                        published_at = IF(? = 'published' AND published_at IS NULL, NOW(), published_at)
+                  WHERE id = ? AND lock_version = ?"
             );
-            $stmt->execute([$target, $target, $target, (int) $game['id'], $lockVersion, $game['status']]);
-
+            $stmt->execute([$to, $to, $gameId, $lockVersion]);
             if ($stmt->rowCount() === 0) {
-                throw new HttpException(409, 'Ta gra została w międzyczasie zmieniona w innym oknie lub przez inną osobę. '
-                    . 'Odśwież stronę i spróbuj ponownie.');
+                throw new HttpException(409, 'Gra została w międzyczasie zmieniona. Odśwież stronę i spróbuj ponownie.');
             }
-
             $pdo->prepare('INSERT INTO game_status_history (game_id, changed_by, from_status, to_status) VALUES (?, ?, ?, ?)')
-                ->execute([(int) $game['id'], $userId, $game['status'], $target]);
+                ->execute([$gameId, $userId, $from, $to]);
         });
+
+        AuditLog::record('game.status', $userId, 'game', $gameId, ['from' => $from, 'to' => $to]);
+        return [];
     }
 }

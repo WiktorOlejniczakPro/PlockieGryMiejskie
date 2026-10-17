@@ -15,6 +15,11 @@ use PDO;
  * Identyfikatory istniejących punktów są zachowywane (aktualizacja zamiast
  * usuwania i wstawiania), co jest ważne dla przyszłych wyników graczy.
  * Konflikt edycji (ta sama gra zapisana w innym oknie) wykrywa lock_version.
+ *
+ * Gra, w którą ktoś już grał (są rekordy game_sessions), chroni postęp graczy:
+ * nie można usunąć jej punktów ani zadań (409) – można je poprawiać. Opcje
+ * odpowiedzi są aktualizowane w miejscu (po kolejności), więc zachowują id
+ * zapisane w odpowiedziach graczy.
  */
 final class GameSaveService
 {
@@ -32,7 +37,7 @@ final class GameSaveService
                 : $this->updateGame($pdo, $gameId, $data, $lockVersion);
 
             $this->syncCategories($pdo, $gameId, $data['categories']);
-            $this->syncWaypoints($pdo, $gameId, $data['waypoints']);
+            $this->syncWaypoints($pdo, $gameId, $data['waypoints'], $this->hasPlayers($pdo, $gameId));
 
             return $gameId;
         });
@@ -88,7 +93,14 @@ final class GameSaveService
         }
     }
 
-    private function syncWaypoints(PDO $pdo, int $gameId, array $waypoints): void
+    private function hasPlayers(PDO $pdo, int $gameId): bool
+    {
+        $stmt = $pdo->prepare('SELECT 1 FROM game_sessions WHERE game_id = ? LIMIT 1');
+        $stmt->execute([$gameId]);
+        return $stmt->fetchColumn() !== false;
+    }
+
+    private function syncWaypoints(PDO $pdo, int $gameId, array $waypoints, bool $protected): void
     {
         // Istniejące punkty tej gry (blokada wierszy na czas transakcji)
         $stmt = $pdo->prepare('SELECT id FROM waypoints WHERE game_id = ? FOR UPDATE');
@@ -105,6 +117,10 @@ final class GameSaveService
 
         // Usunięcie punktów, których nie ma w przesłanych danych (zadania usuwa kaskada)
         $toDelete = array_diff_key($existing, $keep);
+        if ($toDelete && $protected) {
+            throw new HttpException(409, 'W tę grę grali już gracze – nie można usuwać jej punktów, bo zniknąłby ich postęp. '
+                . 'Możesz poprawić nazwę, opis lub położenie punktu albo ukryć grę i utworzyć nową wersję.');
+        }
         if ($toDelete) {
             $ids = array_keys($toDelete);
             $marks = implode(',', array_fill(0, count($ids), '?'));
@@ -135,13 +151,21 @@ final class GameSaveService
                                   $wp['longitude'], $position]);
                 $waypointId = (int) $pdo->lastInsertId();
             }
-            $this->syncTask($pdo, $waypointId, $wp['task']);
+            $this->syncTask($pdo, $waypointId, $wp['task'], $protected);
         }
     }
 
-    private function syncTask(PDO $pdo, int $waypointId, ?array $task): void
+    private function syncTask(PDO $pdo, int $waypointId, ?array $task, bool $protected): void
     {
         if ($task === null) {
+            if ($protected) {
+                $stmt = $pdo->prepare('SELECT 1 FROM tasks WHERE waypoint_id = ?');
+                $stmt->execute([$waypointId]);
+                if ($stmt->fetchColumn() !== false) {
+                    throw new HttpException(409, 'W tę grę grali już gracze – nie można usuwać zadań. '
+                        . 'Możesz zmienić ich treść albo ukryć grę i utworzyć nową wersję.');
+                }
+            }
             $pdo->prepare('DELETE FROM tasks WHERE waypoint_id = ?')->execute([$waypointId]);
             return;
         }
@@ -174,11 +198,30 @@ final class GameSaveService
             $taskId = (int) $pdo->lastInsertId();
         }
 
-        // Odpowiedzi do pytań zamkniętych zapisujemy od nowa w podanej kolejności
-        $pdo->prepare('DELETE FROM task_options WHERE task_id = ?')->execute([$taskId]);
+        // Odpowiedzi do pytań zamkniętych: aktualizacja w miejscu po kolejności
+        // (zachowuje id opcji zapisane w odpowiedziach graczy), nadmiarowe – usuwane
+        $stmt = $pdo->prepare('SELECT position, id FROM task_options WHERE task_id = ?');
+        $stmt->execute([$taskId]);
+        $current = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+        $options = array_values($task['options']);
+
+        // najpierw przesuwamy pozycje, żeby nie naruszyć klucza (task_id, position)
+        $pdo->prepare('UPDATE task_options SET position = position + ' . self::POSITION_OFFSET . ' WHERE task_id = ?')
+            ->execute([$taskId]);
+        $update = $pdo->prepare('UPDATE task_options SET option_text = ?, is_correct = ?, position = ? WHERE id = ?');
         $insert = $pdo->prepare('INSERT INTO task_options (task_id, option_text, is_correct, position) VALUES (?, ?, ?, ?)');
-        foreach (array_values($task['options']) as $i => $option) {
-            $insert->execute([$taskId, $option['text'], $option['is_correct'] ? 1 : 0, $i + 1]);
+        foreach ($options as $i => $option) {
+            $position = $i + 1;
+            if (isset($current[$position])) {
+                $update->execute([$option['text'], $option['is_correct'] ? 1 : 0, $position, $current[$position]]);
+                unset($current[$position]);
+            } else {
+                $insert->execute([$taskId, $option['text'], $option['is_correct'] ? 1 : 0, $position]);
+            }
+        }
+        if ($current) {
+            $marks = implode(',', array_fill(0, count($current), '?'));
+            $pdo->prepare("DELETE FROM task_options WHERE id IN ({$marks})")->execute(array_values($current));
         }
     }
 }

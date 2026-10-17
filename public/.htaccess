@@ -4,8 +4,14 @@
 Options -Indexes
 DirectoryIndex index.php
 
+# Nagłówek "Authorization: Bearer …" z aplikacji mobilnej – Apache domyślnie
+# nie przekazuje go do PHP.
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteCond %{HTTP:Authorization} .
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^ index.php [L,QSA]

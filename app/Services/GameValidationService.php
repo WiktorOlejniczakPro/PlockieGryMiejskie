@@ -237,7 +237,7 @@ final class GameValidationService
                                           ? $this->int($t, 'media_max_seconds', 1, 600, null, "Punkt {$n}: długość filmu od 1 do 600 sekund.", $p, $i)
                                           : null,
             'unlock_mode'             => $unlock,
-            'unlock_radius_m'         => $this->int($t, 'unlock_radius_m', 5, 1000, 30, "Punkt {$n}: promień odblokowania od 5 do 1000 m.", $p, $i) ?? 30,
+            'unlock_radius_m'         => $this->int($t, 'unlock_radius_m', 5, 1000, 50, "Punkt {$n}: promień odblokowania od 5 do 1000 m.", $p, $i) ?? 50,
             'options'                 => $options,
         ];
     }

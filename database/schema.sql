@@ -19,8 +19,13 @@ USE pgm;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS reward_codes;
+DROP TABLE IF EXISTS reward_redemptions;
 DROP TABLE IF EXISTS rewards;
+DROP TABLE IF EXISTS submission_media;
+DROP TABLE IF EXISTS task_submissions;
+DROP TABLE IF EXISTS session_waypoints;
+DROP TABLE IF EXISTS game_sessions;
+DROP TABLE IF EXISTS players;
 DROP TABLE IF EXISTS streets;
 DROP TABLE IF EXISTS places;
 DROP TABLE IF EXISTS place_categories;
@@ -271,7 +276,7 @@ CREATE TABLE tasks (
   media_requirement        VARCHAR(500)       NULL,
   media_max_seconds        SMALLINT UNSIGNED  NULL,
   unlock_mode              ENUM('always','on_arrival','after_previous') NOT NULL DEFAULT 'on_arrival',
-  unlock_radius_m          SMALLINT UNSIGNED  NOT NULL DEFAULT 30,
+  unlock_radius_m          SMALLINT UNSIGNED  NOT NULL DEFAULT 50,
   created_at               DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at               DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -457,75 +462,203 @@ CREATE TABLE streets (
   KEY idx_streets_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
+-- =====================================================================
+--  APLIKACJA MOBILNA – gracze i rozgrywki
+-- =====================================================================
+
 -- ---------------------------------------------------------------------
--- 15. REWARDS – katalog nagród wymienianych przez graczy na punkty
---     reward_type:
---       discount_code – kod rabatowy (discount_kind: percent | amount)
---       gift_card     – karta podarunkowa o wartości value_amount (PLN)
---     value_amount    – procent rabatu (1–100), kwota rabatu albo wartość karty w PLN
---     cost_points     – ile punktów gracz musi wydać na nagrodę
---     per_player_limit– ile razy jeden gracz może odebrać tę nagrodę
---     Wymianę punktów obsłuży przyszła aplikacja mobilna – panel tylko
---     przygotowuje katalog i pule kodów.
+-- 15. PLAYERS – konta graczy aplikacji mobilnej (osobne od users).
+--     Aplikacja przy pierwszym uruchomieniu sama zakłada konto i dostaje
+--     token API – gracz nie musi się logować. W bazie trzymamy wyłącznie
+--     skrót SHA-256 tokenu. created_ip służy do limitu zakładania kont.
 -- ---------------------------------------------------------------------
-CREATE TABLE rewards (
-  id                INT UNSIGNED       NOT NULL AUTO_INCREMENT,
-  created_by        INT UNSIGNED       NULL,
-  reward_type       ENUM('discount_code','gift_card') NOT NULL,
-  title             VARCHAR(150)       NOT NULL,
-  partner_name      VARCHAR(120)       NOT NULL,
-  partner_url       VARCHAR(255)       NULL,
-  description       TEXT               NULL,
-  discount_kind     ENUM('percent','amount') NULL,
-  value_amount      DECIMAL(10,2)      NOT NULL,
-  min_order_amount  DECIMAL(10,2)      NULL,
-  cost_points       INT UNSIGNED       NOT NULL,
-  per_player_limit  SMALLINT UNSIGNED  NOT NULL DEFAULT 1,
-  terms             TEXT               NULL,
-  valid_from        DATE               NULL,
-  valid_until       DATE               NULL,
-  is_active         TINYINT(1)         NOT NULL DEFAULT 1,
-  is_sample         TINYINT(1)         NOT NULL DEFAULT 0,
-  created_at        DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at        DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE players (
+  id              INT UNSIGNED   NOT NULL AUTO_INCREMENT,
+  nickname        VARCHAR(40)    NOT NULL,
+  api_token_hash  CHAR(64)       NOT NULL,
+  nickname_changed_at DATETIME   NULL,
+  created_ip      VARBINARY(16)  NULL,
+  created_at      DATETIME       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  last_seen_at    DATETIME       NULL,
 
   PRIMARY KEY (id),
-  KEY idx_rewards_active (is_active, reward_type, cost_points),
-  KEY idx_rewards_created_by (created_by),
-  CONSTRAINT chk_rewards_title    CHECK (CHAR_LENGTH(TRIM(title)) > 0),
-  CONSTRAINT chk_rewards_partner  CHECK (CHAR_LENGTH(TRIM(partner_name)) > 0),
-  CONSTRAINT chk_rewards_cost     CHECK (cost_points BETWEEN 1 AND 100000),
-  CONSTRAINT chk_rewards_value    CHECK (value_amount > 0),
-  CONSTRAINT chk_rewards_kind     CHECK ((reward_type = 'gift_card' AND discount_kind IS NULL)
-                                         OR (reward_type = 'discount_code' AND discount_kind IS NOT NULL)),
-  CONSTRAINT chk_rewards_percent  CHECK (discount_kind IS NULL OR discount_kind <> 'percent' OR value_amount <= 100),
-  CONSTRAINT chk_rewards_limit    CHECK (per_player_limit BETWEEN 1 AND 100),
-  CONSTRAINT chk_rewards_dates    CHECK (valid_from IS NULL OR valid_until IS NULL OR valid_until >= valid_from),
-  CONSTRAINT chk_rewards_flags    CHECK (is_active IN (0,1) AND is_sample IN (0,1)),
-  CONSTRAINT fk_rewards_created_by
+  UNIQUE KEY uq_players_token (api_token_hash),
+  KEY idx_players_created_ip (created_ip, created_at),
+  CONSTRAINT chk_players_nickname CHECK (CHAR_LENGTH(TRIM(nickname)) >= 3)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 16. GAME_SESSIONS – jedno przejście gry przez gracza.
+--     score – suma przyznanych punktów (+ completion_points gry po
+--     ukończeniu). Gracz może mieć tylko jedną rozgrywkę „w trakcie”
+--     danej gry; po ukończeniu może zagrać ponownie (ranking bierze
+--     najlepszy wynik).
+--     game_version – games.lock_version w chwili startu (która wersja
+--     gry była rozgrywana). Gry z rozgrywkami nie można usunąć (RESTRICT) –
+--     historia graczy zostaje; grę się archiwizuje.
+-- ---------------------------------------------------------------------
+CREATE TABLE game_sessions (
+  id            INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  game_id       INT UNSIGNED       NOT NULL,
+  player_id     INT UNSIGNED       NOT NULL,
+  game_version  INT UNSIGNED       NOT NULL DEFAULT 1,
+  status        ENUM('in_progress','completed') NOT NULL DEFAULT 'in_progress',
+  score         SMALLINT UNSIGNED  NOT NULL DEFAULT 0,
+  started_at    DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  finished_at   DATETIME           NULL,
+
+  PRIMARY KEY (id),
+  KEY idx_sessions_player (player_id, status, started_at),
+  KEY idx_sessions_ranking (game_id, status, score),
+  CONSTRAINT fk_sessions_game
+    FOREIGN KEY (game_id) REFERENCES games (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_sessions_player
+    FOREIGN KEY (player_id) REFERENCES players (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 17. SESSION_WAYPOINTS – dotarcie gracza do punktu trasy (pozycja GPS
+--     zgłoszona przez aplikację i sprawdzona przez serwer).
+-- ---------------------------------------------------------------------
+CREATE TABLE session_waypoints (
+  session_id   INT UNSIGNED       NOT NULL,
+  waypoint_id  INT UNSIGNED       NOT NULL,
+  latitude     DECIMAL(10,7)      NOT NULL,
+  longitude    DECIMAL(10,7)      NOT NULL,
+  accuracy_m   SMALLINT UNSIGNED  NULL,
+  distance_m   SMALLINT UNSIGNED  NOT NULL,
+  reached_at   DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (session_id, waypoint_id),
+  KEY idx_session_waypoints_wp (waypoint_id),
+  CONSTRAINT fk_sw_session
+    FOREIGN KEY (session_id) REFERENCES game_sessions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_sw_waypoint
+    FOREIGN KEY (waypoint_id) REFERENCES waypoints (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 18. TASK_SUBMISSIONS – odpowiedź gracza na zadanie (jedna na zadanie
+--     w danej rozgrywce). review_status:
+--       auto       – oceniona automatycznie (pytania zamknięte, odpowiedź
+--                    otwarta z wpisaną oczekiwaną odpowiedzią, info)
+--       unverified – zaliczona bez sprawdzania (zdjęcie, film, odpowiedź
+--                    otwarta bez wzorca); organizator może ją zweryfikować
+--       rejected   – odrzucona przez organizatora (przyszła funkcja panelu)
+-- ---------------------------------------------------------------------
+CREATE TABLE task_submissions (
+  id                   INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  session_id           INT UNSIGNED       NOT NULL,
+  task_id              INT UNSIGNED       NOT NULL,
+  answer_text          TEXT               NULL,
+  selected_option_ids  JSON               NULL,
+  is_correct           TINYINT(1)         NULL,
+  points_awarded       SMALLINT UNSIGNED  NOT NULL DEFAULT 0,
+  review_status        ENUM('auto','unverified','rejected') NOT NULL DEFAULT 'auto',
+  submitted_at         DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_submissions_session_task (session_id, task_id),
+  KEY idx_submissions_task (task_id, review_status),
+  CONSTRAINT fk_submissions_session
+    FOREIGN KEY (session_id) REFERENCES game_sessions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT fk_submissions_task
+    FOREIGN KEY (task_id) REFERENCES tasks (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 19. SUBMISSION_MEDIA – zdjęcia i filmy przesłane przez graczy.
+--     Pliki leżą w storage/uploads/submissions/ (poza katalogiem public).
+-- ---------------------------------------------------------------------
+CREATE TABLE submission_media (
+  id             INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  submission_id  INT UNSIGNED  NOT NULL,
+  storage_path   VARCHAR(255)  NOT NULL,
+  mime_type      VARCHAR(50)   NOT NULL,
+  file_size      INT UNSIGNED  NOT NULL,
+  sha256         CHAR(64)      NOT NULL,
+  created_at     DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_submission_media_path (storage_path),
+  KEY idx_submission_media_submission (submission_id),
+  CONSTRAINT fk_submission_media_submission
+    FOREIGN KEY (submission_id) REFERENCES task_submissions (id)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- =====================================================================
+--  SKLEP PUNKTÓW
+--  Saldo gracza NIE jest przechowywane – liczy je serwer:
+--    suma najlepszych wyników z każdej gry (ponowne granie tej samej gry
+--    nie „dodrukowuje” punktów)  −  koszt wymian (bez anulowanych).
+-- =====================================================================
+
+-- ---------------------------------------------------------------------
+-- 20. REWARDS – nagrody dodawane przez administratora w panelu.
+--     stock NULL = bez limitu sztuk. is_sample = nagroda demonstracyjna
+--     (bez wartości handlowej – pokazywana z dopiskiem „przykład”).
+-- ---------------------------------------------------------------------
+CREATE TABLE rewards (
+  id                       INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  title                    VARCHAR(150)       NOT NULL,
+  description              TEXT               NULL,
+  reward_type              ENUM('discount','coupon','item','other') NOT NULL DEFAULT 'other',
+  partner_name             VARCHAR(150)       NULL,
+  cost_points              INT UNSIGNED       NOT NULL,
+  stock                    INT UNSIGNED       NULL,
+  valid_until              DATETIME           NULL,
+  redemption_instructions  TEXT               NULL,
+  is_active                TINYINT(1)         NOT NULL DEFAULT 1,
+  is_sample                TINYINT(1)         NOT NULL DEFAULT 0,
+  created_by               INT UNSIGNED       NULL,
+  created_at               DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at               DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  KEY idx_rewards_active (is_active, cost_points),
+  CONSTRAINT chk_rewards_title CHECK (CHAR_LENGTH(TRIM(title)) > 0),
+  CONSTRAINT chk_rewards_cost  CHECK (cost_points BETWEEN 1 AND 1000000),
+  CONSTRAINT fk_rewards_user
     FOREIGN KEY (created_by) REFERENCES users (id)
     ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
 
 -- ---------------------------------------------------------------------
--- 16. REWARD_CODES – pula kodów (rabatowych lub numerów kart) do nagrody
---     Każdy kod może zostać wydany jednemu graczowi. Status "redeemed"
---     ustawi przyszła aplikacja mobilna przy wymianie punktów.
---     Kody NIGDY nie trafiają do publicznego API.
+-- 21. REWARD_REDEMPTIONS – wymiany punktów na nagrody.
+--     cost_points – koszt w chwili wymiany (zmiana ceny nie zmienia historii).
+--     code – kod do okazania przy odbiorze (generuje serwer).
+--     idempotency_key – ten sam klucz od aplikacji = ta sama wymiana
+--     (ponowione żądanie nie pobierze punktów drugi raz).
+--     status: issued – wydana, used – zrealizowana, cancelled – anulowana
+--     (punkty wracają do salda).
 -- ---------------------------------------------------------------------
-CREATE TABLE reward_codes (
-  id           INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-  reward_id    INT UNSIGNED  NOT NULL,
-  code         VARCHAR(64)   NOT NULL,
-  status       ENUM('available','redeemed') NOT NULL DEFAULT 'available',
-  redeemed_at  DATETIME      NULL,
-  created_at   DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE reward_redemptions (
+  id               INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+  reward_id        INT UNSIGNED  NOT NULL,
+  player_id        INT UNSIGNED  NOT NULL,
+  cost_points      INT UNSIGNED  NOT NULL,
+  code             CHAR(14)      NOT NULL,
+  status           ENUM('issued','used','cancelled') NOT NULL DEFAULT 'issued',
+  idempotency_key  CHAR(36)      NULL,
+  created_at       DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  used_at          DATETIME      NULL,
 
   PRIMARY KEY (id),
-  UNIQUE KEY uq_reward_codes (reward_id, code),
-  KEY idx_reward_codes_status (reward_id, status),
-  CONSTRAINT chk_reward_codes_code CHECK (CHAR_LENGTH(TRIM(code)) > 0),
-  CONSTRAINT fk_reward_codes_reward
+  UNIQUE KEY uq_redemptions_code (code),
+  UNIQUE KEY uq_redemptions_idempotency (player_id, idempotency_key),
+  KEY idx_redemptions_player (player_id, created_at),
+  KEY idx_redemptions_reward (reward_id, status),
+  CONSTRAINT fk_redemptions_reward
     FOREIGN KEY (reward_id) REFERENCES rewards (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT fk_redemptions_player
+    FOREIGN KEY (player_id) REFERENCES players (id)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;

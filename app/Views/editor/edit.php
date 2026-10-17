@@ -26,8 +26,11 @@ $status = $game['status'] ?? 'draft';
       <p class="save-state" id="save-state" role="status" aria-live="polite" data-state="<?= $isNew ? 'new' : 'saved' ?>">
         <?= $isNew ? 'Gra nie jest jeszcze zapisana' : 'Wszystkie zmiany zapisane' ?>
       </p>
-      <button type="button" class="btn btn-outline btn-sm" data-goto-tab="preview">Podgląd</button>
-      <button type="button" class="btn btn-outline btn-sm btn-publish" id="btn-publish" hidden>Opublikuj</button>
+      <span class="soon-actions" title="Dostępne w kolejnym etapie">
+        <button type="button" class="btn btn-outline btn-sm" disabled>Podgląd</button>
+        <span class="soon-tag">wkrótce</span>
+      </span>
+      <button type="button" class="btn btn-outline btn-sm" id="btn-status" hidden></button>
       <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry')) ?>" id="btn-cancel">Anuluj</a>
       <button type="button" class="btn btn-primary btn-sm" id="btn-save">
         <?= $status === 'draft' ? 'Zapisz szkic' : 'Zapisz zmiany' ?>

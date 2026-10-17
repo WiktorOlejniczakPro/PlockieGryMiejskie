@@ -15,7 +15,8 @@ $navItems = [
     ['key' => 'dashboard', 'label' => 'Dashboard',          'href' => '/panel', 'icon' => 'M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z'],
     ['key' => 'games',     'label' => 'Twoje gry',          'href' => '/panel/gry',      'icon' => 'M4 6h16M4 12h16M4 18h10'],
     ['key' => 'create',    'label' => 'Utwórz nową grę',    'href' => '/panel/gry/nowa', 'icon' => 'M12 5v14M5 12h14'],
-    ['key' => 'rewards',   'label' => 'Kreator nagród',     'href' => '/panel/nagrody',  'icon' => 'M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7Z'],
+    ['key' => 'rewards',   'label' => 'Nagrody',            'href' => '/panel/nagrody',  'icon' => 'M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7Zm0 0h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7Z'],
+    ['key' => 'faq',       'label' => 'FAQ i pomoc',        'soon' => true,     'icon' => 'M9.1 9a3 3 0 1 1 4.2 2.7c-.8.4-1.3 1.1-1.3 2V14m0 3h.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z'],
     ['key' => 'account',   'label' => 'Konto i ustawienia', 'soon' => true,     'icon' => 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0'],
 ];
 ?>
