@@ -46,7 +46,8 @@ $router->delete('/panel/nagrody/{id}/kody/{codeId}', [RewardController::class, '
 $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']);
 $router->post('/api/v1/admin/games', [AdminGameApi::class, 'store'], ['auth']);
 $router->put('/api/v1/admin/games/{id}', [AdminGameApi::class, 'update'], ['auth']);
+$router->post('/api/v1/admin/games/{id}/status', [AdminGameApi::class, 'changeStatus'], ['auth']);
 $router->post('/api/v1/admin/route', [RouteApi::class, 'walking'], ['auth']);
 
-// Kolejne etapy: podgląd, publikacja, duplikowanie, archiwizacja, zdjęcia,
+// Kolejne etapy: duplikowanie, archiwizacja, zdjęcia,
 // konto, FAQ oraz publiczne API /api/v1/games dla aplikacji mobilnej.

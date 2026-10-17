@@ -11,6 +11,7 @@ use App\Services\AuditLog;
 use App\Services\GameAccess;
 use App\Services\GameSaveService;
 use App\Services\GameSerializer;
+use App\Services\GameStatusService;
 use App\Services\GameValidationService;
 
 /**
@@ -18,6 +19,7 @@ use App\Services\GameValidationService;
  *   GET  /api/v1/admin/games/{id}  – pełne dane gry do edycji
  *   POST /api/v1/admin/games       – utworzenie gry (szkic)
  *   PUT  /api/v1/admin/games/{id}  – zapis zmian (z kontrolą lock_version)
+ *   POST /api/v1/admin/games/{id}/status – zmiana statusu (publikacja, ukrycie, archiwizacja…)
  * Odpowiedzi: {"data": {...}} albo {"error": {"status", "message", "fields"?}}.
  */
 final class AdminGameApi
@@ -57,6 +59,40 @@ final class AdminGameApi
         $userId = (int) Auth::id();
         (new GameSaveService())->save($id, (int) $game['owner_id'], $data, (int) $lockVersion, $userId);
         AuditLog::record('game.updated', $userId, 'game', $id, ['waypoints' => count($data['waypoints'])]);
+
+        json_response(['data' => GameSerializer::forEditor($id)]);
+    }
+
+    /**
+     * Zmiana statusu gry. Treść żądania: {"status": "published", "lock_version": 7}.
+     * Przy publikacji serwer sprawdza kompletność ZAPISANEJ gry (te same reguły
+     * co forPublish) – braki wracają jako 422 z listą pól, jak przy zapisie.
+     */
+    public function changeStatus(Request $request, int $id): void
+    {
+        $game = GameAccess::editable($id);
+
+        $target = (string) $request->input('status', '');
+        $lockVersion = $request->input('lock_version');
+        if (!is_numeric($lockVersion)) {
+            throw new HttpException(422, 'Brak numeru wersji gry. Odśwież stronę edytora.');
+        }
+
+        $service = new GameStatusService();
+        $errors = $service->check($game, $target);
+        if ($errors) {
+            json_response([
+                'error' => [
+                    'status'  => 422,
+                    'message' => 'Gry nie można jeszcze opublikować. Uzupełnij wskazane elementy, zapisz i spróbuj ponownie.',
+                    'fields'  => $errors,
+                ],
+            ], 422);
+        }
+
+        $userId = (int) Auth::id();
+        $service->change($game, $target, (int) $lockVersion, $userId);
+        AuditLog::record('game.status_changed', $userId, 'game', $id, ['from' => $game['status'], 'to' => $target]);
 
         json_response(['data' => GameSerializer::forEditor($id)]);
     }

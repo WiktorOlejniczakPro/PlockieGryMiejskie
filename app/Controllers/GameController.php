@@ -5,7 +5,6 @@ namespace App\Controllers;
 
 use App\Core\Auth;
 use App\Core\Request;
-use App\Core\Session;
 use App\Core\View;
 use App\Models\Category;
 use App\Models\Game;
@@ -33,11 +32,9 @@ final class GameController
 
     public function edit(Request $request, int $id): void
     {
-        $game = GameAccess::editable($id);
-        if ($game['status'] === 'archived') {
-            Session::flash('error', 'Zarchiwizowanej gry nie można edytować.');
-            redirect('/panel/gry');
-        }
+        // Zarchiwizowana gra otwiera się tylko do odczytu (zakładka „Podgląd i publikacja”),
+        // skąd można ją przywrócić jako szkic. Zapis blokuje także API (409).
+        GameAccess::editable($id);
         $this->renderEditor(GameSerializer::forEditor($id));
     }
 
@@ -64,6 +61,8 @@ final class GameController
                 'editPage'     => url('/panel/gry/{id}/edycja'),
                 'login'        => url('/logowanie'),
                 'route'        => url('/api/v1/admin/route'),
+                'status'       => url('/api/v1/admin/games/{id}/status'),
+                'home'         => url('/#gry'),
             ],
         ];
 

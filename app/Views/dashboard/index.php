@@ -65,7 +65,6 @@ $stats = [
                   <?php else: ?>
                     <span class="table__title"><?= e(Game::displayTitle($game)) ?></span>
                   <?php endif; ?>
-                  <?php if ($game['is_sample']): ?><span class="badge badge--sample">Przykład</span><?php endif; ?>
                 </td>
                 <td><span class="status status--<?= e($game['status']) ?>"><?= e(label('status', $game['status'])) ?></span></td>
                 <td><?= e($game['waypoint_count']) ?></td>

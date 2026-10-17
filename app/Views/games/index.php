@@ -51,7 +51,6 @@ $isAdmin = $user['role'] === 'admin';
             <tr>
               <td>
                 <span class="table__title"><?= e(Game::displayTitle($game)) ?></span>
-                <?php if ($game['is_sample']): ?><span class="badge badge--sample">Przykład</span><?php endif; ?>
                 <?php if ($game['short_description']): ?>
                   <span class="table__sub"><?= e($game['short_description']) ?></span>
                 <?php endif; ?>
@@ -64,12 +63,9 @@ $isAdmin = $user['role'] === 'admin';
               <?php if ($isAdmin): ?><td><?= e($game['owner_name']) ?></td><?php endif; ?>
               <td class="nowrap"><?= e(format_datetime($game['updated_at'])) ?></td>
               <td class="table__actions">
-                <?php if ($game['status'] === 'archived'): ?>
-                  <span class="table__muted">Tylko do odczytu</span>
-                <?php else: ?>
-                  <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry/' . (int) $game['id'] . '/edycja')) ?>"
-                     aria-label="Edytuj grę: <?= e(Game::displayTitle($game)) ?>">Edytuj</a>
-                <?php endif; ?>
+                <?php $archived = $game['status'] === 'archived'; ?>
+                <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry/' . (int) $game['id'] . '/edycja')) ?>"
+                   aria-label="<?= $archived ? 'Otwórz' : 'Edytuj' ?> grę: <?= e(Game::displayTitle($game)) ?>"><?= $archived ? 'Otwórz' : 'Edytuj' ?></a>
               </td>
             </tr>
           <?php endforeach; ?>

@@ -84,7 +84,7 @@
       estimated_duration_minutes: g.estimated_duration_minutes, difficulty: g.difficulty,
       completion_points: g.completion_points, categories: (g.categories || []).slice(),
       custom_category: g.custom_category || "", available_from: g.available_from || "",
-      available_until: g.available_until || ""
+      available_until: g.available_until || "", published_at: g.published_at || null
     };
     state.waypoints = (g.waypoints || []).map(function (w) {
       return {
@@ -132,6 +132,12 @@
     return l >= 2 && l <= 4 && (t < 12 || t > 14) ? "punkty" : "punktów";
   }
 
+  function pluralTasks(n) {
+    if (n === 1) return "zadanie";
+    var l = n % 10, t = n % 100;
+    return l >= 2 && l <= 4 && (t < 12 || t > 14) ? "zadania" : "zadań";
+  }
+
   function announce(text) {
     var live = document.getElementById("editor-live");
     live.textContent = "";
@@ -166,6 +172,7 @@
       document.getElementById(tab.getAttribute("aria-controls")).hidden = !active;
       if (active && focusTab) tab.focus();
     });
+    if (name === "preview") renderPreview();
     if (name === "route") {
       if (!mapReady) initMap();
       window.setTimeout(function () { map.invalidateSize(); }, 0);
@@ -209,6 +216,7 @@
     badge.className = "status status--" + state.game.status;
     badge.textContent = STATUS_LABELS[state.game.status] || state.game.status;
     document.getElementById("btn-save").textContent = state.game.status === "draft" ? "Zapisz szkic" : "Zapisz zmiany";
+    applyStatusUi();
   }
 
   function updateCustomCategory() {
@@ -262,9 +270,6 @@
     error: "",
     timer: null
   };
-  try {
-    if (localStorage.getItem("pgm.walkingRoute") === "0") walk.enabled = false;
-  } catch (e) { /* brak dostępu do localStorage – zostaje ustawienie domyślne */ }
 
   function initMap() {
     mapReady = true;
@@ -908,13 +913,15 @@
     };
   }
 
+  /** Zapis gry. Zwraca Promise<boolean> – true, gdy zapis się udał. */
   function save() {
-    if (state.saving) return;
+    if (state.saving) return Promise.resolve(false);
+    if (state.game.status === "archived") return Promise.resolve(false);
 
     // Szybka kontrola w przeglądarce – pełną walidację i tak wykonuje serwer
     if (!state.game.title.trim()) {
       showErrors("Nie można zapisać gry.", [{ path: "title", field: "title", waypoint: null, message: "Podaj tytuł gry." }]);
-      return;
+      return Promise.resolve(false);
     }
 
     state.saving = true;
@@ -928,7 +935,7 @@
     var url = isNew ? boot.urls.create : boot.urls.game.replace("{id}", state.game.id);
     var selectedIndex = findIndex(state.selectedKey);
 
-    fetch(url, {
+    return fetch(url, {
       method: isNew ? "POST" : "PUT",
       credentials: "same-origin",
       headers: {
@@ -944,20 +951,23 @@
       .then(function (r) {
         if (r.res.ok && r.body.data) {
           onSaved(r.body.data, isNew, selectedIndex);
-        } else {
-          onSaveError(r.res.status, r.body);
+          return true;
         }
+        onSaveError(r.res.status, r.body);
+        return false;
       })
       .catch(function () {
         setSaveState("error", "Błąd zapisu");
         showErrors("Brak połączenia z serwerem. Zmiany NIE zostały zapisane – nie zamykaj strony i spróbuj ponownie.", []);
+        return false;
       })
-      .then(function () {
+      .then(function (ok) {
         state.saving = false;
-        saveBtn.disabled = false;
         saveBtn.removeAttribute("aria-busy");
         workspace.removeAttribute("inert");
         workspace.classList.remove("is-saving");
+        applyStatusUi();
+        return ok;
       });
   }
 
@@ -980,6 +990,7 @@
     var time = new Date().toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" });
     setSaveState("saved", "Zapisano o " + time);
     announce("Gra została zapisana.");
+    renderPreview();
 
     if (isNew) {
       var editUrl = boot.urls.editPage.replace("{id}", game.id);
@@ -1045,6 +1056,10 @@
 
   /** Kliknięcie błędu: przejście do zakładki, punktu i pola, którego dotyczy. */
   function goToError(err) {
+    if (err.field === "waypoints") {
+      showTab("route");
+      return;
+    }
     if (err.waypoint === null || err.waypoint === undefined) {
       showTab("info");
       var el = document.querySelector('[data-game="' + err.field + '"]') ||
@@ -1063,12 +1078,277 @@
     if (target) target.focus();
   }
 
-  saveBtn.addEventListener("click", save);
+  saveBtn.addEventListener("click", function () { save(); });
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();
       save();
     }
+  });
+
+
+  /* ================================================================
+     8a. Podgląd i publikacja (statusy gry)
+     ================================================================ */
+  var DIFFICULTY_LABELS = { easy: "Łatwy", medium: "Średni", hard: "Trudny" };
+  var UNLOCK_LABELS = { always: "od razu", on_arrival: "po dotarciu na miejsce", after_previous: "po poprzednim zadaniu" };
+  var STATUS_DESC = {
+    draft: "Gra jest w przygotowaniu. Widzisz ją tylko w panelu – gracze jej nie widzą.",
+    published: "Gra jest opublikowana i dostępna dla graczy.",
+    hidden: "Gra jest czasowo ukryta – nie widać jej na stronie, ale możesz ją poprawiać i opublikować ponownie.",
+    archived: "Gra jest zarchiwizowana: tylko do odczytu i niewidoczna. Przywróć ją jako szkic, aby ją edytować."
+  };
+  // [status docelowy, napis, klasa przycisku, pytanie potwierdzające]
+  var STATUS_ACTIONS = {
+    draft: [["published", "Opublikuj grę", "btn-primary"],
+            ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
+    published: [["hidden", "Ukryj grę", "btn-outline", "Ukryć grę? Zniknie ze strony głównej, dopóki jej ponownie nie opublikujesz."],
+                ["draft", "Cofnij do szkicu", "btn-outline", "Cofnąć grę do szkicu? Zniknie ze strony głównej."],
+                ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
+    hidden: [["published", "Opublikuj ponownie", "btn-primary"],
+             ["draft", "Cofnij do szkicu", "btn-outline"],
+             ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu."]],
+    archived: [["draft", "Przywróć jako szkic", "btn-primary"]]
+  };
+  var publishBtn = document.getElementById("btn-publish");
+  var statusBusy = false;
+
+  /** Ustawia przyciski i blokadę edycji zgodnie z obecnym statusem. */
+  function applyStatusUi() {
+    var st = state.game.status;
+    var archived = st === "archived";
+    publishBtn.hidden = !(st === "draft" || st === "hidden");
+    publishBtn.textContent = st === "hidden" ? "Opublikuj ponownie" : "Opublikuj";
+    publishBtn.disabled = statusBusy || state.saving;
+    saveBtn.disabled = archived || state.saving || statusBusy;
+    ["panel-info", "panel-route"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (archived) el.setAttribute("inert", ""); else el.removeAttribute("inert");
+      el.classList.toggle("is-readonly", archived);
+    });
+  }
+
+  function dateTime(v) {
+    return v ? new Date(v.replace(" ", "T")).toLocaleString("pl-PL", { dateStyle: "medium", timeStyle: "short" }) : "";
+  }
+
+  /** Czy gra jest teraz widoczna na stronie głównej – i dlaczego nie. */
+  function visibility() {
+    var g = state.game, now = new Date();
+    if (!g.id) return [false, "Gra nie jest jeszcze zapisana."];
+    if (g.status !== "published") return [false, "Niewidoczna na stronie głównej – widać tam tylko gry opublikowane."];
+    if (g.available_from && new Date(g.available_from) > now) {
+      return [false, "Opublikowana, ale pojawi się na stronie głównej dopiero " + dateTime(g.available_from) + "."];
+    }
+    if (g.available_until && new Date(g.available_until) < now) {
+      return [false, "Opublikowana, ale termin dostępności minął " + dateTime(g.available_until) + " – zmień datę „Do”."];
+    }
+    return [true, "Widoczna na stronie głównej" + (g.available_until ? " do " + dateTime(g.available_until) : "") + "."];
+  }
+
+  /** Lista kontrolna – te same reguły co GameValidationService::forPublish na serwerze. */
+  function checklist() {
+    var g = state.game, items = [];
+    function add(ok, text, err) { items.push({ ok: ok, text: text, err: err || null }); }
+    function infoErr(field) { return { path: field, field: field, waypoint: null, message: "" }; }
+
+    add(!!g.title.trim(), "Tytuł gry", infoErr("title"));
+    add(!!(g.short_description.trim() || g.description.trim()), "Opis gry (krótki lub pełny)", infoErr("short_description"));
+    var other = $("[data-category][data-other]");
+    var otherId = other ? Number(other.value) : null;
+    if (otherId !== null && g.categories.indexOf(otherId) !== -1) {
+      add(!!g.custom_category.trim(), "Nazwa własnej kategorii „Inne”", infoErr("custom_category"));
+    }
+    add(state.waypoints.length > 0, "Co najmniej jeden punkt trasy",
+      { path: "waypoints", field: "waypoints", waypoint: null, message: "" });
+
+    var bad = [];
+    state.waypoints.forEach(function (w, i) {
+      var t = w.task, n = i + 1, err = null;
+      if (!w.name.trim()) err = ["name", "nazwa punktu"];
+      else if (t) {
+        var correct = (t.options || []).filter(function (o) { return o.is_correct; }).length;
+        var filled = (t.options || []).filter(function (o) { return (o.text || "").trim(); }).length;
+        if (!t.title.trim()) err = ["title", "tytuł zadania", true];
+        else if (!t.description.trim()) err = ["description", "treść zadania", true];
+        else if (CHOICE.indexOf(t.task_type) !== -1 && filled < 2) err = ["options", "co najmniej 2 odpowiedzi"];
+        else if (t.task_type === "single_choice" && correct !== 1) err = ["options", "dokładnie 1 poprawna odpowiedź"];
+        else if (t.task_type === "multiple_choice" && correct < 1) err = ["options", "poprawna odpowiedź"];
+        else if (t.task_type === "open_answer" && !t.expected_answer.trim() && !t.evaluation_instructions.trim()) {
+          err = ["expected_answer", "oczekiwana odpowiedź lub instrukcja oceny", true];
+        } else if ((t.task_type === "photo" || t.task_type === "video") && !t.media_requirement.trim()) {
+          err = ["media_requirement", "opis wymaganego zdjęcia lub filmu", true];
+        }
+      }
+      if (err) bad.push({ n: n, text: err[1], e: { path: "waypoints." + i + (err[2] ? ".task." : ".") + err[0], field: err[0], waypoint: i, message: "" } });
+    });
+    if (state.waypoints.length) {
+      add(!bad.length, bad.length
+        ? "Punkty i zadania kompletne – brakuje: " + bad.slice(0, 3).map(function (b) { return "punkt " + b.n + " (" + b.text + ")"; }).join(", ") +
+          (bad.length > 3 ? " i " + (bad.length - 3) + " więcej" : "")
+        : "Punkty i zadania kompletne", bad.length ? bad[0].e : null);
+    }
+    add(!!state.game.id && !state.dirty, "Wszystkie zmiany zapisane");
+    return items;
+  }
+
+  function renderPreview() {
+    if (!state.game) return;
+    var g = state.game, st = g.status;
+
+    var badge = document.getElementById("pv-status");
+    badge.className = "status status--" + st;
+    badge.textContent = STATUS_LABELS[st];
+    document.getElementById("pv-status-desc").textContent = STATUS_DESC[st] +
+      (st === "published" && g.published_at ? " Pierwsza publikacja: " + dateTime(g.published_at) + "." : "");
+    var vis = visibility(), visEl = document.getElementById("pv-visibility");
+    visEl.textContent = vis[1];
+    visEl.setAttribute("data-ok", String(vis[0]));
+    if (vis[0]) {
+      var a = document.createElement("a");
+      a.href = boot.urls.home; a.target = "_blank"; a.rel = "noopener"; a.textContent = " Zobacz stronę główną ↗";
+      visEl.appendChild(a);
+    }
+    document.getElementById("preview-unsaved").hidden = !state.dirty;
+
+    // Przyciski zmiany statusu
+    var box = document.getElementById("pv-actions");
+    box.textContent = "";
+    if (!g.id) {
+      var p = document.createElement("p");
+      p.className = "field__hint";
+      p.textContent = "Zapisz grę, aby móc ją opublikować.";
+      box.appendChild(p);
+    }
+    (g.id ? STATUS_ACTIONS[st] : []).forEach(function (a) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn-sm " + a[2];
+      b.textContent = a[1];
+      b.disabled = statusBusy;
+      b.addEventListener("click", function () { changeStatus(a[0], a[3]); });
+      box.appendChild(b);
+    });
+
+    // Lista kontrolna
+    var list = document.getElementById("pv-checklist");
+    list.textContent = "";
+    checklist().forEach(function (it) {
+      var li = document.createElement("li");
+      li.className = it.ok ? "is-ok" : "is-missing";
+      if (!it.ok && it.err && st !== "archived") {
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "link-btn"; btn.textContent = it.text;
+        btn.addEventListener("click", function () { goToError(it.err); });
+        li.appendChild(btn);
+      } else {
+        li.textContent = it.text;
+      }
+      list.appendChild(li);
+    });
+
+    // Karta jak na stronie głównej
+    document.getElementById("pv-title").textContent = g.title.trim() || "Bez tytułu";
+    var shortEl = document.getElementById("pv-short");
+    shortEl.textContent = g.short_description.trim();
+    shortEl.hidden = !g.short_description.trim();
+    document.getElementById("pv-difficulty").textContent = DIFFICULTY_LABELS[g.difficulty] || "—";
+    var mins = Number(g.estimated_duration_minutes) || 0;
+    document.getElementById("pv-duration").textContent = !mins ? "—"
+      : mins < 60 ? mins + " min" : Math.floor(mins / 60) + " h" + (mins % 60 ? " " + (mins % 60) + " min" : "");
+    document.getElementById("pv-count").textContent = state.waypoints.length;
+    var cats = $all("[data-category]").filter(function (cb) { return g.categories.indexOf(Number(cb.value)) !== -1; })
+      .map(function (cb) {
+        return cb.hasAttribute("data-other") && g.custom_category.trim()
+          ? g.custom_category.trim() : cb.closest("label").textContent.trim();
+      });
+    var catsEl = document.getElementById("pv-cats");
+    catsEl.textContent = cats.join(", ");
+    catsEl.hidden = !cats.length;
+    document.getElementById("pv-card").setAttribute("data-difficulty", g.difficulty);
+
+    // Przebieg gry
+    var maxPts = 0, tasks = 0;
+    var route = document.getElementById("pv-route");
+    route.textContent = "";
+    state.waypoints.forEach(function (w) {
+      var li = document.createElement("li");
+      var name = document.createElement("strong");
+      name.textContent = w.name.trim() || "Punkt bez nazwy";
+      li.appendChild(name);
+      var meta = document.createElement("span");
+      meta.className = "pv-route__task";
+      if (w.task) {
+        tasks += 1;
+        maxPts += Number(w.task.max_points) || 0;
+        meta.textContent = (TASK_LABELS[w.task.task_type] || "") + ": " + (w.task.title.trim() || "bez tytułu") +
+          " · " + (w.task.max_points || 0) + " pkt · odblokowanie " + (UNLOCK_LABELS[w.task.unlock_mode] || "");
+      } else {
+        meta.textContent = "Bez zadania";
+      }
+      li.appendChild(meta);
+      route.appendChild(li);
+    });
+    var n = state.waypoints.length, r = walkingRoute();
+    document.getElementById("pv-summary").textContent = !n ? "Gra nie ma jeszcze punktów trasy." :
+      n + " " + pluralPoints(n) + " · " + tasks + " " + pluralTasks(tasks) + " · do zdobycia " + (maxPts + (Number(g.completion_points) || 0)) +
+      " pkt (w tym " + (Number(g.completion_points) || 0) + " za ukończenie)" +
+      (n > 1 ? (r ? " · trasa piesza " + formatDistance(r.distance) : " · ok. " + formatDistance(routeLength()) + " w linii prostej") : "");
+  }
+
+  /** Zmiana statusu na serwerze. Niezapisane zmiany są najpierw zapisywane. */
+  function changeStatus(target, question) {
+    if (statusBusy || state.saving) return;
+    if (question && !window.confirm(question)) return;
+
+    var ready = (state.dirty || !state.game.id) ? save() : Promise.resolve(true);
+    ready.then(function (ok) {
+      if (!ok) return;
+      statusBusy = true;
+      applyStatusUi();
+      renderPreview();
+      setSaveState("saving", "Zmieniam status…");
+
+      return fetch(boot.urls.status.replace("{id}", state.game.id), {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
+        },
+        body: JSON.stringify({ status: target, lock_version: state.game.lock_version })
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (body) { return { res: res, body: body }; });
+        })
+        .then(function (r) {
+          statusBusy = false;
+          if (r.res.ok && r.body.data) {
+            onSaved(r.body.data, false, findIndex(state.selectedKey));
+            setSaveState("saved", "Status: " + STATUS_LABELS[r.body.data.status]);
+            announce("Nowy status gry: " + STATUS_LABELS[r.body.data.status] + ".");
+            showTab("preview");
+          } else {
+            onSaveError(r.res.status, r.body);
+            setSaveState("error", "Status nie został zmieniony");
+          }
+        })
+        .catch(function () {
+          statusBusy = false;
+          setSaveState("error", "Status nie został zmieniony");
+          showErrors("Brak połączenia z serwerem. Status gry się nie zmienił.", []);
+        })
+        .then(function () {
+          applyStatusUi();
+          renderPreview();
+        });
+    });
+  }
+
+  publishBtn.addEventListener("click", function () {
+    showTab("preview");
+    changeStatus("published");
   });
 
   /* ================================================================
@@ -1083,25 +1363,10 @@
   /* ================================================================
      Start
      ================================================================ */
-  var walkToggle = document.getElementById("route-walking");
-  if (boot.map.routing && walkToggle) {
-    document.getElementById("route-walking-wrap").hidden = false;
-    walkToggle.checked = walk.enabled;
-    walkToggle.addEventListener("change", function () {
-      walk.enabled = walkToggle.checked;
-      walk.failedKey = "";
-      try { localStorage.setItem("pgm.walkingRoute", walk.enabled ? "1" : "0"); } catch (e) { /* bez zapamiętywania */ }
-      updateRouteLine();
-      renderSummary();
-      updateMapNote();
-      scheduleWalkingRoute();
-    });
-  }
-
   loadGame(boot.game);
   fillInfoForm();
   renderList();
   renderSummary();
-  showTab(boot.game ? "route" : "info");
+  showTab(!boot.game ? "info" : (boot.game.status === "archived" ? "preview" : "route"));
   if (!boot.game) document.getElementById("f-title").focus();
 })();

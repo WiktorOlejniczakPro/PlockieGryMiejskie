@@ -29,7 +29,6 @@ $aria = static fn (string $key): string => $err($key) ? ' aria-invalid="true" ar
   <div>
     <a class="editor-back" href="<?= e(url('/panel/nagrody')) ?>">← Kreator nagród</a>
     <h1><?= $isNew ? 'Nowa nagroda' : 'Edycja nagrody' ?></h1>
-    <?php if (!$isNew && $reward['is_sample']): ?><span class="badge badge--sample">Przykład</span><?php endif; ?>
   </div>
 </div>
 
