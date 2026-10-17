@@ -34,6 +34,8 @@ Odinstalowanie aplikacji = nowe konto. API gracza nie używa ciasteczek ani toke
 | GET | `/games/{id}` | – | gra z punktami i zadaniami (bez poprawnych odpowiedzi) |
 | GET | `/games/{id}/ranking` | – | ranking gry (najlepszy ukończony wynik gracza) |
 | GET | `/ranking` | – | ranking ogólny (suma najlepszych wyników) |
+| GET | `/place-categories` | – | rodzaje miejsc z otwartych danych miasta `[{slug, name, source_name, place_count}]` |
+| GET | `/places?lat=&lng=&radius_m=&category=&q=` | – | miejsca najbliżej punktu (domyślnie centrum Płocka, promień 1500 m, maks. 5000 m, do 300 wyników) posortowane wg `distance_m`; `category` – slug lub kilka po przecinku |
 | POST | `/players` | – | nowe konto `{nickname?}` → `{player, token}` (201) |
 | GET | `/me` | ✔ | `{player, history}` |
 | PUT | `/me` | ✔ | zmiana nicku `{nickname}` |

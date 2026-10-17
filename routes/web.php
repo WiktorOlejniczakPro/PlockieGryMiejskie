@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 
 use App\Controllers\Api\AdminGameApi;
+use App\Controllers\Api\PlaceApi;
 use App\Controllers\Api\PlayerApi;
 use App\Controllers\Api\PublicGameApi;
 use App\Controllers\AuthController;
@@ -43,6 +44,8 @@ $router->get('/api/v1/games', [PublicGameApi::class, 'index']);
 $router->get('/api/v1/games/{id}', [PublicGameApi::class, 'show']);
 $router->get('/api/v1/games/{id}/ranking', [PublicGameApi::class, 'ranking']);
 $router->get('/api/v1/ranking', [PublicGameApi::class, 'overallRanking']);
+$router->get('/api/v1/place-categories', [PlaceApi::class, 'categories']);
+$router->get('/api/v1/places', [PlaceApi::class, 'index']);
 
 // Gracz: konto zakładane automatycznie przez aplikację, dalej token w nagłówku
 // "Authorization: Bearer <token>" (middleware 'player'). Bez sesji i bez CSRF.
