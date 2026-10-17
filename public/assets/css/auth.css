@@ -1,0 +1,49 @@
+/* =========================================================
+   PGM – logowanie i strony błędów
+   ========================================================= */
+
+.page-auth {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 110%, rgba(233,185,73,.25), transparent 70%),
+    linear-gradient(180deg, var(--navy-900), var(--navy-700));
+}
+
+.auth-shell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+  min-height: 100vh; padding: 2rem 1rem;
+}
+
+.auth-brand {
+  display: inline-flex; align-items: center; gap: .6rem;
+  color: var(--white); text-decoration: none; font-family: var(--font-head); font-weight: 600; font-size: 1.15rem;
+  --focus-ring: 0 0 0 3px var(--gold-400);
+}
+.auth-brand strong { color: var(--gold-400); }
+
+.auth-card {
+  width: 100%; max-width: 440px;
+  padding: clamp(1.75rem, 5vw, 2.5rem);
+  background: var(--surface); border-radius: var(--radius-lg);
+  box-shadow: 0 30px 70px -25px rgba(0,0,0,.55);
+  animation: card-in .45s var(--ease) both;
+}
+.auth-card h1 { font-size: 1.7rem; }
+.auth-card--center { text-align: center; }
+.auth-lead { color: var(--text-muted); }
+.auth-note { margin: 1.5rem 0 0; font-size: .9rem; color: var(--text-muted); text-align: center; }
+.auth-back { margin: 0; }
+.auth-back a { color: rgba(255,255,255,.85); --focus-ring: 0 0 0 3px var(--gold-400); }
+
+.error-code { margin: 0; font: 800 3.5rem/1 var(--font-head); color: var(--gold-500); }
+.error-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 1rem; }
+
+.debug-box {
+  margin-top: 1.5rem; padding: 1rem; text-align: left;
+  background: #fff8e6; border: 1px solid #f0d58a; border-radius: var(--radius-sm); font-size: .85rem;
+  word-break: break-word;
+}
+.debug-box summary { cursor: pointer; font-weight: 600; }
+.debug-box p { margin: .5rem 0 0; }
+
+@keyframes card-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }

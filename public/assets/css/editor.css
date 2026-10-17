@@ -1,0 +1,254 @@
+/* =========================================================
+   PGM – edytor gry
+   Duże ekrany: lista punktów | mapa | szczegóły punktu.
+   Mniejsze: mapa na górze, lista i szczegóły pod nią.
+   ========================================================= */
+
+.panel-main--editor { max-width: none; padding: 1rem 1.25rem 1.5rem; }
+
+/* ---------- Pasek edytora ---------- */
+.editor-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1.5rem;
+  margin-bottom: .9rem;
+}
+.editor-back { display: inline-flex; align-items: center; gap: .25rem; font-size: .875rem; font-weight: 500; text-decoration: none; color: var(--blue-600); }
+.editor-back:hover { text-decoration: underline; }
+.editor-bar__heading { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; margin-top: .2rem; }
+.editor-bar__heading h1 { margin: 0; font-size: clamp(1.25rem, 2.4vw, 1.65rem); max-width: 40ch; overflow-wrap: anywhere; }
+.editor-bar__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+
+.save-state { margin: 0 .5rem 0 0; font-size: .875rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: .4rem; }
+.save-state::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #9aa5b8; }
+.save-state[data-state="saved"]::before { background: var(--green-600); }
+.save-state[data-state="dirty"] { color: #8a5a00; font-weight: 600; }
+.save-state[data-state="dirty"]::before { background: var(--gold-500); }
+.save-state[data-state="saving"]::before { background: var(--blue-500); animation: pulse 1s infinite; }
+.save-state[data-state="error"] { color: var(--red-600); font-weight: 600; }
+.save-state[data-state="error"]::before { background: var(--red-600); }
+@keyframes pulse { 50% { opacity: .3; } }
+
+.soon-actions { display: inline-flex; align-items: center; gap: .35rem; }
+
+/* ---------- Błędy zapisu ---------- */
+.save-errors {
+  margin-bottom: .9rem; padding: .9rem 1.1rem;
+  background: var(--red-100); border: 1px solid #f3b8b1; border-left: 4px solid var(--red-600); border-radius: var(--radius-sm);
+  color: #7a1a12; animation: alert-in .25s var(--ease);
+}
+.save-errors__title { margin: 0; font-weight: 600; }
+.save-errors ul { margin: .4rem 0 0; padding-left: 1.2rem; }
+.save-errors li { margin: .15rem 0; }
+.link-btn {
+  padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left;
+  text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+}
+.link-btn:hover { color: #4f0f09; }
+
+/* ---------- Zakładki ---------- */
+.editor-tabs { display: flex; flex-wrap: wrap; gap: .25rem; margin-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.editor-tab {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 46px; padding: .5rem 1rem;
+  border: 0; border-bottom: 3px solid transparent; margin-bottom: -1px; background: none;
+  color: var(--text-muted); font: 600 .95rem var(--font-body); cursor: pointer;
+}
+.editor-tab:hover:not(.is-disabled) { color: var(--navy-800); }
+.editor-tab.is-active { color: var(--navy-800); border-bottom-color: var(--gold-400); }
+.editor-tab.is-disabled { cursor: default; color: #98a2b3; }
+.editor-tab__num {
+  display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%;
+  background: #e6ebf3; color: var(--navy-800); font-size: .8rem;
+}
+.editor-tab.is-active .editor-tab__num { background: var(--navy-800); color: var(--white); }
+.editor-tab__count { padding: .05rem .5rem; border-radius: var(--radius-pill); background: var(--blue-100); color: var(--navy-800); font-size: .78rem; }
+
+.editor-workspace.is-saving { opacity: .65; transition: opacity .2s; }
+
+/* ---------- Informacje podstawowe ---------- */
+.info-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.info-side { display: grid; gap: 1.25rem; }
+.info-card { display: grid; gap: 1rem; }
+.info-card h2 { margin: 0; font-size: 1.05rem; }
+.optional { font-weight: 400; color: var(--text-muted); font-size: .9rem; }
+.field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+.field__hint { margin: 0; font-size: .82rem; color: var(--text-muted); }
+.req { color: var(--red-600); }
+.field textarea { min-height: auto; resize: vertical; }
+.info-next { display: flex; justify-content: flex-end; margin-top: 1.25rem; }
+
+.chips { display: flex; flex-wrap: wrap; gap: .45rem; margin: 0; padding: 0; border: 0; }
+.chip { position: relative; cursor: pointer; }
+.chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.chip span {
+  display: inline-flex; align-items: center; min-height: 38px; padding: .35rem .85rem;
+  border: 1.5px solid var(--border); border-radius: var(--radius-pill); background: var(--white);
+  font-size: .9rem; font-weight: 500; transition: all .15s var(--ease);
+}
+.chip:hover span { border-color: var(--blue-400); }
+.chip input:checked + span { background: var(--navy-800); border-color: var(--navy-800); color: var(--white); }
+.chip input:checked + span::before { content: "✓"; margin-right: .35rem; color: var(--gold-400); }
+.chip input:focus-visible + span { box-shadow: var(--focus-ring); }
+
+/* ---------- Układ trasy ---------- */
+.route-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr) 380px;
+  gap: 1rem;
+  height: calc(100vh - 64px - 230px);
+  min-height: 560px;
+}
+.route-list, .route-details {
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+}
+.route-list { padding: 1rem; gap: .75rem; }
+.route-list__head h2 { margin: 0; font-size: 1.05rem; }
+.route-summary { margin: .2rem 0 0; font-size: .85rem; color: var(--text-muted); }
+.route-list__help { margin: 0; font-size: .8rem; color: var(--text-muted); }
+
+.route-map { display: flex; flex-direction: column; gap: .4rem; min-height: 0; }
+.map {
+  flex: 1; min-height: 320px; border-radius: var(--radius); border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm); background: #dfe7f1; cursor: crosshair; z-index: 0;
+}
+.map-note { margin: 0; font-size: .8rem; color: var(--text-muted); }
+
+.route-details { padding: 1rem 1.1rem; overflow-y: auto; }
+.details-empty { margin: auto; padding: 1rem; text-align: center; color: var(--text-muted); }
+.details-empty p { margin: .2rem 0; }
+
+/* ---------- Lista punktów ---------- */
+.point-list { flex: 1; min-height: 0; overflow-y: auto; margin: 0 -.35rem; padding: .1rem .35rem; list-style: none; display: grid; align-content: start; gap: .35rem; }
+.point-item {
+  position: relative; display: flex; align-items: center; gap: .25rem; padding: .25rem .25rem .25rem .1rem;
+  border: 1.5px solid var(--border); border-radius: 10px; background: var(--white);
+  transition: border-color .15s var(--ease), background-color .15s var(--ease);
+}
+.point-item:hover { border-color: #b7c3d8; }
+.point-item.is-selected { border-color: var(--navy-800); background: var(--blue-50); }
+.point-item.has-error { border-color: var(--red-600); }
+.point-item.is-dragging { opacity: .45; }
+.point-item.drop-before::before, .point-item.drop-after::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 3px; background: var(--gold-400); border-radius: 2px;
+}
+.point-item.drop-before::before { top: -4px; }
+.point-item.drop-after::after { bottom: -4px; }
+.point-item__handle { padding: 0 .2rem; color: #a3adbd; cursor: grab; font-size: .9rem; letter-spacing: -2px; user-select: none; }
+.point-item__main {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: .6rem; min-height: 44px; padding: .25rem .3rem;
+  border: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: inherit; border-radius: 8px;
+}
+.point-item__text { display: grid; min-width: 0; }
+.point-item__text strong { font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--navy-800); }
+.point-item__text small { font-size: .78rem; color: var(--text-muted); }
+.point-item__actions { display: flex; flex-direction: column; gap: 2px; }
+
+.point-num {
+  flex-shrink: 0; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--navy-800); color: var(--white); font: 700 .85rem var(--font-head);
+}
+.point-item.is-selected .point-num { background: var(--gold-400); color: var(--navy-900); }
+.point-num--lg { width: 36px; height: 36px; font-size: 1rem; background: var(--gold-400); color: var(--navy-900); }
+
+.point-list-empty { padding: 1.25rem .75rem; text-align: center; color: var(--text-muted); border: 1.5px dashed var(--border); border-radius: 10px; }
+.point-list-empty svg { width: 34px; height: 34px; fill: none; stroke: var(--blue-400); stroke-width: 1.8; }
+.point-list-empty p { margin: .4rem 0 0; font-size: .9rem; }
+
+.icon-btn {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; padding: 0;
+  border: 1px solid transparent; border-radius: 8px; background: transparent; color: var(--navy-800);
+  cursor: pointer; font-size: .9rem; line-height: 1;
+}
+.icon-btn:hover:not(:disabled) { background: var(--blue-50); border-color: var(--border); }
+.icon-btn:disabled { opacity: .3; cursor: default; }
+.icon-btn--sm { width: 28px; height: 22px; font-size: .8rem; }
+.icon-btn--danger { color: var(--red-600); }
+.icon-btn--danger:hover:not(:disabled) { background: var(--red-100); border-color: #f3b8b1; }
+
+/* ---------- Markery ----------
+   Leaflet ustawia pozycję markera przez "transform" w stylu elementu,
+   dlatego marker nie może mieć własnego transform – ostrze rysuje ::after. */
+.leaflet-marker-icon.pin {
+  display: grid; place-items: center;
+  width: 34px !important; height: 34px !important;
+  background: var(--navy-800); color: var(--white);
+  border: 3px solid var(--white); border-radius: 50%;
+  box-shadow: 0 6px 14px -4px rgba(4, 16, 34, .6);
+}
+.leaflet-marker-icon.pin::after {
+  content: ""; position: absolute; left: 50%; top: 100%; margin-left: -6px; margin-top: -2px;
+  border: 6px solid transparent; border-top: 9px solid var(--white);
+}
+.pin span { font: 700 13px/1 var(--font-head); }
+.pin.has-task { background: var(--blue-600); }
+.pin.is-selected { background: var(--gold-400); color: var(--navy-900); }
+.pin.has-error { background: var(--red-600); color: var(--white); }
+.leaflet-marker-icon.pin:focus-visible { outline: 3px solid var(--gold-400); outline-offset: 3px; }
+
+/* ---------- Formularz punktu ---------- */
+.details-form { display: grid; gap: .9rem; }
+.details-head { display: flex; align-items: center; gap: .6rem; }
+.details-title { flex: 1; margin: 0; font-size: 1.05rem; }
+
+.task-box { display: grid; gap: .9rem; margin-top: .25rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.task-fields { display: grid; gap: .9rem; padding: 1rem; background: var(--blue-50); border-radius: var(--radius-sm); }
+.task-fields[hidden], [data-show-for][hidden], [data-hide-for][hidden], [data-show-unlock][hidden] { display: none; }
+
+.switch { display: inline-flex; align-items: center; gap: .65rem; cursor: pointer; font-weight: 600; color: var(--navy-800); }
+.switch input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.switch__track { position: relative; width: 44px; height: 24px; border-radius: 12px; background: #c5cedb; transition: background-color .2s var(--ease); flex-shrink: 0; }
+.switch__track::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--white); box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .2s var(--ease);
+}
+.switch input:checked + .switch__track { background: var(--green-600); }
+.switch input:checked + .switch__track::after { transform: translateX(20px); }
+.switch input:focus-visible + .switch__track { box-shadow: var(--focus-ring); }
+
+.options { display: grid; gap: .5rem; }
+.options.has-error .options__list { outline: 2px solid var(--red-600); outline-offset: 4px; border-radius: 6px; }
+.options__title { margin: 0; font-weight: 600; font-size: .925rem; color: var(--navy-800); }
+.options__mode { font-weight: 400; color: var(--text-muted); font-size: .85rem; }
+.options__list { display: grid; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.options .btn { justify-self: start; }
+.option-row { display: flex; align-items: center; gap: .4rem; }
+.option-row__correct { display: grid; place-items: center; width: 36px; height: 36px; cursor: pointer; }
+.option-row__correct input { width: 20px; height: 20px; accent-color: var(--green-600); cursor: pointer; }
+.option-row__text {
+  flex: 1; min-width: 0; min-height: 40px; padding: .45rem .7rem; font: inherit;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: var(--white);
+}
+.option-row__text:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(47,128,196,.2); }
+
+/* ---------- Responsywność ---------- */
+@media (max-width: 1360px) {
+  .route-layout { grid-template-columns: 260px minmax(0, 1fr) 340px; }
+}
+
+@media (max-width: 1180px) {
+  .route-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "map map" "list details";
+    height: auto;
+  }
+  .route-map { grid-area: map; }
+  .route-list { grid-area: list; max-height: 520px; }
+  .route-details { grid-area: details; max-height: none; }
+  .map { height: 60vh; min-height: 380px; flex: none; }
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .route-layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "map" "list" "details"; }
+  .map { height: 55vh; min-height: 320px; }
+  .editor-bar__actions { width: 100%; }
+  .save-state { width: 100%; }
+  .soon-actions { display: none; }
+  .field-row { grid-template-columns: 1fr; }
+}
+
+/* Elementy siatki domyślnie nie zwężają się poniżej treści – pozwalamy im na to,
+   żeby pola formularza nie wychodziły poza panel szczegółów. */
+.route-details { overflow-x: hidden; }
+.details-form, .details-form > *, .task-box, .task-box > *, .task-fields > *, .field-row > *, .field { min-width: 0; }
+.field input, .field select, .field textarea { max-width: 100%; }
+.field select { text-overflow: ellipsis; }

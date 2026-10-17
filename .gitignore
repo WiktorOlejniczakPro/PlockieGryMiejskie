@@ -1,0 +1,9 @@
+.env
+storage/logs/*
+!storage/logs/.gitkeep
+storage/uploads/*
+!storage/uploads/.htaccess
+!storage/uploads/.gitkeep
+vendor/
+.DS_Store
+Thumbs.db

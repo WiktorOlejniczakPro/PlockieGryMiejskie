@@ -1,0 +1,18 @@
+# Zabezpieczenie na wypadek, gdy cały katalog pgm/ leży w htdocs (XAMPP).
+# Z przeglądarki dostępny jest WYŁĄCZNIE katalog public/.
+# Adres http://localhost/pgm/ przekierowuje do http://localhost/pgm/public/
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^$ %{REQUEST_URI}public/ [R=302,L]
+  RewriteRule ^(?!public/) - [F,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+  # Bez mod_rewrite blokujemy pliki konfiguracyjne i ukryte
+  <FilesMatch "^\.|\.(sql|md|lock|json|env)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
