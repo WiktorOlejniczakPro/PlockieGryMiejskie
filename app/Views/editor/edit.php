@@ -30,7 +30,14 @@ $status = $game['status'] ?? 'draft';
       <button type="button" class="btn btn-primary btn-sm" id="btn-save">
         <?= $status === 'draft' ? 'Zapisz szkic' : 'Zapisz zmiany' ?>
       </button>
+      <button type="button" class="btn btn-gold btn-sm" id="btn-publish" hidden>Opublikuj grę</button>
     </div>
+  </div>
+
+  <div class="lock-note draft-note" id="draft-note" hidden>
+    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg>
+    <p><strong>To jest szkic.</strong> Gracze go nie widzą – gra pojawi się na stronie głównej i w aplikacji
+      dopiero po kliknięciu „Opublikuj grę”.</p>
   </div>
 
   <div class="lock-note" id="lock-note" hidden>
