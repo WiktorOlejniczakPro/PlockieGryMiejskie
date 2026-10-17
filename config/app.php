@@ -36,6 +36,11 @@ return [
         'tile_url'    => env('MAP_TILE_URL', 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
         'attribution' => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
         'geocoder'    => env('GEOCODER_URL', 'https://nominatim.openstreetmap.org/search'),
+        // Trasy piesze (OSRM, profil „foot”). Puste ROUTING_URL w .env = wyłączone.
+        'routing_url' => env('ROUTING_URL', 'https://routing.openstreetmap.de/routed-foot/route/v1/driving'),
+        'routing_cache_days' => 30,
+        'routing_attribution' => 'Trasy piesze: <a href="https://routing.openstreetmap.de/about.html">FOSSGIS / OSRM</a> · '
+            . '<a href="https://www.openstreetmap.org/fixthemap">zgłoś błąd mapy</a>',
     ],
 
     'uploads' => [

@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 
 use App\Controllers\Api\AdminGameApi;
+use App\Controllers\Api\RouteApi;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\GameController;
@@ -45,6 +46,7 @@ $router->delete('/panel/nagrody/{id}/kody/{codeId}', [RewardController::class, '
 $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']);
 $router->post('/api/v1/admin/games', [AdminGameApi::class, 'store'], ['auth']);
 $router->put('/api/v1/admin/games/{id}', [AdminGameApi::class, 'update'], ['auth']);
+$router->post('/api/v1/admin/route', [RouteApi::class, 'walking'], ['auth']);
 
 // Kolejne etapy: podgląd, publikacja, duplikowanie, archiwizacja, zdjęcia,
 // konto, FAQ oraz publiczne API /api/v1/games dla aplikacji mobilnej.

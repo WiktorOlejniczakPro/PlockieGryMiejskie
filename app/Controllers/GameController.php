@@ -55,12 +55,15 @@ final class GameController
                 'zoom'        => $map['zoom'],
                 'tileUrl'     => $map['tile_url'],
                 'attribution' => $map['attribution'],
+                'routing'     => (string) ($map['routing_url'] ?? '') !== '',
+                'routingAttribution' => $map['routing_attribution'] ?? '',
             ],
             'urls' => [
                 'create'       => url('/api/v1/admin/games'),
                 'game'         => url('/api/v1/admin/games/{id}'),
                 'editPage'     => url('/panel/gry/{id}/edycja'),
                 'login'        => url('/logowanie'),
+                'route'        => url('/api/v1/admin/route'),
             ],
         ];
 

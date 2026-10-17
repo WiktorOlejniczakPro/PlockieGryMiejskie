@@ -252,3 +252,16 @@
 .details-form, .details-form > *, .task-box, .task-box > *, .task-fields > *, .field-row > *, .field { min-width: 0; }
 .field input, .field select, .field textarea { max-width: 100%; }
 .field select { text-overflow: ellipsis; }
+
+/* ---------- Pasek nad mapą: trasa piesza ---------- */
+.map-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem 1rem; min-height: 28px; }
+.toggle-inline { display: inline-flex; align-items: center; gap: .45rem; font-size: .9rem; font-weight: 600; color: var(--navy-800); cursor: pointer; }
+.toggle-inline input { width: 18px; height: 18px; accent-color: #4a90f7; }
+.toggle-inline[hidden] { display: none; }
+.route-status { font-size: .82rem; color: var(--text-muted); }
+.route-status[data-state="loading"]::before {
+  content: ""; display: inline-block; width: 10px; height: 10px; margin-right: .4rem; vertical-align: -1px;
+  border: 2px solid #4a90f7; border-right-color: transparent; border-radius: 50%; animation: spin .8s linear infinite;
+}
+.route-status[data-state="error"] { color: #8a5a00; font-weight: 500; }
+@keyframes spin { to { transform: rotate(360deg); } }

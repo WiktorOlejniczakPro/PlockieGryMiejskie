@@ -248,12 +248,34 @@
      ================================================================ */
   var map, routeLine, markers = {};
 
+  /*
+   * Trasa PIESZA po ulicach – wyznaczana przez serwer (usługa OSRM, profil pieszy).
+   * Wygląd jak w nawigacji: niebieska linia z ciemniejszym obrysem. Gdy trasy nie da się
+   * wyznaczyć (brak internetu, usługa niedostępna), zostaje przerywana linia prosta.
+   */
+  var walk = {
+    enabled: !!boot.map.routing,
+    outline: null, line: null, connectors: null,
+    cache: {},        // klucz współrzędnych -> wynik z serwera
+    pendingKey: "",   // trasa, o którą właśnie pytamy
+    failedKey: "",    // trasa, której nie udało się wyznaczyć (bez ponawiania w kółko)
+    error: "",
+    timer: null
+  };
+  try {
+    if (localStorage.getItem("pgm.walkingRoute") === "0") walk.enabled = false;
+  } catch (e) { /* brak dostępu do localStorage – zostaje ustawienie domyślne */ }
+
   function initMap() {
     mapReady = true;
     // doubleClickZoom wyłączony: kliknięcie dodaje punkt, więc dwuklik dodawałby punkt i przybliżał mapę
     map = L.map("map", { zoomControl: true, doubleClickZoom: false }).setView([boot.map.lat, boot.map.lng], boot.map.zoom);
     L.tileLayer(boot.map.tileUrl, { maxZoom: 19, attribution: boot.map.attribution }).addTo(map);
-    routeLine = L.polyline([], { color: "#0b2545", weight: 3, opacity: 0.75, dashArray: "8 8" }).addTo(map);
+    routeLine = L.polyline([], { color: "#0b2545", weight: 3, opacity: 0.75, dashArray: "8 8", interactive: false }).addTo(map);
+    walk.connectors = L.layerGroup().addTo(map);
+    walk.outline = L.polyline([], { color: "#1a4fa0", weight: 9, opacity: 0.95, lineCap: "round", lineJoin: "round", interactive: false }).addTo(map);
+    walk.line = L.polyline([], { color: "#4a90f7", weight: 5, opacity: 1, lineCap: "round", lineJoin: "round", interactive: false }).addTo(map);
+    if (boot.map.routing && boot.map.routingAttribution) map.attributionControl.addAttribution(boot.map.routingAttribution);
 
     map.on("click", function (e) { addPoint(e.latlng.lat, e.latlng.lng); });
 
@@ -310,11 +332,127 @@
       if (!seen[key]) { map.removeLayer(markers[key]); delete markers[key]; }
     });
     updateRouteLine();
+    scheduleWalkingRoute();
+  }
+
+  /** Klucz trasy – zmienia się przy każdej zmianie położenia lub kolejności punktów. */
+  function routeKey() {
+    return state.waypoints.map(function (w) { return w.latitude.toFixed(6) + "," + w.longitude.toFixed(6); }).join(";");
+  }
+
+  /** Trasa piesza pasująca do obecnych punktów albo null (wtedy pokazujemy linię prostą). */
+  function walkingRoute() {
+    if (!walk.enabled || state.waypoints.length < 2) return null;
+    return walk.cache[routeKey()] || null;
   }
 
   function updateRouteLine() {
     if (!mapReady) return;
-    routeLine.setLatLngs(state.waypoints.map(function (w) { return [w.latitude, w.longitude]; }));
+    var r = walkingRoute();
+    walk.connectors.clearLayers();
+    if (r) {
+      routeLine.setLatLngs([]);
+      walk.outline.setLatLngs(r.geometry);
+      walk.line.setLatLngs(r.geometry);
+      // Kropkowany odcinek od punktu do najbliższej drogi (gdy punkt leży poza chodnikiem)
+      state.waypoints.forEach(function (w, i) {
+        var s = r.snapped && r.snapped[i];
+        if (!s || distance(w, { latitude: s[0], longitude: s[1] }) < 8) return;
+        L.polyline([[w.latitude, w.longitude], s], {
+          color: "#5f6b80", weight: 3, opacity: 0.9, dashArray: "1 7", lineCap: "round", interactive: false
+        }).addTo(walk.connectors);
+      });
+    } else {
+      walk.outline.setLatLngs([]);
+      walk.line.setLatLngs([]);
+      routeLine.setLatLngs(state.waypoints.map(function (w) { return [w.latitude, w.longitude]; }));
+    }
+  }
+
+  function setRouteStatus(kind, text) {
+    var el = document.getElementById("route-status");
+    el.setAttribute("data-state", kind);
+    el.textContent = text;
+  }
+
+  /** Planuje zapytanie o trasę pieszą – z opóźnieniem, żeby nie pytać przy każdej drobnej zmianie. */
+  function scheduleWalkingRoute() {
+    window.clearTimeout(walk.timer);
+    var key = routeKey();
+    if (!walk.enabled || state.waypoints.length < 2) {
+      setRouteStatus("", "");
+      return;
+    }
+    if (walk.cache[key]) {
+      setRouteStatus("ok", "");
+      return;
+    }
+    if (key === walk.failedKey) {
+      setRouteStatus("error", walk.error);
+      return;
+    }
+    if (key === walk.pendingKey) return;
+    setRouteStatus("loading", "Wyznaczam trasę pieszą…");
+    walk.timer = window.setTimeout(function () { fetchWalkingRoute(key); }, 700);
+  }
+
+  function fetchWalkingRoute(key) {
+    if (key !== routeKey()) return;
+    walk.pendingKey = key;
+    var points = state.waypoints.map(function (w) { return [w.latitude, w.longitude]; });
+
+    fetch(boot.urls.route, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
+      },
+      body: JSON.stringify({ points: points })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) { return { ok: res.ok, body: body }; });
+      })
+      .then(function (r) {
+        if (r.ok && r.body.data && r.body.data.geometry && r.body.data.geometry.length > 1) {
+          walk.cache[key] = r.body.data;
+          walk.error = "";
+        } else {
+          walk.failedKey = key;
+          walk.error = (r.body.error && r.body.error.message) || "Nie udało się wyznaczyć trasy pieszej. Pokazano linię prostą.";
+        }
+      })
+      .catch(function () {
+        walk.failedKey = key;
+        walk.error = "Brak połączenia z serwerem – pokazano linię prostą.";
+      })
+      .then(function () {
+        if (walk.pendingKey === key) walk.pendingKey = "";
+        if (key !== routeKey()) {   // punkty zmieniły się w czasie zapytania
+          scheduleWalkingRoute();
+          return;
+        }
+        setRouteStatus(walk.cache[key] ? "ok" : "error", walk.cache[key] ? "" : walk.error);
+        updateRouteLine();
+        renderSummary();
+        updateMapNote();
+      });
+  }
+
+  function updateMapNote() {
+    var note = document.getElementById("map-note");
+    note.textContent = walkingRoute()
+      ? "Niebieska linia to trasa piesza po ulicach i chodnikach (dane OpenStreetMap). " +
+        "Kropkowane odcinki łączą punkt z najbliższą drogą. Gracz może wybrać inną drogę."
+      : "Linia łączy punkty w kolejności trasy – to schemat, nie trasa piesza. Długość podana jest w linii prostej.";
+  }
+
+  /** 340 s -> "6 min", 4000 s -> "1 h 7 min". */
+  function formatWalkTime(seconds) {
+    var min = Math.max(1, Math.round(seconds / 60));
+    if (min < 60) return min + " min";
+    return Math.floor(min / 60) + " h" + (min % 60 ? " " + (min % 60) + " min" : "");
   }
 
   function routeLength() {
@@ -326,9 +464,11 @@
   function renderSummary() {
     var n = state.waypoints.length;
     var summary = document.getElementById("route-summary");
-    summary.textContent = n === 0
-      ? "Brak punktów"
-      : n + " " + pluralPoints(n) + (n > 1 ? " · ok. " + formatDistance(routeLength()) + " w linii prostej" : "");
+    var r = walkingRoute();
+    var length = r
+      ? " · trasa piesza " + formatDistance(r.distance) + " · ok. " + formatWalkTime(r.duration) + " marszu"
+      : " · ok. " + formatDistance(routeLength()) + " w linii prostej";
+    summary.textContent = n === 0 ? "Brak punktów" : n + " " + pluralPoints(n) + (n > 1 ? length : "");
     document.getElementById("tab-route-count").textContent = n;
   }
 
@@ -943,6 +1083,21 @@
   /* ================================================================
      Start
      ================================================================ */
+  var walkToggle = document.getElementById("route-walking");
+  if (boot.map.routing && walkToggle) {
+    document.getElementById("route-walking-wrap").hidden = false;
+    walkToggle.checked = walk.enabled;
+    walkToggle.addEventListener("change", function () {
+      walk.enabled = walkToggle.checked;
+      walk.failedKey = "";
+      try { localStorage.setItem("pgm.walkingRoute", walk.enabled ? "1" : "0"); } catch (e) { /* bez zapamiętywania */ }
+      updateRouteLine();
+      renderSummary();
+      updateMapNote();
+      scheduleWalkingRoute();
+    });
+  }
+
   loadGame(boot.game);
   fillInfoForm();
   renderList();

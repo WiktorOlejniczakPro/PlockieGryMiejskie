@@ -7,3 +7,5 @@ storage/uploads/*
 vendor/
 .DS_Store
 Thumbs.db
+storage/cache/*
+!storage/cache/.gitkeep

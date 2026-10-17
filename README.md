@@ -29,7 +29,12 @@ Pozycje menu z przyszłych etapów są widoczne w panelu z etykietą „wkrótce
 Minimum do zapisania szkicu: tytuł gry, nazwy punktów, poprawne współrzędne oraz tytuł i treść zadania (jeśli zadanie jest włączone).
 Puste wiersze odpowiedzi w pytaniach zamkniętych są pomijane przy zapisie.
 
-Linia na mapie łączy punkty w kolejności trasy. To schemat, a nie trasa piesza, dlatego długość jest podana „w linii prostej”.
+**Trasa piesza po ulicach.** Nad mapą jest przełącznik „Trasa piesza po ulicach” (domyślnie włączony). Panel wyznacza wtedy
+najkrótszą drogę dla pieszych przez wszystkie punkty – po ulicach, chodnikach i ścieżkach z OpenStreetMap – i rysuje ją
+niebieską linią jak w nawigacji, z długością i czasem marszu. Kropkowane odcinki łączą punkt z najbliższą drogą.
+Trasę liczy publiczny serwer OSRM fundacji FOSSGIS (`ROUTING_URL` w `.env`). Zapytania idą przez serwer PHP, który pilnuje
+limitu 1 zapytania na sekundę i zapamiętuje policzone trasy w `storage/cache/routes`. Gdy usługa jest niedostępna albo
+przełącznik jest wyłączony, mapa pokazuje przerywaną linię prostą (schemat) z długością „w linii prostej”.
 Mapa wymaga internetu (kafelki OpenStreetMap). Biblioteka Leaflet jest dołączona do projektu, więc nie zależy od CDN.
 
 ## Wymagania

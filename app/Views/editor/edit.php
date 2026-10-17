@@ -170,8 +170,15 @@ $status = $game['status'] ?? 'draft';
         </aside>
 
         <div class="route-map">
+          <div class="map-toolbar" id="map-toolbar">
+            <label class="toggle-inline" id="route-walking-wrap" hidden>
+              <input type="checkbox" id="route-walking" checked>
+              <span>Trasa piesza po ulicach</span>
+            </label>
+            <span class="route-status" id="route-status" role="status" aria-live="polite"></span>
+          </div>
           <div id="map" class="map" role="region" aria-label="Mapa trasy. Kliknij, aby dodać punkt. Punkty można przeciągać."></div>
-          <p class="map-note">
+          <p class="map-note" id="map-note">
             Linia łączy punkty w kolejności trasy – to schemat, nie trasa piesza.
             Długość podana jest w linii prostej.
           </p>
