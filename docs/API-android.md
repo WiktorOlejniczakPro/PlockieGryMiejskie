@@ -37,9 +37,14 @@ Odinstalowanie aplikacji = nowe konto. API gracza nie używa ciasteczek ani toke
 | GET | `/place-categories` | – | rodzaje miejsc z otwartych danych miasta `[{slug, name, source_name, place_count}]` |
 | GET | `/places?lat=&lng=&radius_m=&category=&q=` | – | miejsca najbliżej punktu (domyślnie centrum Płocka, promień 1500 m, maks. 5000 m, do 300 wyników) posortowane wg `distance_m`; `category` – slug lub kilka po przecinku |
 | POST | `/players` | – | nowe konto `{nickname?}` → `{player, token}` (201) |
-| GET | `/me` | ✔ | `{player, history}` |
-| PUT | `/me` | ✔ | zmiana nicku `{nickname}` |
-| POST | `/games/{id}/sessions` | ✔ | start gry lub wznowienie trwającej → stan rozgrywki (201) |
+| GET | `/me` | ✔ | `{player, balance, limits, history}` |
+| PUT | `/me` | ✔ | zmiana nicku `{nickname}` – raz na rok (pierwsza zmiana od razu); 409 z datą kolejnej możliwej zmiany |
+| GET | `/me/limits` | ✔ | `{daily_limit, used_today, remaining, resets_at}` – limit rozpoczętych gier na dziś (Europe/Warsaw) |
+| GET | `/me/balance` | ✔ | `{earned, spent, balance}` |
+| GET | `/rewards` | ✔ | `{balance, rewards[]}` – nagrody w sklepie |
+| POST | `/rewards/{id}/redeem` | ✔ | wymiana `{idempotency_key}` → `{redemption, balance}` (201) |
+| GET | `/me/redemptions` | ✔ | historia wymian z kodami odbioru |
+| POST | `/games/{id}/sessions` | ✔ | start gry lub wznowienie trwającej → stan rozgrywki (201); 429 po wykorzystaniu dziennego limitu (wznowienie się nie liczy) |
 | GET | `/sessions/{id}` | ✔ | stan rozgrywki |
 | POST | `/sessions/{id}/waypoints/{waypointId}/arrival` | ✔ | „jestem na miejscu” `{latitude, longitude, accuracy_m?}` |
 | POST | `/sessions/{id}/tasks/{taskId}/answer` | ✔ | odpowiedź na zadanie (opis niżej) |
@@ -120,6 +125,25 @@ Filtry listy gier: `category` – slug kategorii (np. `historyczna`), `difficult
 - Po ukończeniu wszystkich punktów `status` = `completed`, a do wyniku dochodzi `completion_points`.
 - `review_status`: `auto` – oceniono automatycznie; `unverified` – zaliczone bez sprawdzania
   (zdjęcie, film, odpowiedź otwarta bez wzorca); `rejected` – odrzucone przez organizatora (przyszła funkcja panelu).
+
+## Kolejność punktów, limit dzienny
+
+- Punkty przechodzi się **po kolei** (kolejność z edytora). Dotarcie i zadanie są przyjmowane tylko dla
+  bieżącego punktu (`next_waypoint_id`); inny punkt → 409 „Najpierw dotrzyj do punktu N…”, zadanie → 403.
+- Zadanie bieżącego punktu: `always` / `after_previous` – od razu, `on_arrival` – po dotarciu.
+- Domyślny promień: 50 m (punkt bez zadania i nowe zadania); zadanie może mieć własny `arrival_radius_m`.
+- Limit `PLAYER_DAILY_GAME_LIMIT` (domyślnie 2) rozpoczętych gier na dzień; liczy serwer w strefie Europe/Warsaw,
+  w tej samej transakcji co zapis rozgrywki (równoczesne żądania nie przekroczą limitu).
+
+## Sklep punktów
+
+- **Saldo** = suma najlepszych wyników z każdej gry (ponowne przejście tej samej gry nie dodaje punktów) − koszt wymian.
+- `GET /rewards` – pole `affordable` (czy gracza stać), `available` i `stock_left` (null = bez limitu), `is_sample`
+  (nagroda demonstracyjna – bez wartości handlowej, aplikacja pokazuje etykietę „Przykład”).
+- `POST /rewards/{id}/redeem` z `{"idempotency_key": "<UUID>"}` – aplikacja generuje klucz raz na kliknięcie;
+  ponowienie z tym samym kluczem zwraca tę samą wymianę i nie pobiera punktów drugi raz.
+  Błędy: 422 za mało punktów, 409 nagroda się skończyła, 404 nagroda niedostępna.
+- Wymiana ma `code` (np. `PGM-7K3D-Q9XM`) i `status`: `issued` / `used` (oznaczony w panelu) / `cancelled`.
 
 ## Dotarcie do punktu
 

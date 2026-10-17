@@ -131,7 +131,7 @@ erDiagram
 2. Otwórz `http://localhost/phpmyadmin`.
 3. Wybierz zakładkę **Import** (bez zaznaczania bazy po lewej) → plik `database/schema.sql` → **Importuj**. Skrypt sam utworzy bazę `pgm` z kodowaniem `utf8mb4_polish_ci`.
 4. Ponownie **Import** → `database/seed.sql` → **Importuj**.
-5. Kontrola: w bazie `pgm` powinno być 19 tabel, 11 kategorii, 4 gry z tytułami `[PRZYKŁAD] …`, 21 rodzajów miejsc, ok. 1300 miejsc i 504 ulice.
+5. Kontrola: w bazie `pgm` powinno być 21 tabel, 11 kategorii, 4 gry z tytułami `[PRZYKŁAD] …`, 21 rodzajów miejsc, ok. 1300 miejsc i 504 ulice.
 
 Z wiersza poleceń (`C:\xampp\mysql\bin`):
 

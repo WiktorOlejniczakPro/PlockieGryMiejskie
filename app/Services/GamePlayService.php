@@ -14,10 +14,13 @@ use PDOException;
  *
  *  - dotarcie do punktu: serwer liczy odległość od zgłoszonej pozycji GPS
  *    i przyjmuje ją, gdy gracz jest w promieniu punktu (+ tolerancja GPS),
- *  - dostępność zadania wg unlock_mode:
- *      always         – od razu,
- *      on_arrival     – po dotarciu do punktu,
- *      after_previous – po ukończeniu poprzedniego punktu trasy,
+ *  - punkty przechodzi się PO KOLEI (kolejność z edytora – waypoints.position):
+ *    dotarcie i zadanie są możliwe tylko dla bieżącego punktu, czyli
+ *    pierwszego nieukończonego; dostępność zadania wg unlock_mode:
+ *      always / after_previous – gdy punkt jest bieżący,
+ *      on_arrival              – gdy gracz dotarł do bieżącego punktu,
+ *  - limit rozpoczętych gier na dzień (Europe/Warsaw, domyślnie 2); wznowienie
+ *    trwającej rozgrywki nie zużywa limitu,
  *  - ocena odpowiedzi (jedna próba na zadanie):
  *      pytania zamknięte – automatycznie (wszystko albo nic),
  *      odpowiedź otwarta – porównanie z expected_answer (bez wielkości liter
@@ -32,7 +35,35 @@ use PDOException;
 final class GamePlayService
 {
     /** Promień dotarcia dla punktu bez zadania. */
-    public const DEFAULT_RADIUS_M = 30;
+    public const DEFAULT_RADIUS_M = 50;
+
+    /**
+     * Limit gier na dziś (strefa Europe/Warsaw – granice dnia liczy PHP, nie zegar telefonu).
+     * @return array{daily_limit:int, used_today:int, remaining:int, resets_at:string}
+     */
+    public static function dailyLimit(int $playerId): array
+    {
+        $limit = (int) config('app.player.daily_game_limit', 2);
+        [$from, $to] = self::todayRange();
+        $used = (int) Database::query(
+            'SELECT COUNT(*) FROM game_sessions WHERE player_id = ? AND started_at >= ? AND started_at < ?',
+            [$playerId, $from, $to]
+        )->fetchColumn();
+        return [
+            'daily_limit' => $limit,
+            'used_today'  => $used,
+            'remaining'   => max(0, $limit - $used),
+            'resets_at'   => $to,
+        ];
+    }
+
+    /** @return array{0:string, 1:string} początek dzisiejszego i jutrzejszego dnia w Warszawie */
+    private static function todayRange(): array
+    {
+        $tz = new \DateTimeZone('Europe/Warsaw');
+        $today = new \DateTimeImmutable('today', $tz);
+        return [$today->format('Y-m-d H:i:s'), $today->modify('+1 day')->format('Y-m-d H:i:s')];
+    }
 
     // ------------------------------------------------------------------
     //  Operacje
@@ -50,9 +81,21 @@ final class GamePlayService
             $stmt->execute([$gameId, $playerId]);
             $existing = $stmt->fetchColumn();
             if ($existing !== false) {
-                return (int) $existing;
+                return (int) $existing; // wznowienie – nie liczy się do limitu
             }
-            $pdo->prepare('INSERT INTO game_sessions (game_id, player_id) VALUES (?, ?)')->execute([$gameId, $playerId]);
+
+            // limit sprawdzany w tej samej transakcji co zapis (wiersz gracza zablokowany wyżej),
+            // więc dwa równoczesne żądania nie przekroczą limitu
+            $limit = self::dailyLimit($playerId);
+            if ($limit['remaining'] <= 0) {
+                throw new HttpException(429, sprintf(
+                    'Wykorzystałeś dzisiejszy limit gier (%d). Kolejną grę rozpoczniesz jutro.', $limit['daily_limit']
+                ));
+            }
+
+            $version = (int) $pdo->query('SELECT lock_version FROM games WHERE id = ' . $gameId)->fetchColumn();
+            $pdo->prepare('INSERT INTO game_sessions (game_id, player_id, game_version, started_at) VALUES (?, ?, ?, ?)')
+                ->execute([$gameId, $playerId, $version, date('Y-m-d H:i:s')]);
             return (int) $pdo->lastInsertId();
         });
 
@@ -72,6 +115,21 @@ final class GamePlayService
         $session = $this->activeSession($sessionId, $playerId);
         $game = $this->gameData((int) $session['game_id']);
         $wp = $game['waypoints'][$waypointId] ?? throw new HttpException(404, 'Ten punkt nie należy do tej gry.');
+
+        // trasa po kolei: można zgłosić tylko bieżący punkt (ponowne zgłoszenie dotartego – bez błędu)
+        $state = $this->buildState($session, $game);
+        $wpState = null;
+        foreach ($state['waypoints'] as $w) {
+            if ($w['waypoint_id'] === $waypointId) {
+                $wpState = $w;
+            }
+        }
+        if ($wpState !== null && !$wpState['reached'] && $state['next_waypoint_id'] !== $waypointId) {
+            $next = $game['waypoints'][$state['next_waypoint_id']] ?? null;
+            throw new HttpException(409, $next
+                ? sprintf('Najpierw dotrzyj do punktu %d: „%s”.', $next['position'], $next['name'])
+                : 'Ten punkt nie jest teraz aktywny.');
+        }
 
         if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
             throw new HttpException(422, 'Nieprawidłowe współrzędne.');
@@ -112,10 +170,9 @@ final class GamePlayService
             throw new HttpException(409, 'To zadanie zostało już wykonane.');
         }
         if (!$wpState['task']['available']) {
-            throw new HttpException(403, match ($task['unlock_mode']) {
-                'after_previous' => 'Zadanie odblokuje się po ukończeniu poprzedniego punktu.',
-                default          => 'Zadanie odblokuje się, gdy dotrzesz do punktu.',
-            });
+            throw new HttpException(403, $state['next_waypoint_id'] !== $wpState['waypoint_id']
+                ? 'Najpierw ukończ poprzednie punkty trasy.'
+                : 'Zadanie odblokuje się, gdy dotrzesz do punktu.');
         }
 
         $result = $this->evaluate($task, $input, $file);
@@ -268,7 +325,7 @@ final class GamePlayService
         }
 
         $waypoints = [];
-        $previousCompleted = true;
+        $previousCompleted = true; // dla pierwszego punktu
         $completed = 0;
         $taskPoints = 0;
         $next = null;
@@ -279,11 +336,8 @@ final class GamePlayService
 
             $taskState = null;
             if ($task !== null) {
-                $available = match ($task['unlock_mode']) {
-                    'always'         => true,
-                    'after_previous' => $previousCompleted,
-                    default          => $isReached,
-                };
+                // bieżący punkt = wszystkie wcześniejsze ukończone
+                $available = $previousCompleted && ($task['unlock_mode'] !== 'on_arrival' || $isReached);
                 $taskState = [
                     'task_id'    => $task['id'],
                     'available'  => $available,
@@ -310,7 +364,7 @@ final class GamePlayService
             if (!$isCompleted && $next === null) {
                 $next = $wp['id'];
             }
-            $previousCompleted = $isCompleted;
+            $previousCompleted = $previousCompleted && $isCompleted;
 
             $waypoints[] = [
                 'waypoint_id' => $wp['id'],
@@ -333,6 +387,7 @@ final class GamePlayService
             'completed_waypoints' => $completed,
             'total_waypoints'     => count($game['waypoints']),
             'next_waypoint_id'    => $next,
+            'game_version'        => (int) ($session['game_version'] ?? 1),
             'started_at'          => $session['started_at'],
             'finished_at'         => $session['finished_at'],
             'waypoints'           => $waypoints,

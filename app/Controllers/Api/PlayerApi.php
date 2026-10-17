@@ -8,12 +8,14 @@ use App\Core\Request;
 use App\Models\GameSession;
 use App\Models\Player;
 use App\Services\GamePlayService;
+use App\Services\RewardService;
 
 /**
  * Konto gracza i rozgrywka (aplikacja mobilna).
  *   POST /api/v1/players                                   – nowe konto, zwraca token (bez logowania)
  *   GET  /api/v1/me                                        – profil + historia rozgrywek
- *   PUT  /api/v1/me                                        – zmiana nicku
+ *   PUT  /api/v1/me                                        – zmiana nicku (raz na rok)
+ *   GET  /api/v1/me/limits                                 – limit rozpoczętych gier na dziś
  *   POST /api/v1/games/{id}/sessions                       – start / wznowienie gry
  *   GET  /api/v1/sessions/{id}                             – stan rozgrywki
  *   POST /api/v1/sessions/{id}/waypoints/{waypointId}/arrival – „jestem na miejscu” (pozycja GPS)
@@ -44,6 +46,8 @@ final class PlayerApi
         $player = Player::current();
         json_response(['data' => [
             'player'  => Player::publicData($player),
+            'balance' => RewardService::balance((int) $player['id']),
+            'limits'  => GamePlayService::dailyLimit((int) $player['id']),
             'history' => GameSession::historyForPlayer((int) $player['id']),
         ]]);
     }
@@ -53,8 +57,21 @@ final class PlayerApi
         $player = Player::current();
         $nickname = $request->string('nickname');
         self::assertNickname($nickname);
+        if ($nickname === $player['nickname']) {
+            json_response(['data' => ['player' => Player::publicData($player)]]);
+        }
+        $next = Player::nextNicknameChange($player);
+        if ($next !== null) {
+            throw new HttpException(409, 'Nick można zmienić raz w roku. Kolejna zmiana będzie możliwa od '
+                . date('d.m.Y', (int) strtotime($next)) . '.');
+        }
         Player::rename((int) $player['id'], $nickname);
-        json_response(['data' => ['player' => Player::publicData(['nickname' => $nickname] + $player)]]);
+        json_response(['data' => ['player' => Player::publicData(Player::findById((int) $player['id']) ?? $player)]]);
+    }
+
+    public function limits(Request $request): void
+    {
+        json_response(['data' => GamePlayService::dailyLimit(self::playerId())]);
     }
 
     public function startSession(Request $request, int $id): void

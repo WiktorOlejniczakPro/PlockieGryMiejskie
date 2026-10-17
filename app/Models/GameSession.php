@@ -12,7 +12,14 @@ final class GameSession
     public static function historyForPlayer(int $playerId): array
     {
         $rows = Database::query(
-            'SELECT s.id, s.game_id, s.status, s.score, s.started_at, s.finished_at, g.title, g.is_sample
+            'SELECT s.id, s.game_id, s.status, s.score, s.started_at, s.finished_at, g.title, g.is_sample,
+                    g.status AS game_status,
+                    (SELECT COUNT(*) FROM waypoints w WHERE w.game_id = s.game_id) AS total_waypoints,
+                    (SELECT COUNT(*) FROM waypoints w
+                      WHERE w.game_id = s.game_id
+                        AND (EXISTS (SELECT 1 FROM session_waypoints sw WHERE sw.session_id = s.id AND sw.waypoint_id = w.id)
+                             OR EXISTS (SELECT 1 FROM tasks t JOIN task_submissions ts ON ts.task_id = t.id
+                                         WHERE t.waypoint_id = w.id AND ts.session_id = s.id))) AS completed_waypoints
                FROM game_sessions s JOIN games g ON g.id = s.game_id
               WHERE s.player_id = ?
               ORDER BY s.started_at DESC, s.id DESC
@@ -28,6 +35,10 @@ final class GameSession
             'score'       => (int) $r['score'],
             'started_at'  => $r['started_at'],
             'finished_at' => $r['finished_at'],
+            'completed_waypoints' => (int) $r['completed_waypoints'],
+            'total_waypoints'   => (int) $r['total_waypoints'],
+            // gra ukryta / zarchiwizowana przez administratora – historia zostaje
+            'game_available'    => $r['game_status'] === 'published',
         ], $rows);
     }
 

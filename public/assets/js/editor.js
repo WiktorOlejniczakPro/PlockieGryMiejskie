@@ -66,7 +66,7 @@
     return {
       task_type: "single_choice", title: "", description: "", hint: "", max_points: 1,
       expected_answer: "", evaluation_instructions: "", media_requirement: "", media_max_seconds: null,
-      unlock_mode: "on_arrival", unlock_radius_m: 30,
+      unlock_mode: "on_arrival", unlock_radius_m: 50,
       options: [{ text: "", is_correct: true }, { text: "", is_correct: false }]
     };
   }
@@ -209,6 +209,13 @@
     badge.className = "status status--" + state.game.status;
     badge.textContent = STATUS_LABELS[state.game.status] || state.game.status;
     document.getElementById("btn-save").textContent = state.game.status === "draft" ? "Zapisz szkic" : "Zapisz zmiany";
+
+    // Publikacja / ukrycie – tylko dla zapisanej gry
+    var statusBtn = document.getElementById("btn-status");
+    if (statusBtn) {
+      statusBtn.hidden = !state.game.id;
+      statusBtn.textContent = state.game.status === "published" ? "Ukryj w aplikacji" : "Opublikuj";
+    }
   }
 
   function updateCustomCategory() {
@@ -821,6 +828,58 @@
       });
   }
 
+  /** Publikacja (draft/hidden → published) albo ukrycie (published → hidden). */
+  function changeStatus() {
+    if (state.saving || !state.game.id) return;
+    if (state.dirty) {
+      showErrors("Najpierw zapisz zmiany – publikowana jest zapisana wersja gry.", []);
+      return;
+    }
+    var publish = state.game.status !== "published";
+    var tasks = state.waypoints.filter(function (w) { return !!w.task; }).length;
+    var question = publish
+      ? "Opublikować grę „" + state.game.title + "”?\n\nPunkty trasy: " + state.waypoints.length +
+        ", zadania: " + tasks + ".\nGra od razu pojawi się w aplikacji mobilnej dla wszystkich graczy."
+      : "Ukryć grę „" + state.game.title + "” w aplikacji?\n\nNowi gracze nie będą jej widzieć, " +
+        "a rozpoczęte rozgrywki zostaną zachowane.";
+    if (!window.confirm(question)) return;
+
+    var btn = document.getElementById("btn-status");
+    state.saving = true;
+    btn.disabled = true;
+    setSaveState("saving", publish ? "Publikowanie…" : "Ukrywanie…");
+
+    fetch(boot.urls.status.replace("{id}", state.game.id), {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
+      },
+      body: JSON.stringify({ status: publish ? "published" : "hidden", lock_version: state.game.lock_version })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) { return { res: res, body: body }; });
+      })
+      .then(function (r) {
+        state.saving = false;
+        if (r.res.ok && r.body.data) {
+          onSaved(r.body.data, false, findIndex(state.selectedKey));
+          setSaveState("saved", publish ? "Opublikowano – gra jest widoczna w aplikacji" : "Gra ukryta w aplikacji");
+          announce(publish ? "Gra została opublikowana." : "Gra została ukryta.");
+        } else {
+          onSaveError(r.res.status, r.body);
+        }
+      })
+      .catch(function () {
+        state.saving = false;
+        setSaveState("error", "Błąd");
+        showErrors("Brak połączenia z serwerem. Status gry nie został zmieniony.", []);
+      })
+      .then(function () { btn.disabled = false; });
+  }
+
   function onSaved(game, isNew, selectedIndex) {
     loadGame(game);
     state.dirty = false;
@@ -924,6 +983,8 @@
   }
 
   saveBtn.addEventListener("click", save);
+  var statusBtnEl = document.getElementById("btn-status");
+  if (statusBtnEl) statusBtnEl.addEventListener("click", changeStatus);
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();

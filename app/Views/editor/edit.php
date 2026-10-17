@@ -29,9 +29,9 @@ $status = $game['status'] ?? 'draft';
       </p>
       <span class="soon-actions" title="Dostępne w kolejnym etapie">
         <button type="button" class="btn btn-outline btn-sm" disabled>Podgląd</button>
-        <button type="button" class="btn btn-outline btn-sm" disabled>Opublikuj</button>
         <span class="soon-tag">wkrótce</span>
       </span>
+      <button type="button" class="btn btn-outline btn-sm" id="btn-status" hidden></button>
       <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry')) ?>" id="btn-cancel">Anuluj</a>
       <button type="button" class="btn btn-primary btn-sm" id="btn-save">
         <?= $status === 'draft' ? 'Zapisz szkic' : 'Zapisz zmiany' ?>

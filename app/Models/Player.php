@@ -31,14 +31,14 @@ final class Player
 
     public static function findById(int $id): ?array
     {
-        $row = Database::query('SELECT id, nickname, created_at FROM players WHERE id = ?', [$id])->fetch();
+        $row = Database::query('SELECT id, nickname, nickname_changed_at, created_at FROM players WHERE id = ?', [$id])->fetch();
         return $row ?: null;
     }
 
     public static function findByToken(string $token): ?array
     {
         $row = Database::query(
-            'SELECT id, nickname, created_at, last_seen_at FROM players WHERE api_token_hash = ?',
+            'SELECT id, nickname, nickname_changed_at, created_at, last_seen_at FROM players WHERE api_token_hash = ?',
             [hash('sha256', $token)]
         )->fetch();
         return $row ?: null;
@@ -53,9 +53,23 @@ final class Player
         )->fetchColumn();
     }
 
+    /** Nick można zmienić raz na rok (pierwsza zmiana automatycznego „Gracz 1234” – od razu). */
+    public const NICKNAME_CHANGE_DAYS = 365;
+
     public static function rename(int $id, string $nickname): void
     {
-        Database::query('UPDATE players SET nickname = ? WHERE id = ?', [$nickname, $id]);
+        Database::query('UPDATE players SET nickname = ?, nickname_changed_at = NOW() WHERE id = ?', [$nickname, $id]);
+    }
+
+    /** Data, od której wolno znowu zmienić nick, albo null (można teraz). */
+    public static function nextNicknameChange(array $player): ?string
+    {
+        $last = $player['nickname_changed_at'] ?? null;
+        if ($last === null) {
+            return null;
+        }
+        $next = (new \DateTimeImmutable((string) $last))->modify('+' . self::NICKNAME_CHANGE_DAYS . ' days');
+        return $next > new \DateTimeImmutable() ? $next->format('Y-m-d H:i:s') : null;
     }
 
     /** Aktualizacja "ostatnio widziany" najwyżej raz na 5 minut (bez zapisu przy każdym żądaniu). */
@@ -83,9 +97,11 @@ final class Player
     public static function publicData(array $player): array
     {
         return [
-            'id'         => (int) $player['id'],
-            'nickname'   => $player['nickname'],
-            'created_at' => $player['created_at'],
+            'id'                      => (int) $player['id'],
+            'nickname'                => $player['nickname'],
+            'created_at'              => $player['created_at'],
+            'nickname_change_allowed' => self::nextNicknameChange($player) === null,
+            'nickname_next_change_at' => self::nextNicknameChange($player),
         ];
     }
 }

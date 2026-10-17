@@ -11,6 +11,7 @@ use App\Services\AuditLog;
 use App\Services\GameAccess;
 use App\Services\GameSaveService;
 use App\Services\GameSerializer;
+use App\Services\GameStatusService;
 use App\Services\GameValidationService;
 
 /**
@@ -18,6 +19,7 @@ use App\Services\GameValidationService;
  *   GET  /api/v1/admin/games/{id}  – pełne dane gry do edycji
  *   POST /api/v1/admin/games       – utworzenie gry (szkic)
  *   PUT  /api/v1/admin/games/{id}  – zapis zmian (z kontrolą lock_version)
+ *   POST /api/v1/admin/games/{id}/status – publikacja / ukrycie / powrót do szkicu {status, lock_version}
  * Odpowiedzi: {"data": {...}} albo {"error": {"status", "message", "fields"?}}.
  */
 final class AdminGameApi
@@ -58,6 +60,26 @@ final class AdminGameApi
         (new GameSaveService())->save($id, (int) $game['owner_id'], $data, (int) $lockVersion, $userId);
         AuditLog::record('game.updated', $userId, 'game', $id, ['waypoints' => count($data['waypoints'])]);
 
+        json_response(['data' => GameSerializer::forEditor($id)]);
+    }
+
+    public function changeStatus(Request $request, int $id): void
+    {
+        GameAccess::editable($id);
+        $status = $request->input('status');
+        $lockVersion = $request->input('lock_version');
+        if (!in_array($status, ['published', 'hidden', 'draft'], true) || !is_numeric($lockVersion)) {
+            throw new HttpException(422, 'Nieprawidłowy status gry.');
+        }
+
+        $errors = (new GameStatusService())->change($id, $status, (int) $lockVersion, (int) Auth::id());
+        if ($errors) {
+            json_response(['error' => [
+                'status'  => 422,
+                'message' => 'Gry nie można jeszcze opublikować. Uzupełnij wskazane elementy i zapisz grę.',
+                'fields'  => $errors,
+            ]], 422);
+        }
         json_response(['data' => GameSerializer::forEditor($id)]);
     }
 
