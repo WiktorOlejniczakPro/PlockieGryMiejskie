@@ -26,17 +26,11 @@ use App\Core\View;
 
       <nav class="site-nav" id="site-nav" aria-label="Nawigacja główna">
         <ul>
+          <li><a href="<?= e(url('/')) ?>#top">Strona główna</a></li>
           <li><a href="<?= e(url('/')) ?>#o-projekcie">O projekcie</a></li>
-          <li><a href="<?= e(url('/')) ?>#jak-to-dziala">Jak to działa</a></li>
           <li><a href="<?= e(url('/')) ?>#gry">Gry</a></li>
           <li><a href="<?= e(url('/')) ?>#aplikacja">Aplikacja</a></li>
-          <li>
-            <?php if (Auth::check()): ?>
-              <a class="btn btn-gold btn-sm" href="<?= e(url('/panel')) ?>">Przejdź do panelu</a>
-            <?php else: ?>
-              <a class="btn btn-gold btn-sm" href="<?= e(url('/logowanie')) ?>">Logowanie dla twórców</a>
-            <?php endif; ?>
-          </li>
+          <li><a class="btn btn-gold btn-sm" href="<?= e(url('/panel')) ?>">Panel twórcy</a></li>
         </ul>
       </nav>
     </div>
@@ -50,7 +44,7 @@ use App\Core\View;
     <div class="container footer-inner">
       <p class="footer-brand">Płockie <strong>Gry Miejskie</strong></p>
       <p>Projekt przygotowany dla Urzędu Miasta Płocka.</p>
-      <p class="footer-small">Mapy: © współtwórcy OpenStreetMap · © <?= date('Y') ?> PGM</p>
+      <p class="footer-small">Mapy: © OpenStreetMap · © <?= date('Y') ?> Stardust Crusaders Hackathon</p>
     </div>
   </footer>
 </body>

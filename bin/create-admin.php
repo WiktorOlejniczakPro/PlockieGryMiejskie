@@ -128,4 +128,4 @@ try {
 
 out('');
 out(sprintf('Gotowe! Utworzono konto „%s” (%s) z rolą: %s.', "{$first} {$last}", $email, label('role', $role)));
-out('Zaloguj się w przeglądarce na stronie /logowanie.');
+out('Wpisz ten adres e-mail w pliku .env jako AUTO_LOGIN_EMAIL i otwórz /panel w przeglądarce.');

@@ -9,10 +9,10 @@ Gracze będą przechodzić gry w osobnej aplikacji mobilnej na Androida (przysz�
 | Etap | Zakres | Stan |
 |---|---|---|
 | 1 | Architektura, schemat MySQL, dane przykładowe | ✅ gotowe |
-| 2 | Konfiguracja, routing, layouty, strona publiczna, sesje, logowanie, CSRF, konto administratora | ✅ gotowe |
+| 2 | Konfiguracja, routing, layouty, strona publiczna, sesje, stałe konto panelu (bez logowania), CSRF, konto administratora | ✅ gotowe |
 | 3 | Edytor gry: informacje podstawowe, mapa z punktami, kolejność, zadania, zapis do MySQL, lista gier | ✅ gotowe |
 | 7 | API dla aplikacji Android: lista i szczegóły gier, gracze bez logowania (token), rozgrywka z GPS, odpowiedzi, zdjęcia i filmy, rankingi – [docs/API-android.md](docs/API-android.md) | ✅ gotowe |
-| 7b | Publikacja / ukrywanie gier w edytorze, ochrona postępu graczy przy edycji, punkty po kolei, limit 2 gier dziennie, sklep punktów (panel **Nagrody** + API) | ✅ gotowe |
+| 7b | Publikacja gier w edytorze, ochrona postępu graczy przy edycji, punkty po kolei, limit 2 gier dziennie, sklep punktów połączony z **Kreatorem nagród** (kody z puli trafiają do graczy) | ✅ gotowe |
 | 4+ | Wyszukiwarka adresów, obszar gry, zdjęcia, podgląd, publikacja, filtry listy, konto, FAQ, ocena materiałów graczy w panelu | ⏳ w kolejnych etapach |
 | Android | Aplikacja mobilna w Kotlinie (`android/`) | ⏳ w trakcie |
 
@@ -98,12 +98,21 @@ Hasło trafia do bazy wyłącznie jako hash. W kodzie projektu nie ma żadnych d
 
 Konto twórcy gier (bez uprawnień administratora) tworzy się tak samo, z dopiskiem `--role=creator`.
 
-### 6. Otwórz aplikację
+### 6. Konto panelu – nic nie trzeba robić
+
+Panel działa **bez ekranu logowania**. `seed.sql` zakłada konto administratora `demo@gmail.com`,
+a w `.env` jest `AUTO_LOGIN_EMAIL=demo@gmail.com`. Gdy tego konta nie ma, panel bierze pierwszego aktywnego
+administratora, a gdy w bazie nie ma żadnego – sam go zakłada (`admin@pgm.local`). Skrypt `bin/create-admin.php`
+jest potrzebny tylko do dodania kolejnych kont.
+Sprawdzenie: `C:\xampp\php\php.exe bin\sprawdz-konto.php` pokaże, które konto panel ładuje.
+
+> Każdy, kto otworzy stronę, ma pełny dostęp do panelu – używaj lokalnie lub na pokazie,
+> nie na serwerze dostępnym z internetu.
+
+### 7. Otwórz aplikację
 
 - Strona publiczna: **http://localhost/pgm/** (przekierowuje do `/pgm/public/`)
-- Logowanie: **http://localhost/pgm/public/logowanie**
-
-Po zalogowaniu zobaczysz dashboard z liczbą gier pobraną z bazy (administrator widzi też 4 gry przykładowe).
+- Panel twórcy: **http://localhost/pgm/public/panel**
 
 ### Alternatywa bez Apache
 
@@ -122,23 +131,16 @@ Menu panelu → **Kreator nagród**. Administrator przygotowuje tu katalog nagr�
 
 Dla każdej nagrody ustawiasz sklep, koszt w punktach, limit na gracza, termin ważności i warunki, a podgląd pokazuje, jak nagrodę zobaczy gracz.
 Każda nagroda ma **pulę kodów** (wklejasz je – każdy w osobnej linii); jeden kod trafia do jednego gracza. Kody są w panelu domyślnie zamaskowane.
-Twórcy gier widzą listę nagród tylko do odczytu. Samą wymianę punktów obsłuży przyszła aplikacja mobilna.
+Twórcy gier widzą listę nagród tylko do odczytu.
 
-**Masz już bazę z wcześniejszego etapu?** Nie importuj `schema.sql` od nowa – w phpMyAdmin zaimportuj tylko
-`database/migracje/2026-10-17-nagrody.sql`. Doda tabele nagród i 4 przykładowe nagrody, nie ruszając gier ani kont.
+**Połączenie z aplikacją mobilną:** aktywne nagrody (w terminie ważności) od razu widać w zakładce **Sklep** aplikacji.
+Gracz wymienia punkty na nagrodę i dostaje jeden wolny kod z puli – serwer pilnuje salda, limitu na gracza i liczby kodów.
+W edycji nagrody, przy wydanym kodzie, widać nick gracza i datę wymiany. Nagrody, z której gracze odebrali kody, nie da się usunąć
+(można ją dezaktywować – zniknie z aplikacji).
 
-## Tryb demonstracyjny – bez ekranu logowania
-
-Na pokaz (np. dla jury) panel może być stale zalogowany na jedno konto:
-
-1. Utwórz konto skryptem `bin/create-admin.php` (jeśli jeszcze go nie masz).
-2. W pliku `.env` wpisz jego adres: `AUTO_LOGIN_EMAIL=admin@example.org`
-3. Odśwież stronę – panel otworzy się od razu, a `/logowanie` przekieruje do panelu.
-
-- W panelu widać żółty pasek „Tryb demonstracyjny”, żeby nikt nie zapomniał go wyłączyć.
-- Kliknięcie „Wyloguj” wyłącza automatyczne logowanie do zamknięcia przeglądarki.
-- Przy `APP_ENV=production` ustawienie jest ignorowane.
-- **Wyłączenie:** wyczyść wartość (`AUTO_LOGIN_EMAIL=`). Każdy, kto otworzy stronę w trybie demo, ma pełny dostęp do tego konta – nie zostawiaj go na serwerze dostępnym z internetu.
+**Masz już bazę z tabelami aplikacji (gracze, rozgrywki)?** Zamiast importować `schema.sql` od nowa zaimportuj
+`database/migracje/2026-10-18_kreator_nagrod_sklep.sql` – podmieni tabele nagród na tabele Kreatora (usuwa tylko testowe
+nagrody i wymiany).
 
 ## Najczęstsze problemy
 

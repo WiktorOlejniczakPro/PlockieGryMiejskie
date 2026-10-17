@@ -55,7 +55,10 @@ $isAdmin = $user['role'] === 'admin';
                   <span class="table__sub"><?= e($game['short_description']) ?></span>
                 <?php endif; ?>
               </td>
-              <td><span class="status status--<?= e($game['status']) ?>"><?= e(label('status', $game['status'])) ?></span></td>
+              <td>
+                <span class="status status--<?= e($game['status']) ?>"><?= e(label('status', $game['status'])) ?></span>
+                <?php if ($game['status'] === 'draft'): ?><span class="table__sub">niewidoczna dla graczy</span><?php endif; ?>
+              </td>
               <td class="table__muted"><?= e($game['categories'] ?: '—') ?></td>
               <td><?= e(label('difficulty', $game['difficulty'])) ?></td>
               <td><?= e($game['waypoint_count']) ?></td>
@@ -66,6 +69,10 @@ $isAdmin = $user['role'] === 'admin';
                 <?php $archived = $game['status'] !== 'draft'; // edytować można tylko szkic ?>
                 <a class="btn btn-outline btn-sm" href="<?= e(url('/panel/gry/' . (int) $game['id'] . '/edycja')) ?>"
                    aria-label="<?= $archived ? 'Otwórz' : 'Edytuj' ?> grę: <?= e(Game::displayTitle($game)) ?>"><?= $archived ? 'Otwórz' : 'Edytuj' ?></a>
+                <?php if ($game['status'] === 'draft'): ?>
+                  <a class="btn btn-gold btn-sm" href="<?= e(url('/panel/gry/' . (int) $game['id'] . '/edycja')) ?>#status"
+                     aria-label="Opublikuj grę: <?= e(Game::displayTitle($game)) ?>">Opublikuj</a>
+                <?php endif; ?>
               </td>
             </tr>
           <?php endforeach; ?>

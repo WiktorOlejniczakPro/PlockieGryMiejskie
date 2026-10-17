@@ -6,8 +6,11 @@ namespace App\Core;
 use App\Models\User;
 
 /**
- * Stan zalogowania. Użytkownik jest pobierany z bazy przy każdym żądaniu,
- * więc zablokowanie konta lub zmiana roli działa natychmiast.
+ * Stałe konto – bez logowania.
+ * Każde żądanie działa jako konto, którego e-mail wpisano w .env (AUTO_LOGIN_EMAIL).
+ * Gdy takiego konta nie ma, panel używa pierwszego aktywnego administratora,
+ * a gdy w bazie nie ma żadnego – sam go zakłada (nie trzeba uruchamiać bin/create-admin.php).
+ * UWAGA: każdy, kto otworzy stronę, ma pełny dostęp do panelu tego konta.
  */
 final class Auth
 {
@@ -21,17 +24,28 @@ final class Auth
         }
         self::$resolved = true;
 
-        $id = Session::get('user_id');
-        if (!is_int($id)) {
-            return self::$user = self::autoLogin();
+        // 1) konto z AUTO_LOGIN_EMAIL w .env
+        $email = (string) config('app.auth.auto_login_email', '');
+        if ($email !== '') {
+            $found = User::findForLogin($email);
+            if ($found !== null && $found['account_status'] === 'active') {
+                return self::$user = User::findById((int) $found['id']);
+            }
         }
 
-        $user = User::findById($id);
-        if ($user === null || $user['account_status'] !== 'active') {
-            self::logout();
-            return null;
+        // 2) pierwszy aktywny administrator, 3) brak – zakładamy konto administratora
+        $id = Database::query(
+            "SELECT id FROM users WHERE role = 'admin' AND account_status = 'active' ORDER BY id LIMIT 1"
+        )->fetchColumn();
+        if ($id === false) {
+            Database::query(
+                "INSERT INTO users (organization_name, first_name, last_name, email, password_hash, role, account_status)
+                 VALUES ('Urząd Miasta Płocka', 'Administrator', 'PGM', ?, '!panel-bez-logowania', 'admin', 'active')",
+                [$email !== '' && User::findForLogin($email) === null ? User::normalizeEmail($email) : 'admin@pgm.local']
+            );
+            $id = Database::connection()->lastInsertId();
         }
-        return self::$user = $user;
+        return self::$user = User::findById((int) $id);
     }
 
     public static function id(): ?int
@@ -47,60 +61,5 @@ final class Auth
     public static function isAdmin(): bool
     {
         return (self::user()['role'] ?? null) === 'admin';
-    }
-
-    /** Czy włączony jest tryb demonstracyjny z automatycznym logowaniem. */
-    public static function autoLoginEnabled(): bool
-    {
-        return config('app.auth.auto_login_email', '') !== '' && config('app.env') !== 'production';
-    }
-
-    /**
-     * TRYB DEMONSTRACYJNY: loguje konto z AUTO_LOGIN_EMAIL, jeśli nikt nie jest zalogowany.
-     * Nie działa w APP_ENV=production ani po ręcznym wylogowaniu (do zamknięcia przeglądarki).
-     */
-    private static function autoLogin(): ?array
-    {
-        if (!self::autoLoginEnabled()) {
-            if (config('app.auth.auto_login_email', '') !== '') {
-                error_log('[PGM] AUTO_LOGIN_EMAIL jest ustawiony, ale ignorowany w trybie production.');
-            }
-            return null;
-        }
-        if (Session::get('_no_auto_login') === true) {
-            return null;
-        }
-
-        $found = User::findForLogin((string) config('app.auth.auto_login_email'));
-        if ($found === null || $found['account_status'] !== 'active') {
-            error_log('[PGM] AUTO_LOGIN_EMAIL: nie znaleziono aktywnego konta o tym adresie.');
-            return null;
-        }
-
-        Session::regenerate();
-        Session::set('user_id', (int) $found['id']);
-        Session::set('logged_in_at', time());
-        return User::findById((int) $found['id']);
-    }
-
-    public static function login(array $user): void
-    {
-        Session::forget('_no_auto_login');
-        Session::regenerate();
-        Csrf::rotate();
-        Session::set('user_id', (int) $user['id']);
-        Session::set('logged_in_at', time());
-        self::$user = $user;
-        self::$resolved = true;
-    }
-
-    public static function logout(): void
-    {
-        Session::forget('user_id');
-        Session::forget('logged_in_at');
-        Session::regenerate();
-        Csrf::rotate();
-        self::$user = null;
-        self::$resolved = true;
     }
 }

@@ -7,7 +7,8 @@ use App\Core\Database;
 
 /**
  * Nagrody wymieniane przez graczy na punkty (tabele rewards i reward_codes).
- * Panel przygotowuje katalog i pule kodów; wymianę obsłuży aplikacja mobilna.
+ * Panel przygotowuje katalog i pule kodów; gracze wymieniają punkty w aplikacji
+ * (RewardService) – każdy dostaje jeden wolny kod z puli.
  */
 final class Reward
 {
@@ -81,8 +82,11 @@ final class Reward
     public static function codes(int $rewardId): array
     {
         return Database::query(
-            "SELECT id, code, status, redeemed_at, created_at FROM reward_codes
-              WHERE reward_id = ? ORDER BY status = 'redeemed', id",
+            "SELECT c.id, c.code, c.status, c.redeemed_at, c.created_at, p.nickname AS player_nickname
+               FROM reward_codes c
+               LEFT JOIN reward_redemptions x ON x.reward_code_id = c.id
+               LEFT JOIN players p ON p.id = x.player_id
+              WHERE c.reward_id = ? ORDER BY c.status = 'redeemed', c.id",
             [$rewardId]
         )->fetchAll();
     }
@@ -112,6 +116,28 @@ final class Reward
             "DELETE FROM reward_codes WHERE id = ? AND reward_id = ? AND status = 'available'",
             [$codeId, $rewardId]
         )->rowCount() === 1;
+    }
+
+    /**
+     * Czy gracze widzą nagrodę w zakładce „Sklep” aplikacji (te same warunki co RewardService).
+     * @return array{visible: bool, label: string}
+     */
+    public static function appVisibility(array $r): array
+    {
+        $today = date('Y-m-d');
+        if (!(int) $r['is_active']) {
+            return ['visible' => false, 'label' => 'Niewidoczna w aplikacji – nagroda jest nieaktywna'];
+        }
+        if (!empty($r['valid_from']) && $r['valid_from'] > $today) {
+            return ['visible' => false, 'label' => 'Pojawi się w aplikacji ' . date('d.m.Y', strtotime((string) $r['valid_from']))];
+        }
+        if (!empty($r['valid_until']) && $r['valid_until'] < $today) {
+            return ['visible' => false, 'label' => 'Niewidoczna w aplikacji – termin ważności minął'];
+        }
+        if ((int) ($r['codes_available'] ?? 0) === 0) {
+            return ['visible' => true, 'label' => 'Widoczna w aplikacji jako „Brak kodów” – dodaj kody'];
+        }
+        return ['visible' => true, 'label' => 'Widoczna w aplikacji (Sklep)'];
     }
 
     /** Wartość nagrody do wyświetlenia: „−10%”, „−15 zł”, „50 zł”. */

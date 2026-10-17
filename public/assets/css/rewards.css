@@ -125,3 +125,7 @@
   .stat-grid--3, .type-choice, .field-row { grid-template-columns: 1fr; }
   .reward-card { grid-template-columns: 92px minmax(0, 1fr); }
 }
+
+/* ---------- Widoczność nagrody w aplikacji mobilnej ---------- */
+.reward-item__app { margin: .35rem 0 0; font-size: .85rem; font-weight: 600; color: #1d7a46; }
+.reward-item__app.is-hidden { color: var(--text-muted); }

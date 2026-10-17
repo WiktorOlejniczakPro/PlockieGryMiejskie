@@ -1079,6 +1079,7 @@
   }
 
   saveBtn.addEventListener("click", function () { save(); });
+  document.getElementById("btn-publish").addEventListener("click", function () { changeStatus("published"); });
   document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") {
       e.preventDefault();
@@ -1120,6 +1121,11 @@
       el.classList.toggle("is-readonly", locked);
     });
     document.getElementById("lock-note").hidden = !locked;
+    // szkic: wyraźna informacja i przycisk publikacji w pasku edytora
+    document.getElementById("draft-note").hidden = st !== "draft";
+    var publishBtn = document.getElementById("btn-publish");
+    publishBtn.hidden = st !== "draft";
+    publishBtn.disabled = state.saving || statusBusy;
     if (locked) {
       document.getElementById("lock-note-text").textContent = st === "published"
         ? "Gra jest opublikowana. Aby ją zmienić, cofnij ją do szkicu, wprowadź poprawki i opublikuj ponownie."
@@ -1362,6 +1368,7 @@
   fillInfoForm();
   renderList();
   renderSummary();
-  showTab(!boot.game ? "info" : (boot.game.status !== "draft" ? "preview" : "route"));
+  // #status w adresie (przycisk „Opublikuj” na liście gier) – od razu zakładka statusu
+  showTab(!boot.game ? "info" : (location.hash === "#status" || boot.game.status !== "draft" ? "preview" : "route"));
   if (!boot.game) document.getElementById("f-title").focus();
 })();

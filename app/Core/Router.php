@@ -5,7 +5,6 @@ namespace App\Core;
 
 use App\Middleware\AuthMiddleware;
 use App\Middleware\CsrfMiddleware;
-use App\Middleware\GuestMiddleware;
 use App\Middleware\PlayerMiddleware;
 
 /**
@@ -22,7 +21,6 @@ final class Router
 
     private const MIDDLEWARE = [
         'auth'  => AuthMiddleware::class,
-        'guest' => GuestMiddleware::class,
         'player' => PlayerMiddleware::class,
     ];
 
