@@ -14,6 +14,7 @@ use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\GameController;
 use App\Controllers\HomeController;
+use App\Controllers\RewardController;
 
 // --- Strona publiczna -----------------------------------------------------
 $router->get('/', [HomeController::class, 'index']);
@@ -28,6 +29,17 @@ $router->get('/panel', [DashboardController::class, 'index'], ['auth']);
 $router->get('/panel/gry', [GameController::class, 'index'], ['auth']);
 $router->get('/panel/gry/nowa', [GameController::class, 'create'], ['auth']);
 $router->get('/panel/gry/{id}/edycja', [GameController::class, 'edit'], ['auth']);
+
+// --- Kreator nagród (tworzenie i zmiany – tylko administrator) ----------
+$router->get('/panel/nagrody', [RewardController::class, 'index'], ['auth']);
+$router->get('/panel/nagrody/nowa', [RewardController::class, 'create'], ['auth']);
+$router->post('/panel/nagrody', [RewardController::class, 'store'], ['auth']);
+$router->get('/panel/nagrody/{id}/edycja', [RewardController::class, 'edit'], ['auth']);
+$router->put('/panel/nagrody/{id}', [RewardController::class, 'update'], ['auth']);
+$router->delete('/panel/nagrody/{id}', [RewardController::class, 'destroy'], ['auth']);
+$router->post('/panel/nagrody/{id}/status', [RewardController::class, 'toggle'], ['auth']);
+$router->post('/panel/nagrody/{id}/kody', [RewardController::class, 'addCodes'], ['auth']);
+$router->delete('/panel/nagrody/{id}/kody/{codeId}', [RewardController::class, 'deleteCode'], ['auth']);
 
 // --- API panelu (wymaga zalogowania, JSON) -------------------------------
 $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']);

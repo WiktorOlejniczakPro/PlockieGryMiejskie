@@ -140,6 +140,7 @@ function label(string $group, string $key): string
         'difficulty' => ['easy' => 'Łatwy', 'medium' => 'Średni', 'hard' => 'Trudny'],
         'status'     => ['draft' => 'Szkic', 'published' => 'Opublikowana', 'hidden' => 'Ukryta', 'archived' => 'Zarchiwizowana'],
         'role'       => ['admin' => 'Administrator', 'creator' => 'Twórca gier'],
+        'reward_type'=> ['discount_code' => 'Kod rabatowy', 'gift_card' => 'Karta podarunkowa'],
     ];
     return $labels[$group][$key] ?? $key;
 }

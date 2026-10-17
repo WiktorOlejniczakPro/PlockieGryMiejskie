@@ -11,6 +11,7 @@ Gracze będą przechodzić gry w osobnej aplikacji mobilnej na Androida (przysz�
 | 1 | Architektura, schemat MySQL, dane przykładowe | ✅ gotowe |
 | 2 | Konfiguracja, routing, layouty, strona publiczna, sesje, logowanie, CSRF, konto administratora | ✅ gotowe |
 | 3 | Edytor gry: informacje podstawowe, mapa z punktami, kolejność, zadania, zapis do MySQL, lista gier | ✅ gotowe |
+| 3a | Kreator nagród: kody rabatowe i karty podarunkowe za punkty, pule kodów | ✅ gotowe |
 | 4+ | Wyszukiwarka adresów, obszar gry, zdjęcia, podgląd, publikacja, filtry listy, API dla Androida, konto, FAQ | ⏳ w kolejnych etapach |
 
 Pozycje menu z przyszłych etapów są widoczne w panelu z etykietą „wkrótce” i nie da się ich kliknąć.
@@ -103,6 +104,20 @@ C:\xampp\php\php.exe -S localhost:8000 -t public public\index.php
 ```
 
 Potem otwórz `http://localhost:8000`.
+
+## Kreator nagród
+
+Menu panelu → **Kreator nagród**. Administrator przygotowuje tu katalog nagród, które gracze wymieniają na punkty:
+
+- **kody rabatowe** – procentowe (np. −10%) lub kwotowe (np. −15 zł), opcjonalnie z minimalną wartością zakupów,
+- **karty podarunkowe** – bon o wartości w złotówkach.
+
+Dla każdej nagrody ustawiasz sklep, koszt w punktach, limit na gracza, termin ważności i warunki, a podgląd pokazuje, jak nagrodę zobaczy gracz.
+Każda nagroda ma **pulę kodów** (wklejasz je – każdy w osobnej linii); jeden kod trafia do jednego gracza. Kody są w panelu domyślnie zamaskowane.
+Twórcy gier widzą listę nagród tylko do odczytu. Samą wymianę punktów obsłuży przyszła aplikacja mobilna.
+
+**Masz już bazę z wcześniejszego etapu?** Nie importuj `schema.sql` od nowa – w phpMyAdmin zaimportuj tylko
+`database/migracje/2026-10-17-nagrody.sql`. Doda tabele nagród i 4 przykładowe nagrody, nie ruszając gier ani kont.
 
 ## Tryb demonstracyjny – bez ekranu logowania
 
