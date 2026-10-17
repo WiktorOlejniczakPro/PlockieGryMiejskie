@@ -21,10 +21,14 @@ use PDO;
  */
 final class RewardService
 {
-    /** Nagroda widoczna w aplikacji: aktywna i w terminie ważności. */
+    /**
+     * Nagroda widoczna w aplikacji: aktywna i w terminie ważności (Reward::appVisibility).
+     * Data „dziś” z PHP (czas polski), nie CURDATE() – baza może mieć inną strefę czasową.
+     * Parametry: dwa razy dzisiejsza data.
+     */
     private const VISIBLE = 'r.is_active = 1
-        AND (r.valid_from IS NULL OR r.valid_from <= CURDATE())
-        AND (r.valid_until IS NULL OR r.valid_until >= CURDATE())';
+        AND (r.valid_from IS NULL OR r.valid_from <= ?)
+        AND (r.valid_until IS NULL OR r.valid_until >= ?)';
 
     public static function balance(int $playerId, ?PDO $pdo = null): array
     {
@@ -61,7 +65,7 @@ final class RewardService
                FROM rewards r
               WHERE " . self::VISIBLE . '
               ORDER BY r.cost_points, r.id',
-            [$playerId]
+            [$playerId, date('Y-m-d'), date('Y-m-d')]
         )->fetchAll();
 
         return array_map(static function (array $r) use ($balance): array {
@@ -109,7 +113,7 @@ final class RewardService
             }
 
             $stmt = $pdo->prepare('SELECT * FROM rewards r WHERE r.id = ? AND ' . self::VISIBLE . ' FOR UPDATE');
-            $stmt->execute([$rewardId]);
+            $stmt->execute([$rewardId, date('Y-m-d'), date('Y-m-d')]);
             $reward = $stmt->fetch(PDO::FETCH_ASSOC);
             if (!$reward) {
                 throw new HttpException(404, 'Ta nagroda nie jest już dostępna.');

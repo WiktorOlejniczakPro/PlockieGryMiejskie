@@ -29,6 +29,9 @@ $aria = static fn (string $key): string => $err($key) ? ' aria-invalid="true" ar
   <div>
     <a class="editor-back" href="<?= e(url('/panel/nagrody')) ?>">← Kreator nagród</a>
     <h1><?= $isNew ? 'Nowa nagroda' : 'Edycja nagrody' ?></h1>
+    <?php if (!$isNew): $app = Reward::appVisibility($reward); ?>
+      <p class="reward-item__app<?= $app['visible'] ? '' : ' is-hidden' ?>">📱 <?= e($app['label']) ?></p>
+    <?php endif; ?>
   </div>
 </div>
 

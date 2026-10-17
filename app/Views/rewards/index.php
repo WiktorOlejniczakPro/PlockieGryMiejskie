@@ -43,6 +43,8 @@ use App\Models\Reward;
           <div class="reward-item__badges">
             <span class="status <?= $r['is_active'] ? 'status--published' : 'status--archived' ?>"><?= $r['is_active'] ? 'Aktywna' : 'Nieaktywna' ?></span>
           </div>
+          <?php $app = Reward::appVisibility($r); ?>
+          <p class="reward-item__app<?= $app['visible'] ? '' : ' is-hidden' ?>">📱 <?= e($app['label']) ?></p>
           <p class="reward-item__codes<?= (int) $r['codes_available'] === 0 ? ' is-empty' : '' ?>">
             Kody: <strong><?= e($r['codes_available']) ?></strong> dostępnych · <?= e($r['codes_redeemed']) ?> wydanych
             <?php if ((int) $r['codes_available'] === 0): ?><br><span>Brak kodów – gracze nie odbiorą tej nagrody</span><?php endif; ?>

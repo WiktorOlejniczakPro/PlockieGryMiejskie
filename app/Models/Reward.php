@@ -118,6 +118,28 @@ final class Reward
         )->rowCount() === 1;
     }
 
+    /**
+     * Czy gracze widzą nagrodę w zakładce „Sklep” aplikacji (te same warunki co RewardService).
+     * @return array{visible: bool, label: string}
+     */
+    public static function appVisibility(array $r): array
+    {
+        $today = date('Y-m-d');
+        if (!(int) $r['is_active']) {
+            return ['visible' => false, 'label' => 'Niewidoczna w aplikacji – nagroda jest nieaktywna'];
+        }
+        if (!empty($r['valid_from']) && $r['valid_from'] > $today) {
+            return ['visible' => false, 'label' => 'Pojawi się w aplikacji ' . date('d.m.Y', strtotime((string) $r['valid_from']))];
+        }
+        if (!empty($r['valid_until']) && $r['valid_until'] < $today) {
+            return ['visible' => false, 'label' => 'Niewidoczna w aplikacji – termin ważności minął'];
+        }
+        if ((int) ($r['codes_available'] ?? 0) === 0) {
+            return ['visible' => true, 'label' => 'Widoczna w aplikacji jako „Brak kodów” – dodaj kody'];
+        }
+        return ['visible' => true, 'label' => 'Widoczna w aplikacji (Sklep)'];
+    }
+
     /** Wartość nagrody do wyświetlenia: „−10%”, „−15 zł”, „50 zł”. */
     public static function valueLabel(array $r): string
     {
