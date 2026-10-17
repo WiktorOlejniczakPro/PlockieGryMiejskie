@@ -41,7 +41,15 @@ Mapa wymaga internetu (kafelki OpenStreetMap). Biblioteka Leaflet jest dołączo
 
 ### 1. Pliki
 
-Rozpakuj projekt tak, żeby powstał folder `C:\xampp\htdocs\pgm`, a w nim `app`, `public`, `database` itd.
+Pobierz projekt z GitHuba do folderu `C:\xampp\htdocs\pgm`:
+
+```
+cd C:\xampp\htdocs
+git clone https://github.com/WiktorOlejniczakPro/PlockieGryMiejskie.git pgm
+```
+
+Bez gita: na stronie repozytorium kliknij **Code → Download ZIP**, rozpakuj i zmień nazwę folderu na `pgm`.
+W `C:\xampp\htdocs\pgm` muszą być bezpośrednio foldery `app`, `public`, `database` itd.
 
 ### 2. Apache i MySQL
 
