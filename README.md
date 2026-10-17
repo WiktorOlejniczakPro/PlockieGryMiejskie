@@ -41,15 +41,7 @@ Mapa wymaga internetu (kafelki OpenStreetMap). Biblioteka Leaflet jest dołączo
 
 ### 1. Pliki
 
-Pobierz projekt z GitHuba do folderu `C:\xampp\htdocs\pgm`:
-
-```
-cd C:\xampp\htdocs
-git clone https://github.com/WiktorOlejniczakPro/PlockieGryMiejskie.git pgm
-```
-
-Bez gita: na stronie repozytorium kliknij **Code → Download ZIP**, rozpakuj i zmień nazwę folderu na `pgm`.
-W `C:\xampp\htdocs\pgm` muszą być bezpośrednio foldery `app`, `public`, `database` itd.
+Rozpakuj projekt tak, żeby powstał folder `C:\xampp\htdocs\pgm`, a w nim `app`, `public`, `database` itd.
 
 ### 2. Apache i MySQL
 
@@ -103,6 +95,19 @@ C:\xampp\php\php.exe -S localhost:8000 -t public public\index.php
 ```
 
 Potem otwórz `http://localhost:8000`.
+
+## Tryb demonstracyjny – bez ekranu logowania
+
+Na pokaz (np. dla jury) panel może być stale zalogowany na jedno konto:
+
+1. Utwórz konto skryptem `bin/create-admin.php` (jeśli jeszcze go nie masz).
+2. W pliku `.env` wpisz jego adres: `AUTO_LOGIN_EMAIL=admin@example.org`
+3. Odśwież stronę – panel otworzy się od razu, a `/logowanie` przekieruje do panelu.
+
+- W panelu widać żółty pasek „Tryb demonstracyjny”, żeby nikt nie zapomniał go wyłączyć.
+- Kliknięcie „Wyloguj” wyłącza automatyczne logowanie do zamknięcia przeglądarki.
+- Przy `APP_ENV=production` ustawienie jest ignorowane.
+- **Wyłączenie:** wyczyść wartość (`AUTO_LOGIN_EMAIL=`). Każdy, kto otworzy stronę w trybie demo, ma pełny dostęp do tego konta – nie zostawiaj go na serwerze dostępnym z internetu.
 
 ## Najczęstsze problemy
 

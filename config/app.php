@@ -20,6 +20,8 @@ return [
 
     'auth' => [
         'registration_enabled'  => env('REGISTRATION_ENABLED', false),
+        // Tryb demonstracyjny: to konto jest logowane automatycznie (działa tylko poza APP_ENV=production)
+        'auto_login_email'      => trim((string) env('AUTO_LOGIN_EMAIL', '')),
         'min_password_length'   => 12,
         // limit prób logowania w oknie czasowym
         'max_attempts_per_email' => 5,

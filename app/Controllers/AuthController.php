@@ -93,6 +93,8 @@ final class AuthController
     {
         $userId = Auth::id();
         Auth::logout();
+        // W trybie demonstracyjnym wylogowanie wyłącza automatyczne logowanie do zamknięcia przeglądarki
+        Session::set('_no_auto_login', true);
         AuditLog::record('auth.logout', $userId, 'user', $userId);
         Session::flash('success', 'Wylogowano pomyślnie.');
         redirect('/logowanie');
