@@ -14,7 +14,6 @@ use App\Controllers\Api\PlaceApi;
 use App\Controllers\Api\PlayerApi;
 use App\Controllers\Api\PublicGameApi;
 use App\Controllers\Api\RewardApi;
-use App\Controllers\RewardController;
 use App\Controllers\AuthController;
 use App\Controllers\DashboardController;
 use App\Controllers\GameController;
@@ -40,17 +39,6 @@ $router->post('/panel/nagrody', [RewardController::class, 'store'], ['auth']);
 $router->get('/panel/nagrody/{id}/edycja', [RewardController::class, 'edit'], ['auth']);
 $router->post('/panel/nagrody/{id}', [RewardController::class, 'update'], ['auth']);
 $router->post('/panel/nagrody/wymiany/{id}/wykorzystana', [RewardController::class, 'markUsed'], ['auth']);
-
-// --- Kreator nagród (tworzenie i zmiany – tylko administrator) ----------
-$router->get('/panel/nagrody', [RewardController::class, 'index'], ['auth']);
-$router->get('/panel/nagrody/nowa', [RewardController::class, 'create'], ['auth']);
-$router->post('/panel/nagrody', [RewardController::class, 'store'], ['auth']);
-$router->get('/panel/nagrody/{id}/edycja', [RewardController::class, 'edit'], ['auth']);
-$router->put('/panel/nagrody/{id}', [RewardController::class, 'update'], ['auth']);
-$router->delete('/panel/nagrody/{id}', [RewardController::class, 'destroy'], ['auth']);
-$router->post('/panel/nagrody/{id}/status', [RewardController::class, 'toggle'], ['auth']);
-$router->post('/panel/nagrody/{id}/kody', [RewardController::class, 'addCodes'], ['auth']);
-$router->delete('/panel/nagrody/{id}/kody/{codeId}', [RewardController::class, 'deleteCode'], ['auth']);
 
 // --- API panelu (wymaga zalogowania, JSON) -------------------------------
 $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']);
@@ -83,5 +71,5 @@ $router->get('/api/v1/sessions/{id}', [PlayerApi::class, 'showSession'], ['playe
 $router->post('/api/v1/sessions/{id}/waypoints/{waypointId}/arrival', [PlayerApi::class, 'arrive'], ['player']);
 $router->post('/api/v1/sessions/{id}/tasks/{taskId}/answer', [PlayerApi::class, 'answer'], ['player']);
 
-// Kolejne etapy panelu: podgląd, publikacja, duplikowanie, archiwizacja, zdjęcia,
+// Kolejne etapy panelu: duplikowanie, zdjęcia,
 // konto, FAQ, ocena zdjęć i filmów przesłanych przez graczy.
