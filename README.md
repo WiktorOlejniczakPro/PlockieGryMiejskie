@@ -63,6 +63,8 @@ Otwórz **XAMPP Control Panel** i kliknij **Start** przy **Apache** i **MySQL**.
 
 > `schema.sql` usuwa i tworzy tabele od nowa – nie uruchamiaj go ponownie, gdy w bazie są już prawdziwe gry.
 
+`seed.sql` zawiera też **miejsca i ulice Płocka** z otwartych danych miasta (tabele `place_categories`, `places`, `streets`) – patrz sekcja [Dane miejskie](#dane-miejskie).
+
 ### 4. Plik konfiguracyjny `.env`
 
 W folderze `C:\xampp\htdocs\pgm` skopiuj plik `.env.example` i nazwij kopię `.env`.
@@ -114,6 +116,39 @@ Potem otwórz `http://localhost:8000`.
 | Apache nie startuje (port 80) | Port zajmuje inny program (np. Skype, IIS). Zamknij go albo zmień port Apache na 8080 w XAMPP (Config → httpd.conf, `Listen 8080`). |
 | Krzaczki zamiast polskich liter w konsoli | Dotyczy tylko wiersza poleceń MySQL – dodaj `--default-character-set=utf8mb4`. |
 
+## Dane miejskie
+
+Pliki źródłowe (otwarte dane UM Płock, BDOT10k, TERYT/PRG) leżą w `database/dane-zrodlowe/`.
+Skrypt `bin/build-places-seed.php` zamienia je na sekcję „MIEJSCA” w `database/seed.sql`:
+
+| Rodzaj miejsc | Plik źródłowy | Liczba |
+|---|---|---|
+| Zabytki – rejestr i gminna ewidencja | `zabytki-rejestr.csv`, `zabytki-ewidencja.csv` | 535 |
+| Przedszkola, szkoły, poradnie, internaty | `placowki-oswiatowe.csv` | 73 |
+| Szkoły niepubliczne i uczelnie (uzupełnienie) | `budynki-szkol-*.csv` (BDOT10k) | 41 |
+| Przystanki komunikacji miejskiej | `przystanki.csv` | 387 |
+| Stacje roweru miejskiego | `rower-miejski.csv` | 56 |
+| Place zabaw, siłownie, boiska, parki, fontanny, toalety, parkingi | `wsk-obiekty-komunalne.kml` | 206 |
+| Osiedla (obrys obszaru w GeoJSON) | `wsk-obiekty-komunalne.kml` | 21 |
+| Ulice Płocka (kod TERYT ULIC, punkt na ulicy, zasięg) | `ulice-plock-2023.gml` | 504 |
+
+Skrypt przy okazji:
+- przelicza współrzędne z układu PUWG 1992 (EPSG:2180) na WGS84,
+- naprawia uszkodzone polskie litery w źródłach („P3ocku” → „Płocku”, „Sob?tka” → „Sobótka”, „Dluga” → „Długa”) na podstawie poprawnie zapisanych nazw ulic i szkół,
+- poprawia dwa błędne wiersze w pliku roweru miejskiego i usuwa duplikaty.
+
+Celowo **pomijane** są dane techniczne: stacje transformatorowe, przepompownie i punkty pomiarowe liczników (numery PPE).
+Pliki `ulice-linie-bdot.csv` i `prg-ulice.gml` są w repozytorium jako materiał źródłowy (PRG służy tylko do słownika nazw).
+
+Po zmianie plików źródłowych:
+
+```
+C:\xampp\php\php.exe bin\build-places-seed.php
+C:\xampp\php\php.exe bin\build-places-seed.php --report   (lista wszystkich poprawionych nazw)
+```
+
+Na istniejącej bazie z prawdziwymi grami nie importuj całego `seed.sql` ponownie – wystarczy utworzyć trzy nowe tabele (koniec `schema.sql`) i wykonać sekcję „MIEJSCA” z `seed.sql`.
+
 ## Struktura projektu
 
 ```
@@ -127,9 +162,9 @@ pgm/
 │   ├── Views/         layouts/, public/, auth/, dashboard/, errors/, partials/
 │   ├── bootstrap.php  wspólny start aplikacji
 │   └── helpers.php    e(), url(), asset(), csrf_field(), redirect() …
-├── bin/create-admin.php
+├── bin/               create-admin.php, build-places-seed.php
 ├── config/            app.php, database.php
-├── database/          schema.sql, seed.sql
+├── database/          schema.sql, seed.sql, dane-zrodlowe/ (otwarte dane miasta)
 ├── docs/              dokumentacja etapów
 ├── public/            ← jedyny katalog dostępny z przeglądarki
 │   ├── index.php

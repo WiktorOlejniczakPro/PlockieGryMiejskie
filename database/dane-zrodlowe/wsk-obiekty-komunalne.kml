@@ -1,0 +1,5378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>WSK</name>
+    <description>Obiekty będące w zarządzaniu Wydziału Spraw Komunalnych UMP</description>
+    <Style id="icon-1019-labelson-nodesc">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1019-biz-finance.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1021-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1021-biz-flower.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1021-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1021-biz-flower.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1021">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1021-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1021-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1031-labelson">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1031-biz-gym.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1031-labelson-nodesc">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1031-biz-gym.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1067-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1067-biz-plumber.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1067-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1067-biz-plumber.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1067">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1067-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1067-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1067-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1067-biz-plumber.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1067-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1067-biz-plumber.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1067-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1067-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1067-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1117-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1117-biz-yoga.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1117-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1117-biz-yoga.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1117">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1117-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1117-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1117-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1117-biz-yoga.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1117-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1117-biz-yoga.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1117-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1117-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1117-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1141-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1141-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1141">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1141-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1141-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1141-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1141-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1141-crisis-electrical.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1141-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1141-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1141-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1149-labelson">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1149-crisis-flood.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1149-labelson-nodesc">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1149-crisis-flood.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1219-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1219-fac-wc-unisex.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1219-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1219-fac-wc-unisex.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1219">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1219-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1219-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1219-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1219-fac-wc-unisex.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1219-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1219-fac-wc-unisex.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1219-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1219-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1219-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1235-labelson">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1235-poi-casino.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1235-labelson-nodesc">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1235-poi-casino.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1289-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1289-poi-museum.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1289-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1289-poi-museum.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1289-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1289-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1289-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1353-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1353-rec-basketball.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1353-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1353-rec-basketball.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1353">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1353-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1353-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1353-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1353-rec-basketball.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1353-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1353-rec-basketball.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1353-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1353-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1353-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1355-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1355-rec-beach.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1355-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1355-rec-beach.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1355">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1355-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1355-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1359-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1359-rec-canoe.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1359-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1359-rec-canoe.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1359">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1359-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1359-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1379-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1379-rec-park.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1379-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1379-rec-park.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1379">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1379-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1379-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1379-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1379-rec-park.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1379-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1379-rec-park.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1379-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1379-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1379-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1409-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1409-rec-winter-ski.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1409-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1409-rec-winter-ski.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1409">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1409-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1409-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1419-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1419-trans-bicycle.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1419-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1419-trans-bicycle.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1419">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1419-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1419-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1453-labelson">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1453-trans-parking.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1453-labelson-nodesc">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1453-trans-parking.png</href>
+        </Icon>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1467-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1467-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1467">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1467-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1467-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1467-nodesc-normal">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1467-nodesc-highlight">
+      <IconStyle>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/1467-trans-tunnel.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1467-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1467-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1467-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-DB4436-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-503-DB4436-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-503-DB4436">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-DB4436-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-DB4436-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-503-DB4436-labelson-nodesc">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-503-DB4436-nodesc-normal">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-503-DB4436-nodesc-highlight">
+      <IconStyle>
+        <color>ff3644db</color>
+        <scale>1.1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="16" xunits="pixels" y="32" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1.1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-503-DB4436-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-503-DB4436-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-503-DB4436-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-009D57-1200-76-normal">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c579d00</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-009D57-1200-76-highlight">
+      <LineStyle>
+        <color>ff579d00</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c579d00</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-009D57-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-009D57-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-009D57-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-0BA9CC-1200-76-normal">
+      <LineStyle>
+        <color>ffcca90b</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ccca90b</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-0BA9CC-1200-76-highlight">
+      <LineStyle>
+        <color>ffcca90b</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ccca90b</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-0BA9CC-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-0BA9CC-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-0BA9CC-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-3F5BA9-1200-86-nodesc-normal">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>56a95b3f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="poly-3F5BA9-1200-86-nodesc-highlight">
+      <LineStyle>
+        <color>ffa95b3f</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>56a95b3f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="poly-3F5BA9-1200-86-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-3F5BA9-1200-86-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-3F5BA9-1200-86-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-62AF44-1200-76-normal">
+      <LineStyle>
+        <color>ff44af62</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c44af62</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-62AF44-1200-76-highlight">
+      <LineStyle>
+        <color>ff44af62</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c44af62</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-62AF44-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-62AF44-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-62AF44-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-795046-1200-76-normal">
+      <LineStyle>
+        <color>ff465079</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c465079</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-795046-1200-76-highlight">
+      <LineStyle>
+        <color>ff465079</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c465079</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-795046-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-795046-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-795046-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-7C3592-1200-76-normal">
+      <LineStyle>
+        <color>ff92357c</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c92357c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-7C3592-1200-76-highlight">
+      <LineStyle>
+        <color>ff92357c</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c92357c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-7C3592-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-7C3592-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-7C3592-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-7CCFA9-1200-76-normal">
+      <LineStyle>
+        <color>ffa9cf7c</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca9cf7c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-7CCFA9-1200-76-highlight">
+      <LineStyle>
+        <color>ffa9cf7c</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca9cf7c</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-7CCFA9-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-7CCFA9-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-7CCFA9-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-9FC3FF-1200-76-normal">
+      <LineStyle>
+        <color>ffffc39f</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cffc39f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-9FC3FF-1200-76-highlight">
+      <LineStyle>
+        <color>ffffc39f</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cffc39f</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-9FC3FF-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-9FC3FF-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-9FC3FF-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-A61B4A-1200-76-normal">
+      <LineStyle>
+        <color>ff4a1ba6</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c4a1ba6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-A61B4A-1200-76-highlight">
+      <LineStyle>
+        <color>ff4a1ba6</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c4a1ba6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-A61B4A-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-A61B4A-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-A61B4A-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-CDDC39-1200-76-normal">
+      <LineStyle>
+        <color>ff39dccd</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c39dccd</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-CDDC39-1200-76-highlight">
+      <LineStyle>
+        <color>ff39dccd</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c39dccd</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-CDDC39-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-CDDC39-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-CDDC39-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-D698AD-1200-76-normal">
+      <LineStyle>
+        <color>ffad98d6</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cad98d6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-D698AD-1200-76-highlight">
+      <LineStyle>
+        <color>ffad98d6</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4cad98d6</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-D698AD-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-D698AD-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-D698AD-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-DB4436-1200-76-normal">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c3644db</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-DB4436-1200-76-highlight">
+      <LineStyle>
+        <color>ff3644db</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c3644db</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-DB4436-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-DB4436-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-DB4436-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-EE9C96-1200-76-normal">
+      <LineStyle>
+        <color>ff969cee</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c969cee</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-EE9C96-1200-76-highlight">
+      <LineStyle>
+        <color>ff969cee</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c969cee</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-EE9C96-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-EE9C96-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-EE9C96-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F4EB37-1200-76-normal">
+      <LineStyle>
+        <color>ff37ebf4</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c37ebf4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-F4EB37-1200-76-highlight">
+      <LineStyle>
+        <color>ff37ebf4</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c37ebf4</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-F4EB37-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F4EB37-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F4EB37-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-F9F7A6-1200-76-normal">
+      <LineStyle>
+        <color>ffa6f7f9</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca6f7f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-F9F7A6-1200-76-highlight">
+      <LineStyle>
+        <color>ffa6f7f9</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4ca6f7f9</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-F9F7A6-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-F9F7A6-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-F9F7A6-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFDD5E-1200-66-normal">
+      <LineStyle>
+        <color>ff5eddff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>425eddff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-FFDD5E-1200-66-highlight">
+      <LineStyle>
+        <color>ff5eddff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>425eddff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-FFDD5E-1200-66">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFDD5E-1200-66-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFDD5E-1200-66-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="poly-FFDD5E-1200-76-normal">
+      <LineStyle>
+        <color>ff5eddff</color>
+        <width>1.2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5eddff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <Style id="poly-FFDD5E-1200-76-highlight">
+      <LineStyle>
+        <color>ff5eddff</color>
+        <width>1.8</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>4c5eddff</color>
+        <fill>1</fill>
+        <outline>1</outline>
+      </PolyStyle>
+    </Style>
+    <StyleMap id="poly-FFDD5E-1200-76">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#poly-FFDD5E-1200-76-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#poly-FFDD5E-1200-76-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Oczyszczalnie i przepompownie</name>
+      <Placemark>
+        <name>SEP Bielska
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7136033,52.5641429,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Borowicka</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7738228,52.5136337,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Browarna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6736974,52.4939223,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Brzoskwiniowa
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7643426,52.5294562,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Cmentarz
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7241282,52.5697186,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Długa
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6916842,52.5706577,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Grabówka Strzelnica</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7202766,52.5281801,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Gościniec
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7548985,52.5177943,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Krakówka
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.67749,52.5210911,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Medyczna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6538169,52.5585925,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Most Solidarności
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7303403,52.523748,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Mościckiego
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6863091,52.5329839,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[SEP Rów "A"]]></name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.695096,52.4982234,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Rów R-4 </name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7064525,52.5052083,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Pl. Witosa
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7692456,52.51302,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Srebrna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7699833,52.5193285,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Tr. Popiełuszki 1</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7245118,52.5189335,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Tr. Popiełuszki 2</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7248551,52.5187785,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OS Dobrzyńska
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.665463,52.5604775,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Ciechomicka mostek</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6742928,52.4980276,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP za FORDem - 1
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7429091,52.5370561,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP za FORDem-2</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7425228,52.5362241,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP przy trasie przed wiaduktem
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6907401,52.4960877,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Wańkowicza
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7669685,52.5444035,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Włościany 4</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6708811,52.495245,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Ciechomicka - wiadukt</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6818137,52.4943469,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Grabówka Słoneczna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7173583,52.5311238,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Grabowa
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.780224,52.513619,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Gwardii Ludowej
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6880257,52.5630081,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Medyczna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6536719,52.558136,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Mehoffera
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6675122,52.5602541,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Portowa
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6746361,52.5347492,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Osadnik Skarpa Wiślana</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6778226,52.5462827,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Wąska
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6887178,52.5255105,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Wschód</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7499204,52.5203599,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Wyszogrodzka
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.766196,52.5338323,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>OŚ Zgodna
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7564757,52.5148595,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Osadnik do separatora - rów R-4
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7077506,52.504921,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[SEP Rów R-4 "
+]]></name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7061198,52.5052443,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Grabówka</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7167253,52.5292637,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Chruściela
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.767065,52.5377349,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Braci Jeziorowskich
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7273576,52.5422896,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Spółdzielcza
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7166288,52.5432552,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Muniserwis
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7006214,52.5691056,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Otolińska
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7321481,52.5517205,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Piłsudskiego</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7269526,52.5413711,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Przepompownia Srebna
+</name>
+        <styleUrl>#icon-1019-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7681379,52.5185386,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Nabrzeże W1
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6897925,52.539612,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Nabrzeże 2
+</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6905758,52.5386266,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP - Żyzna</name>
+        <description>separator lamelowy Ugos Slekow B Rekow NG 60/600, poj. 6,0</description>
+        <styleUrl>#icon-1149-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7678889,52.5458254,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Łukasiewicza Parowa
+</name>
+        <description>lamelowy ESL Ecol Unicon 130/1300 S, poj. 9,8 m3</description>
+        <styleUrl>#icon-1149-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6790437,52.5627625,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>SEP Łukasiewicza Kobiałka
+</name>
+        <description>lamelowy ESL Ecol Unicon 130/1300 poj. 9,8m3</description>
+        <styleUrl>#icon-1149-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6774727,52.5648335,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Obwodnica W10 </name>
+        <description>lamelowy PWS Ecol – Unicon 75/750 - 5,2 m3</description>
+        <styleUrl>#icon-1149-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7193817,52.568126,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Mazowieckiego(układy: B, C, D, G, E, F, H)</name>
+        <styleUrl>#icon-1149-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.741127,52.5457877,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mazowieckiego</name>
+        <styleUrl>#icon-503-DB4436-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7423246,52.5430999,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Place zabaw</name>
+      <Placemark>
+        <name>ul. Zielona</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6748185,52.5290222,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Nabrzeże
+</name>
+        <description>w administrowaniu ARSu</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6905384,52.5385315,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Parkowa/Osiedlowa</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6461511,52.5043824,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Miętowa</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6847587,52.4941265,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Nizinna 39</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6997523,52.5040819,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Południowa</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW5NVSF6sa8PKtuxtk0bB4km8bdVJxH9-x-JIpmsXAKydJLC5egi0HvgKkX6gbaXjSmmuH9t8fOuUQuJ7SPTSIUZ23coqCvXbPnEt6jfo80CxGSShEfa0VOEyJPuInFvc6AUggg" height="200" width="auto" /><br><br>zestaw Olka, huśtawka bocianie gniazdo, bujak na sprężynie SMOK, bujak na sprężynie (Rok budowy 2014)]]></description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW5NVSF6sa8PKtuxtk0bB4km8bdVJxH9-x-JIpmsXAKydJLC5egi0HvgKkX6gbaXjSmmuH9t8fOuUQuJ7SPTSIUZ23coqCvXbPnEt6jfo80CxGSShEfa0VOEyJPuInFvc6AUggg</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.7173798,52.5373433,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Na Skarpie</name>
+        <description>plac zabaw</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6650231,52.5559703,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Asnyka/Norwida</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6712244,52.5587751,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Miodowa</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6767765,52.5618765,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Bartnicza/Skłodowskiej</name>
+        <description>2014</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6782276,52.5538145,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Słodowa/Sklodowskiej Centralny Park Rekreacji
+</name>
+        <description><![CDATA[<img src="https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hg4rbgji4ck0an4ajdh4tnccls/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbQvoi3bMaGmC36dmoYJz08WICkJSHYPMBzqCoJT2-nUkD7aU_RussueRfcfpFmlmC5gpp3NNSdPLCd86hJJ7tqivXkSF6xq4fDhaRTtfYF2K24WcrwFSFZTjCRhBG9LcfY8jmTHxRVJ00K-GvPbtn1wB70r4GkZK_Oxl16YaEdItxDtx2J8h9jTIsb?fife" height="200" width="auto" /><br><br><br><br><img src="https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/vl39hbf1nbbvs3gpo1nmnvbdkg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbqeguc3SELmvfMkXu3GTwU4Csxtog5dYhsCMuW3Kzv4389L9OxEKsXbGTjm9AgDNKhWbr0bFCbc5sL2S_zAWSFBNzYzmquaeYTHFpbeIM9S0PRaSLVLBSuQ08Ru5QA18zJVDQkO-9hz5fJDKx6Kje5EdWhrxBGThzyZq7Khn99vIPFYncGw0tFEBXu?fife" height="200" width="auto" /><br><br><img src="https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/mfafqtu5ootthhr800a1brr6vg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYoYK5qYtW1LLCQdwXJwg93UmZuLzuyYO-ZUMg4iFk2p1UiIMESTG-ejVMs_w8lK5eaXS4fyMAe_mnFZtaPO-wyz7KzkFTx0u-vE1BqPRWSoonXYQbvE61rJAFxakOtt9ssF97I0nGzNNKDwV-S-cQ6kaW-UHCJXRNi10P5aX3d_IdiGHcs3Nzy81ei?fife" height="200" width="auto" /><br><br><img src="https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/9d60ogp2gjgmsq5e54s8u7rgec/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYyArIylrSgSNVc_Z8xYdEoVkAcx-11Y1YrLWUOhCbRdb8cD-ahDiKgyXiUyTkPrPO3IVA44QgVzL8f8VQKqMpAJ68B455OmpI6PXH37RKw_Bm8AMsEi5zMec2rI3hjiFxKQCppgD-aMN8aVBQUG-1mMiTC8vXwm-gu_VKwmHgxfs2V8jzEdVLuZowe?fife" height="200" width="auto" />]]></description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hg4rbgji4ck0an4ajdh4tnccls/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbQvoi3bMaGmC36dmoYJz08WICkJSHYPMBzqCoJT2-nUkD7aU_RussueRfcfpFmlmC5gpp3NNSdPLCd86hJJ7tqivXkSF6xq4fDhaRTtfYF2K24WcrwFSFZTjCRhBG9LcfY8jmTHxRVJ00K-GvPbtn1wB70r4GkZK_Oxl16YaEdItxDtx2J8h9jTIsb?fife https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/vl39hbf1nbbvs3gpo1nmnvbdkg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbqeguc3SELmvfMkXu3GTwU4Csxtog5dYhsCMuW3Kzv4389L9OxEKsXbGTjm9AgDNKhWbr0bFCbc5sL2S_zAWSFBNzYzmquaeYTHFpbeIM9S0PRaSLVLBSuQ08Ru5QA18zJVDQkO-9hz5fJDKx6Kje5EdWhrxBGThzyZq7Khn99vIPFYncGw0tFEBXu?fife https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/mfafqtu5ootthhr800a1brr6vg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYoYK5qYtW1LLCQdwXJwg93UmZuLzuyYO-ZUMg4iFk2p1UiIMESTG-ejVMs_w8lK5eaXS4fyMAe_mnFZtaPO-wyz7KzkFTx0u-vE1BqPRWSoonXYQbvE61rJAFxakOtt9ssF97I0nGzNNKDwV-S-cQ6kaW-UHCJXRNi10P5aX3d_IdiGHcs3Nzy81ei?fife https://doc-0g-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/9d60ogp2gjgmsq5e54s8u7rgec/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYyArIylrSgSNVc_Z8xYdEoVkAcx-11Y1YrLWUOhCbRdb8cD-ahDiKgyXiUyTkPrPO3IVA44QgVzL8f8VQKqMpAJ68B455OmpI6PXH37RKw_Bm8AMsEi5zMec2rI3hjiFxKQCppgD-aMN8aVBQUG-1mMiTC8vXwm-gu_VKwmHgxfs2V8jzEdVLuZowe?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6755159,52.5534263,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Jaśminowa/Pszczela cz1</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6804029,52.5566455,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Jaśminowa/Pszczela cz.2</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6795928,52.5566716,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tysiąclecia/Łukasiewicza Skwer Gier Miejskich</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW5GgmLQseznGODTsJazBXc_ihnpvSRzlaGvE6cOzIYUEfEyhLhjmQ5Lnos5yK-wlZ5GnxA7R9m-CNFoqsDCG0wFt-zAn3nucqYB_MOtuIrDAj0u33WVKlG9tWCnSja1XiDHlA" height="200" width="auto" /><br><br>zestaw zabawowy dla dzieci „warownia-zamek”, kółko i krzyżyk, ściankę wspinaczkową, grę w klasy, tor dla samochodzików oraz nawierzchnię do ćwiczeń ruchowych. Zamontowano 4 stoły do szachów, 2 stoły do tenisa stołowego (2013)]]></description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW5GgmLQseznGODTsJazBXc_ihnpvSRzlaGvE6cOzIYUEfEyhLhjmQ5Lnos5yK-wlZ5GnxA7R9m-CNFoqsDCG0wFt-zAn3nucqYB_MOtuIrDAj0u33WVKlG9tWCnSja1XiDHlA</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6841311,52.5535959,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park na Zdunach</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6674371,52.5516389,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jar Abisynia</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6785092,52.548315,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Kazimierza Wielkiego/Okrzei</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6810144,52.5465045,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Dobrzyńska/PCK</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6580923,52.5638624,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Dworcowa/Otolińska</name>
+        <description>2014</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7110605,52.5470884,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lasek Brzozowy</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7552741,52.5315317,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Kochanowskiego 11</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6982235,52.5531915,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>al.Jachowicza</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW6QQvqbVa7YarTgFyF72OKhU2lU8wUKakacT-9CYfL88V06k3KlQRS-A4kEAQ73YjNlv8pQE-xheta5FaSCRn0jal1-YDB-IC46Wt8-iyG_Yw2_SHq5TrOID5e3HGS8kUeimH4" height="200" width="auto" /><br><br>2014]]></description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW6QQvqbVa7YarTgFyF72OKhU2lU8wUKakacT-9CYfL88V06k3KlQRS-A4kEAQ73YjNlv8pQE-xheta5FaSCRn0jal1-YDB-IC46Wt8-iyG_Yw2_SHq5TrOID5e3HGS8kUeimH4</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.7021127,52.546909,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Narodowych Sił Zbrojnych
+</name>
+        <description>daw. Gwardii Ludowej</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6882832,52.5595448,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Gradowskiego/Krótka</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7006106,52.5395391,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul.Gałczyńskiego 18/1
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6781095,52.5579663,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Obrońców Westerplatte 5/1</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6941104,52.5504092,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Morelowa</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7702422,52.5306506,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Otolińska 23
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.722637,52.550264,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7557381,52.5404788,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Chopina 16</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7043282,52.5569651,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Żwirki i Wigury/Wschodnia 14</name>
+        <description>(vel. Żwirki i Wigury) Wschodnia 14</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7039902,52.5557388,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Popłacińska 42</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6661067,52.5355879,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Źródlana/Kalinowa</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7315714,52.5364312,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Armii Krajowej/Monte Casino (Zielony Jar)
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7639752,52.5392846,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Asnyka/Norwida Las Skarpas</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6694541,52.5591551,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Krakówka
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6803063,52.5242344,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Przyszkolna
+</name>
+        <description>piaskownica</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6532321,52.5031611,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Wańkowicza
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7662577,52.54119,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Teligi
+</name>
+        <description>Plac zabaw</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6667384,52.5323916,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Orlen Arena
+</name>
+        <description>W utrzymaniu MOSIRu</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6829241,52.5606569,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Hermana</name>
+        <description>plac zabaw</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6853616,52.5524684,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Tokarska
+</name>
+        <description>plac zabaw</description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7214242,52.5005122,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Mościckiego
+</name>
+        <styleUrl>#icon-1235-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6859336,52.5319135,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Piłsudskiego 34
+</name>
+        <description><![CDATA[· plac zabaw<br>· stół do ping-ponga<br>· zestaw CrossFit<br>· gry terenowe (szachy, warcaby, chińczyk)]]></description>
+        <styleUrl>#icon-1235-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7261615,52.5401998,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Siłownie pod chmurką</name>
+      <Placemark>
+        <name>ul. Przyszkolna</name>
+        <description>- wyciąg górny</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6531087,52.5033603,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Zielona</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6747488,52.5289928,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Miętowa</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6847882,52.494053,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Nizinna 39</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6996504,52.5039775,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Południowa</name>
+        <description>wyciąg górny i dolny ... (rok budowy 2014)</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7171062,52.537216,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Na Skarpie</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6647549,52.5555855,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jaśminowa/Pszczela</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.680301,52.5564628,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park na Zdunach</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.667201,52.5515834,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jar Abisynia</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6784824,52.5481616,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dobrzyńska/PCK</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6582639,52.5637777,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dworcowa/Otolińska</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7109264,52.5472352,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Gierzyńskiego</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7179618,52.54434,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lasek Brzozowy</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7551346,52.5309574,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Kochanowskiego 11</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6982181,52.5530382,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Osiedlowa/Parkowa</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6463148,52.504335,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>al. Pawła Nowaka</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6867704,52.5508104,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Gradowskiego/Krótka</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7007608,52.5394935,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Mazowiecka</name>
+        <description>2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7603059,52.5207256,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Popłacińska</name>
+        <description>Ścieżka zdrowia</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6659243,52.5366842,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <description>Budowa MTBS wraz ze spółdzielnią 2014</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7536486,52.5404755,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Skwer Zielony Jar</name>
+        <description>Armii Krajowej</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7650641,52.5393303,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Las Skarpas</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6691778,52.5591942,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Obrońców Westerplatte 5/1
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6939024,52.5504271,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Krakówka</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.680301,52.5243127,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Piaska
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7232002,52.5433237,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tysiąclecia/Łukasiewicza - Skwer Gier Miejskich
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6842813,52.5535503,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bartnicza/Skłodowskiej
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.677844,52.5538569,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Kątowa/Harcerska
+</name>
+        <description>przy przedszkolu</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7747469,52.5291723,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Orlen ARENA
+</name>
+        <description>w utrzymaniu MOSIRu</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6846676,52.5603601,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Źródlana
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7315015,52.5363353,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Otolińska 23
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7224942,52.5501846,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Tokarska
+</name>
+        <description><![CDATA[<img src="https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/v694d5tibk447n43i60r0fmdbg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbBUzooFKt5zOR4TBTwVox4iW24iJHcYFAv27DCEkvcf0YKKZFuPZC8i198uSFUqWbNcOVj6n22ookOtLeLShm-4V5NIA0Pc5tx3x4RN5YNbi5tQmBENLamUIZwf4nhTff8QdYGcGFkJ5fQhA1XQsM8J7GxUtFa4owGU0I1omqOZ7KDIEoZzmxXBJ5D?fife" height="200" width="auto" /><br><br>siłownia]]></description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/v694d5tibk447n43i60r0fmdbg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbBUzooFKt5zOR4TBTwVox4iW24iJHcYFAv27DCEkvcf0YKKZFuPZC8i198uSFUqWbNcOVj6n22ookOtLeLShm-4V5NIA0Pc5tx3x4RN5YNbi5tQmBENLamUIZwf4nhTff8QdYGcGFkJ5fQhA1XQsM8J7GxUtFa4owGU0I1omqOZ7KDIEoZzmxXBJ5D?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.721325,52.5006183,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Okopowa
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6844149,52.5260041,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Teligi
+</name>
+        <styleUrl>#icon-1031-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6667822,52.5322049,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Centrum Aktywności Seniora ul. Otolińska
+</name>
+        <description>w utrzymaniu CAS</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.716215,52.5474985,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Braci Jeziorowskich
+</name>
+        <description>Skwer</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7291709,52.5427521,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Traktowa
+</name>
+        <description>siłownia</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.6460284,52.5621758,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Piłsudskiego 34
+</name>
+        <description>siłownia zewnętrzna</description>
+        <styleUrl>#icon-1031-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.7254319,52.5400432,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Boiska, stojaki rowerowe  i górki saneczkowe</name>
+      <Placemark>
+        <name>ul. Południowa</name>
+        <description>Boisko trawiaste, 2 bramki + piłkochwyty (Rok budowy 2014)</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.7170794,52.5373368,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Zielona</name>
+        <description>Boiska asfaltowa, bramka i kosz</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.6746039,52.5290156,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Na Skarpie</name>
+        <description>trawiaste, 2 bramki + piłkochwyty (2014)</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.6647656,52.555729,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Norwida/Asnyka</name>
+        <description>boisko trawiaste - 2 bramki + piłkochywty (r. budowy 2013)</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.6694327,52.5593589,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Gradowskiego/Krótka</name>
+        <description>boisko</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.7009164,52.5396631,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Hubalczyków - za flow parkiem
+</name>
+        <description>boiska do tenisa, siatkówki oraz piłki ręcznej plażowej</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.7563255,52.5419894,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Batalionu Parasol</name>
+        <description>boisko trawiaste</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.7645706,52.5393205,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Teligi
+</name>
+        <description>Boisko wielofuncyjne</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.6670602,52.5322415,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Teligi
+</name>
+        <description>boisko do piłki siatkowej</description>
+        <styleUrl>#icon-1353</styleUrl>
+        <Point>
+          <coordinates>
+            19.6665734,52.5321052,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Harcerska/Kątowa
+</name>
+        <styleUrl>#icon-1353-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7747614,52.5295597,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Źródlana/Kalinowa</name>
+        <styleUrl>#icon-1353-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7314827,52.5362309,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Skłodowskiej - Centralny Park Rekreacji
+</name>
+        <description><![CDATA[<img src="https://doc-00-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/6prv7k40seco5frdsq72emqso4/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbV-vA9-tfuge67B5_duiLdrtwuarHT9Wur7olqTaqozLynmwd6g--J1qcVX9vCo3F3p3Z4uvqeoEoAcrzWmAYTaDIlI7DpbVdoERfMEl7a8jSfb9ZrqcHvg_rgV7UmpoT0N5-wJaHhg-MHJURKIkdK44QMTf3M_5YFWTBWGpY3B9mn8Z_JLmOp_vRB?fife" height="200" width="auto" /><br><br><br><br><img src="https://doc-0o-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/b40pp2ure0op3bg4voahl1n12c/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vZQkD8N0D6LYBHirJcoBQ8RB2G2TLnpSo0TKhReGBfwFcWAbSg4It_uyisb_QUW7gGMJk6itzrEq14RNCQPKCNKeC2ARs43IEj4gBt1cDQezw49NBKXUAovEVX7zaXLAGE2UaN0_Pq_ZSVjfOpRgDyxrxM7x_iU9Zoa9fvM2Qeg0kEnF5JvvR2F8DHe?fife" height="200" width="auto" /><br><br><img src="https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hceaootubi6luber8igbh9t2f8/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbiHlkhPh2D_Gyu8bBRfDbWk-Z-7J8zH8prCEBoCbThBLQcniBsQ6qPMdxE6bzXv60cOdp-tX3tUU5vG_7LVD3ePliNbFSKImpA9TnHHOUtHOErttoMocct8Y1YxrfK-XyC6QrH3J0tUXFLJuLb9KC5fvLB6Z4eWSFIIbq_-NAFlUF2bV_Yvoyl5PH2?fife" height="200" width="auto" /><br><br><img src="https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/ee7ir9pe8s6cjdbl9b81e5oj10/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vY1T1Air1ZerqjAuGDGD4uLQfkJw0wnFUm_FN40mQX6NpvYjxVf4I-Om3_RSojUZVcd_vW4oVgGpXaxEK1Vyv0v2UZFjUMJJqyff_cxTdGiMOAw0Gus4UJ3IP8qsYIjVcUJx2WzvtCEax5Swe-c4_vWNCzpA-lrnfvudmF5a7gIi4bbjTL4USNLSXyt?fife" height="200" width="auto" />]]></description>
+        <styleUrl>#icon-1353</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-00-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/6prv7k40seco5frdsq72emqso4/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbV-vA9-tfuge67B5_duiLdrtwuarHT9Wur7olqTaqozLynmwd6g--J1qcVX9vCo3F3p3Z4uvqeoEoAcrzWmAYTaDIlI7DpbVdoERfMEl7a8jSfb9ZrqcHvg_rgV7UmpoT0N5-wJaHhg-MHJURKIkdK44QMTf3M_5YFWTBWGpY3B9mn8Z_JLmOp_vRB?fife https://doc-0o-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/b40pp2ure0op3bg4voahl1n12c/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vZQkD8N0D6LYBHirJcoBQ8RB2G2TLnpSo0TKhReGBfwFcWAbSg4It_uyisb_QUW7gGMJk6itzrEq14RNCQPKCNKeC2ARs43IEj4gBt1cDQezw49NBKXUAovEVX7zaXLAGE2UaN0_Pq_ZSVjfOpRgDyxrxM7x_iU9Zoa9fvM2Qeg0kEnF5JvvR2F8DHe?fife https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hceaootubi6luber8igbh9t2f8/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbiHlkhPh2D_Gyu8bBRfDbWk-Z-7J8zH8prCEBoCbThBLQcniBsQ6qPMdxE6bzXv60cOdp-tX3tUU5vG_7LVD3ePliNbFSKImpA9TnHHOUtHOErttoMocct8Y1YxrfK-XyC6QrH3J0tUXFLJuLb9KC5fvLB6Z4eWSFIIbq_-NAFlUF2bV_Yvoyl5PH2?fife https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/ee7ir9pe8s6cjdbl9b81e5oj10/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vY1T1Air1ZerqjAuGDGD4uLQfkJw0wnFUm_FN40mQX6NpvYjxVf4I-Om3_RSojUZVcd_vW4oVgGpXaxEK1Vyv0v2UZFjUMJJqyff_cxTdGiMOAw0Gus4UJ3IP8qsYIjVcUJx2WzvtCEax5Swe-c4_vWNCzpA-lrnfvudmF5a7gIi4bbjTL4USNLSXyt?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.675906,52.5537625,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Na Skarpie</name>
+        <description>Górka saneczkowa</description>
+        <styleUrl>#icon-1409</styleUrl>
+        <Point>
+          <coordinates>
+            19.6651626,52.5553898,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Za Parkiem Północnym</name>
+        <description>Górka saneczkowa</description>
+        <styleUrl>#icon-1409</styleUrl>
+        <Point>
+          <coordinates>
+            19.757098,52.5415457,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Wańkowicza</name>
+        <description>górka saneczkowa</description>
+        <styleUrl>#icon-1409</styleUrl>
+        <Point>
+          <coordinates>
+            19.7666064,52.541469,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek</name>
+        <description>Stojak na rowery 1 szt</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6848929,52.5452273,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek 
+</name>
+        <description>Stojaki rowerowe - 2 szt</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6856761,52.5444134,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>al. Jachowicza
+</name>
+        <description>stojak rowerowy - 1 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6929073,52.5490718,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sobótka</name>
+        <description>stojak na rowery - 3 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.673987,52.5459662,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Gradowskiego/Krótka</name>
+        <description>stojak na rowery - 1 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7009593,52.5397251,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lasek Brzozowy
+</name>
+        <description>Stojak rowerowy - 1 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7549468,52.5312902,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Zielona</name>
+        <description>Stojak na rowery - 4 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6739119,52.5289438,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Popłacińska 
+</name>
+        <description>Stojak na rowery - 2 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6656454,52.5367429,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kochanowskiego 11
+</name>
+        <description>stojak na rowery - 1 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.69832,52.5529892,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Skwer Lutyńskiego</name>
+        <description>Stojak na rowery - 3 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6959221,52.5527185,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Skwer Gier Miejskich
+</name>
+        <description>Stojak na rowery - 2 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.6842492,52.553609,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jachowicza - skwer
+</name>
+        <description>Stojak na rowery - 6 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7023219,52.5473918,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Piłsudskiego - UMP</name>
+        <description>Stojak na rowery - 1 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7111142,52.5443024,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pasaż Paderewskiego
+</name>
+        <description>Stojak na rowery - 2 szt.</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7543782,52.5333722,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Bielska - parking
+</name>
+        <description>stojaki rowerowe</description>
+        <styleUrl>#icon-1419</styleUrl>
+        <Point>
+          <coordinates>
+            19.7240816,52.5689527,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Skłodowskiej - CRP
+</name>
+        <description><![CDATA[<img src="https://doc-0o-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/faddnubog7u3rccnq02u62ub9s/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYq5PFksczQZPXXWK1vRucNVDfiZFEdtkcqb4C_DB3ZVVwGetXQiMOCJFgyvAg2J4nMnwHaYlrh-KoYeoR6PDhSZpgZl4jk_JqeELDL9JwVQKn39L9afKo6fvAbKAoG2iZx8br28RPHsb8HHNhHfApXu2-WNlny8S-7xapvCCaVGJqO0GreYZK7k-zN?fife" height="200" width="auto" /><br><br>StreetWorkout<br><br><img src="https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/1a710s6jfhjinc9tdgdvdve4jg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYZf5Tzj0Dcok0PknObwZ77ounshOm7SbZmJfXEV5LVtdRzPlGxorjQ-9voKi8n6GjDybc7JaRbE3afpbM7ZLrGtPAe7L9k1u1ieUJQyWNmFOkliFGViyabgDdlE4GJQ_gMrk8_0LY2WTZzs07YKfQkJhC6hl5GEeb5jjZBIefOm0tEIBPThi8AGMjf?fife" height="200" width="auto" />]]></description>
+        <styleUrl>#icon-1117</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-0o-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/faddnubog7u3rccnq02u62ub9s/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYq5PFksczQZPXXWK1vRucNVDfiZFEdtkcqb4C_DB3ZVVwGetXQiMOCJFgyvAg2J4nMnwHaYlrh-KoYeoR6PDhSZpgZl4jk_JqeELDL9JwVQKn39L9afKo6fvAbKAoG2iZx8br28RPHsb8HHNhHfApXu2-WNlny8S-7xapvCCaVGJqO0GreYZK7k-zN?fife https://doc-0k-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/1a710s6jfhjinc9tdgdvdve4jg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vYZf5Tzj0Dcok0PknObwZ77ounshOm7SbZmJfXEV5LVtdRzPlGxorjQ-9voKi8n6GjDybc7JaRbE3afpbM7ZLrGtPAe7L9k1u1ieUJQyWNmFOkliFGViyabgDdlE4GJQ_gMrk8_0LY2WTZzs07YKfQkJhC6hl5GEeb5jjZBIefOm0tEIBPThi8AGMjf?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6762123,52.5541476,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Rybaki - StreetWorkout
+</name>
+        <description>StreetWorkout</description>
+        <styleUrl>#icon-1117</styleUrl>
+        <Point>
+          <coordinates>
+            19.6796252,52.5451088,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Parowa StreetWorkout
+</name>
+        <styleUrl>#icon-1117-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6615419,52.5519735,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Street Workout
+</name>
+        <styleUrl>#icon-1117-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6672869,52.5474831,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Parki i skwery</name>
+      <Placemark>
+        <name>Skwer Lutyńskiego</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW6--fLLKcpEhUeYg49UIm4V7nlJWT39jpxbMja5UxICiVtB8_Ry4YNKL_QxGMGABzUxeUkfrqeh7UZ41ECvfACVG-cy4sj6gIEGbIQr0hfYUllAi40dkF8M07dIclt0kX4deA1Q6EZ_kDk" height="200" width="auto" /><br><br>]]></description>
+        <styleUrl>#icon-1379</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW6--fLLKcpEhUeYg49UIm4V7nlJWT39jpxbMja5UxICiVtB8_Ry4YNKL_QxGMGABzUxeUkfrqeh7UZ41ECvfACVG-cy4sj6gIEGbIQr0hfYUllAi40dkF8M07dIclt0kX4deA1Q6EZ_kDk</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6960509,52.5528653,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <styleUrl>#icon-1379-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7547054,52.539947,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Plac Mościckiego</name>
+        <styleUrl>#icon-1379-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6859336,52.5319135,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Skwer parkowy - Jachowicza</name>
+        <description>2014</description>
+        <styleUrl>#icon-1379</styleUrl>
+        <Point>
+          <coordinates>
+            19.7022951,52.5472417,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Zielone miejsca w przestrzeni Radziwia </name>
+        <description>Popłacińska - miejsce na ognisko</description>
+        <styleUrl>#icon-1379</styleUrl>
+        <Point>
+          <coordinates>
+            19.6653986,52.5367168,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park na Zdunach</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW7bS4_upwU9uePq7KcSRn5XZdDx27fB1F_U0g-x9GHA111TJA-Owgx6-5DCskoCtFJWKsvhBDNo0tw4zP0NAwmhSd600FsnvpjN6lhoTk26kJpp0PvLkqPdjritxYA78huj6bUT0g" height="200" width="auto" /><br><br>]]></description>
+        <styleUrl>#icon-1379</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW7bS4_upwU9uePq7KcSRn5XZdDx27fB1F_U0g-x9GHA111TJA-Owgx6-5DCskoCtFJWKsvhBDNo0tw4zP0NAwmhSd600FsnvpjN6lhoTk26kJpp0PvLkqPdjritxYA78huj6bUT0g</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6669114,52.5515149,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park sportowo-rekeacyjny</name>
+        <styleUrl>#icon-1379-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6746683,52.5289438,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Park "Za Tumem"
+]]></name>
+        <styleUrl>#icon-1379-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6897316,52.5403907,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park na Górkach Podominikańskich
+</name>
+        <styleUrl>#icon-1379-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6905684,52.5392944,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Jar Abisynia</name>
+        <description>Park „Jar Abisynia” na Skarpie Wiślanej Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6777207,52.5480051,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Park Północny</name>
+        <description>Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.7549629,52.5399731,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Pasaż Kutrzeby</name>
+        <description>Pasaż Kutrzeby Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.7601449,52.5395294,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Al. Roguckiego</name>
+        <description>Pasaż Roguckiego Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6882617,52.5556899,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Zieleniec</name>
+        <description>Zieleniec u zbiegu ulic Piłsudskiego i Chopina, Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.7163606,52.5445014,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[MP - Park "Za Tumem"]]></name>
+        <description>Park „Za Tumem” na Skarpie Wiślanej w rejonie Bazyliki Katedralnej (na otwartej przestrzeniza Katedrą),</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.689517,52.5404527,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Park na Górkach Podominikańskich</name>
+        <description>Park na Górkach Podominikańskich Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6908796,52.5391248,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Park na Zdunach</name>
+        <description>Park na Zdunach Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6668309,52.5516193,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Park Mościckiego</name>
+        <description>Park Mościckiego Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6864164,52.5321028,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MP - Sobótka</name>
+        <description>Teren wokół zalewu Sobótka, Miejsca piknikowe (zarz 2678/2013)</description>
+        <styleUrl>#icon-1355</styleUrl>
+        <Point>
+          <coordinates>
+            19.6699798,52.5471112,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Grodzka</name>
+        <description>Donice bet. Potrójne 13 kpl (1 niekompletny)</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6876609,52.5439012,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kościuszki</name>
+        <description>Donice betomowe Klomb - 8 szt. (przy pomniku Broniewskiego)</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6928939,52.5414527,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Plac Narutowicza
+</name>
+        <description>Donice betonowe Klomb - 9 dużych, 2 małe oraz 2 donice prostokątne (przy płycie nieznanego żołnierza)</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6889162,52.5427968,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kazimierza Wielkiego
+</name>
+        <description>Kwiatoniery drewniane (przy Słoneczku)</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.681288,52.5457215,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska</name>
+        <description>Donice bet. Ø 60 - 28 szt</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6901715,52.5434575,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pasaż Paderewskiego</name>
+        <description>Donice bet. Ø 80 - 6 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.7543997,52.5332939,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny
+</name>
+        <description>Wieże kwiatowe - 6 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.753933,52.5394347,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek
+</name>
+        <description><![CDATA[Kwiatoniery betonowe prostokątne - 3 szt.<br>??]]></description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.685896,52.5446515,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pl. 13 Straconych
+</name>
+        <description>Kwiatoniery betonowe okrągłe - 2 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6875402,52.5450642,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>pl. Narutowicza
+</name>
+        <description>Wieże kwiatowe - 2 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6886292,52.5429681,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Nowy Rynek
+</name>
+        <description>Wieże kwiatowe - 2 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6925506,52.5471308,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek </name>
+        <description><![CDATA[wieże kwiatowe - 2 szt.<br>tylko w sezonie]]></description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6849841,52.5450202,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jachowicza</name>
+        <description>Donice betonowe - Skwer - 6 szt., oraz donice betonowe Klomb - 6 szt.</description>
+        <styleUrl>#icon-1021</styleUrl>
+        <Point>
+          <coordinates>
+            19.6938676,52.5490293,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Fontanny i wodotryski itp</name>
+      <Placemark>
+        <name>Lasek Brzozowy</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW7rlUvwk8FzNsQIvm87K0BQUbOQWfeRygBq_jWU9MCsnDYdqfts16VNBwbdjMKeOQmSJVafhnAt9DmtxGroejZS5-rAwAEUWNaFwP2brAr2-E6uBQMtPXWBF8C8w9Kx1Q" height="200" width="auto" /><br><br>fontanna]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW7rlUvwk8FzNsQIvm87K0BQUbOQWfeRygBq_jWU9MCsnDYdqfts16VNBwbdjMKeOQmSJVafhnAt9DmtxGroejZS5-rAwAEUWNaFwP2brAr2-E6uBQMtPXWBF8C8w9Kx1Q</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.7548288,52.5318646,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek</name>
+        <description><![CDATA[<img src="https://doc-10-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/uufiv3u5mhcufh8k2ptvfibumg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vZsHkFzlA0t3c137_3LZWgSHReUO9FStddiX1jmNA0eNiOdOFUNV2YazH0EJlkdeep6WDWDiyqtdZ8Ue4W5SNP7V2xmF61ubuSe3QwxV2MqpgrZ4rhRPN9-CQ9BoCpBZuniXxZpm3KLzG8CcwOF346i5f9Pn2GzN3XFqlpDRAASXF-szsFFL4jaMOjV?fife" height="200" width="auto" /><br><br>Afrodyta<br>od 5 lipca 2016 r. w zarządzie ARS Sp. zo.o.]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-10-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/uufiv3u5mhcufh8k2ptvfibumg/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vZsHkFzlA0t3c137_3LZWgSHReUO9FStddiX1jmNA0eNiOdOFUNV2YazH0EJlkdeep6WDWDiyqtdZ8Ue4W5SNP7V2xmF61ubuSe3QwxV2MqpgrZ4rhRPN9-CQ9BoCpBZuniXxZpm3KLzG8CcwOF346i5f9Pn2GzN3XFqlpDRAASXF-szsFFL4jaMOjV?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.685094,52.5449092,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 5</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW7BukzJo-Ya775PYufSwRN_N9VnZg9FTlYT13dSeZb2Cg90PFy8H_TZkIHPIKi1qF_GRYNkcsRmew5m7a_tB_jd7XflmJcwmPk34m7lOndqaHPN3Lvr4kKV0i724PSD5ki3p_FMY34" height="200" width="auto" /><br><br>fontanna - w utrzymaniu ARSu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW7BukzJo-Ya775PYufSwRN_N9VnZg9FTlYT13dSeZb2Cg90PFy8H_TZkIHPIKi1qF_GRYNkcsRmew5m7a_tB_jd7XflmJcwmPk34m7lOndqaHPN3Lvr4kKV0i724PSD5ki3p_FMY34</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6901071,52.5433857,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 9</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW7II-cLUZCN7CZFcINXaoCrxEM3R-MAqI9Wnubbwdm5JGGpsEs2udAhPYHS1RU5RP2apJNN_suPRqWBZyMNidNkXysve7H70ZHL90Secp2O837Geu7tLyPreMHbsofUnt4UFWbDcKE" height="200" width="auto" /><br><br>fontanna -  w utrzymaniu ARSu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW7II-cLUZCN7CZFcINXaoCrxEM3R-MAqI9Wnubbwdm5JGGpsEs2udAhPYHS1RU5RP2apJNN_suPRqWBZyMNidNkXysve7H70ZHL90Secp2O837Geu7tLyPreMHbsofUnt4UFWbDcKE</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6912819,52.544707,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 13 - wodotrysk</name>
+        <description><![CDATA[<img src="https://doc-04-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hlt9b2gkd2b4277sgn91a8o35o/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbRoroxx3pQ_vhw0R0lTqCa-CmNtPp30EJ1VLOpxa2gz3E1er6uqZOehiiFzMazz227IrAvXJ2wuSAV78gh9ejd8fwUrtoGgeaWEFwXYuy4zi152Hr7snXyKJDTaxMsnzejc9czUizfy2ppyU9FJkMuQV5vEyDS9YFBGFM4gnAULawJTxTkbk2D1AlS?fife" height="200" width="auto" /><br><br>wodotrysk - w utrzymaniu ARSu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-04-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/hlt9b2gkd2b4277sgn91a8o35o/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbRoroxx3pQ_vhw0R0lTqCa-CmNtPp30EJ1VLOpxa2gz3E1er6uqZOehiiFzMazz227IrAvXJ2wuSAV78gh9ejd8fwUrtoGgeaWEFwXYuy4zi152Hr7snXyKJDTaxMsnzejc9czUizfy2ppyU9FJkMuQV5vEyDS9YFBGFM4gnAULawJTxTkbk2D1AlS?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6927893,52.5463936,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 14 - wodotrysk</name>
+        <description><![CDATA[<img src="https://doc-04-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/vbjactk7pcefq3ug3pmmb9ao80/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vY-DZU1t9fVJ52tFFVgRSgPlP8cCnHvx1F4ARZUNBWG-KeDaWQkQ6vBAdAttzjc7DSZj_EXemfFHuIf6Vj-mEuVzWKMq9qit9kJrNjWN0M-8KrlR_F5au69O8GRliIgmeut_ok1RCV5izQzWzAGH3OlcgU8ijta12ZqJG_XIOt9ypRHWzoyM5DjzQCxNQ?fife" height="200" width="auto" /><br><br>wodotrysk - w utrzymaniu ARSu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-04-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/vbjactk7pcefq3ug3pmmb9ao80/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vY-DZU1t9fVJ52tFFVgRSgPlP8cCnHvx1F4ARZUNBWG-KeDaWQkQ6vBAdAttzjc7DSZj_EXemfFHuIf6Vj-mEuVzWKMq9qit9kJrNjWN0M-8KrlR_F5au69O8GRliIgmeut_ok1RCV5izQzWzAGH3OlcgU8ijta12ZqJG_XIOt9ypRHWzoyM5DjzQCxNQ?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6921295,52.5456628,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek - poidełko</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW61_E_uX1WzeJivKB_tjp3FN_ylcMrI5sr5tlsVEpRFUxHKkSrJGVwiCVjldnwOR0BBL441ZElR1IE9mXkt56B1iRXi12YKsSOBJB-PyaiypXWbmRP84I43jfpBJiWrriDhsAdT" height="200" width="auto" /><br><br>poidełko - w utrzymaniu ARSu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW61_E_uX1WzeJivKB_tjp3FN_ylcMrI5sr5tlsVEpRFUxHKkSrJGVwiCVjldnwOR0BBL441ZElR1IE9mXkt56B1iRXi12YKsSOBJB-PyaiypXWbmRP84I43jfpBJiWrriDhsAdT</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.685601,52.5446417,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pl. Obrońców Warszawy</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW4-LspEUrhxVlFaRgIUEuPM5mefQ0ML8PmocHiNPh9zw0nUPsza-2WxLD9Bqvs5u2DUhX9TJ2B7gD6MyTnOVinEqlRKHWylXP9W6UTnA-VHAvAfAHatT6SXKQUBRP9vvn8WvFrKtNEsfDhADlRzVj7B8Iwb1qd9O4DAIoOw-c8jIhKB0X-wlPB9pA" height="200" width="auto" /><br><br>fontanna]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW4-LspEUrhxVlFaRgIUEuPM5mefQ0ML8PmocHiNPh9zw0nUPsza-2WxLD9Bqvs5u2DUhX9TJ2B7gD6MyTnOVinEqlRKHWylXP9W6UTnA-VHAvAfAHatT6SXKQUBRP9vvn8WvFrKtNEsfDhADlRzVj7B8Iwb1qd9O4DAIoOw-c8jIhKB0X-wlPB9pA</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6934009,52.5420546,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pasaż Paderewskiego</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW5gN1pW-N-wbKfrpVfjQpzCTtAQEAkF974GtV64oFoKbaECAqM47ZMANYJuqlBE5ecvr97OXi8jtBciX70LHlwb6T8G1jfUV46JYy9ShSFk" height="200" width="auto" /><br><br>fontanna]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW5gN1pW-N-wbKfrpVfjQpzCTtAQEAkF974GtV64oFoKbaECAqM47ZMANYJuqlBE5ecvr97OXi8jtBciX70LHlwb6T8G1jfUV46JYy9ShSFk</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.7533965,52.532762,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Zielony Jar
+</name>
+        <styleUrl>#icon-1467-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7635245,52.5392993,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Orlen Arena
+</name>
+        <description><![CDATA[<img src="https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/66upp37q8bbl36ctjnd5qcavm8/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbLsl72koGTnF-kjHP23tKQMEhbp6lUWg4BIDfXb4TeA_gMvJnkyxKxmBSMEkMBn9PsWRANhSgAqJXVsZmn4-olxkRrim-z25euiVmndcVqvpAg3rBv978Zn0dcQJwTEyUvEWRa0Oe3wkaWWcKZDP0qCMrBrGdm_uVCMERJeXTpcKquf-3IFzrogMnS?fife" height="200" width="auto" /><br><br>w utrzymaniu MOSIRu]]></description>
+        <styleUrl>#icon-1467</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://doc-0c-8g-mymaps.googleusercontent.com/untrusted/hostedimage/ou6c6r4ot251igcmt16atv0meo/66upp37q8bbl36ctjnd5qcavm8/1663309800000/Bysrb4IwDYu_ppuPftV-_dmsqNA98UK8/*/6AFzc1vbLsl72koGTnF-kjHP23tKQMEhbp6lUWg4BIDfXb4TeA_gMvJnkyxKxmBSMEkMBn9PsWRANhSgAqJXVsZmn4-olxkRrim-z25euiVmndcVqvpAg3rBv978Zn0dcQJwTEyUvEWRa0Oe3wkaWWcKZDP0qCMrBrGdm_uVCMERJeXTpcKquf-3IFzrogMnS?fife</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6832192,52.5606927,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Anakonda - zjeżdzalnia</name>
+        <description><![CDATA[<img src="https://lh3.googleusercontent.com/umsh/AK26PW7CrlceK1CUDvdZigERJqmDI4SOJ8OuNjcNdfaGkXDCxnTd6rdiHyBlWhe1WOFbrBnGyZfZ-cU1EOHtHdgsPmzzwdIrQNqN3gFZ9QU" height="200" width="auto" /><br><br>]]></description>
+        <styleUrl>#icon-1359</styleUrl>
+        <ExtendedData>
+          <Data name="gx_media_links">
+            <value>https://lh3.googleusercontent.com/umsh/AK26PW7CrlceK1CUDvdZigERJqmDI4SOJ8OuNjcNdfaGkXDCxnTd6rdiHyBlWhe1WOFbrBnGyZfZ-cU1EOHtHdgsPmzzwdIrQNqN3gFZ9QU</value>
+          </Data>
+        </ExtendedData>
+        <Point>
+          <coordinates>
+            19.6672869,52.5474831,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>al. Roguckiego 
+</name>
+        <description>kaskady wodne - 3 szt.</description>
+        <styleUrl>#icon-1467</styleUrl>
+        <Point>
+          <coordinates>
+            19.6880603,52.5561072,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>ul. Hermana
+</name>
+        <description>fontanna</description>
+        <styleUrl>#icon-1467</styleUrl>
+        <Point>
+          <coordinates>
+            19.6854107,52.5526772,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tężnia solankowa
+</name>
+        <styleUrl>#icon-1289-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6545778,52.5594764,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mościckiego</name>
+        <styleUrl>#icon-1467-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6865351,52.532434,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Toalety publiczne i TOI-TOI</name>
+      <Placemark>
+        <name>Szalet miejski - Królewiecka</name>
+        <description>wyłączony z ekspoatacji</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6921295,52.546984,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Szalet miejski - plac Narutowicza</name>
+        <description>toaleta bezpłatna</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6888411,52.542606,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Toaleta kontenerowa - Jachowicza</name>
+        <description>Jachowicza - odpłatna 2 zł </description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6937227,52.5496752,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Toaleta kontenerowa - Lasek Brzozowy</name>
+        <description>całoroczna - odpłatność 2 zł</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7551131,52.531597,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Łazienki Grodzkie
+</name>
+        <description><![CDATA[ul. Grodzka 1<br>zarządca ARS Sp. zoo <br>odpłatność 2 zł toaleta, 5 zł  prysznic]]></description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6865585,52.5445031,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>toaleta Roguckiego
+</name>
+        <description>toaleta bezpłatna</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6886799,52.5564632,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>toaleta - Park Północny
+</name>
+        <description>toaleta bezpłatna</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7527182,52.5400937,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Tysiąclecia
+</name>
+        <description>1 kabina od 01.04. do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6832997,52.5538503,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Cmentarz Komunalny
+</name>
+        <description>3 kabiny całorocznie, oraz dodatkowo 2 kabiny w tym jedna dla niepełnosprawnych od 01.04 do 30.11</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7272396,52.5709511,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Park Północny
+</name>
+        <description>1 kabina od 01.03 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7547268,52.5406647,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Krakówka
+</name>
+        <description>1 kabina całorocznie</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6815723,52.5251547,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Gromadzka (Zielona)
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6740031,52.5293061,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Jar Abisynia
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.678477,52.5479398,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Park na Zdunach
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6670723,52.5514399,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Harcerska
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7749235,52.5297005,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Zielony Jar
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.7644676,52.5391535,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Medyczna
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6547605,52.5594848,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI - Teligi
+</name>
+        <description>1 kabina od 01.04 do 31.10</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6665104,52.5323133,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI-TOI Sobótka
+</name>
+        <styleUrl>#icon-1219-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6617819,52.5519455,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Toalety Nabrzeże
+</name>
+        <description>zostaną uruchomionę przez najeme pawilonów</description>
+        <styleUrl>#icon-1219</styleUrl>
+        <Point>
+          <coordinates>
+            19.6900825,52.5388061,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Toaleta - Cmentarz Komunalny
+</name>
+        <description><![CDATA[Toaleta dwustanowiskowa - dla niepełnosprawnych + przewijak dla niemowląt<br>Toaleta odpłatna - 2 zł.]]></description>
+        <styleUrl>#icon-503-DB4436</styleUrl>
+        <Point>
+          <coordinates>
+            19.7281717,52.5708704,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Toaleta - park Mościckiego
+</name>
+        <styleUrl>#icon-503-DB4436-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6869423,52.5320693,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>TOI TOI Kilińskiego
+</name>
+        <styleUrl>#icon-1219-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7024774,52.5382307,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Parkingi WKŚ</name>
+      <Placemark>
+        <name>Kutrzeby</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7577819,52.5400383,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kobylińskiego</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6883852,52.5498742,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Okrzei/Nowowiejskiego</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6840695,52.5475272,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Medyczna - mały
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6542808,52.5587409,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Medyczna - duży
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6534628,52.558886,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kobylińskiego - cmentarz
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6790135,52.5519422,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Wschodnia 14
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7061655,52.5554664,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Piłsudskiego</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.711538,52.5445634,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rembielińskiego</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6923333,52.5556377,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Obrońców Westerplatte 12-14
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6970138,52.5524641,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Zduńska</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6837234,52.5458683,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Misjonarska/Kolegialna
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6976817,52.5420481,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>1-Maja</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6962011,52.5453757,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Harcerska</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7755033,52.5294138,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Okrzei</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.683584,52.5473461,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Miodowa
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6753362,52.5575065,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dobrowolskiego</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7277492,52.542743,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Górna 
+</name>
+        <description>dz. 777/5</description>
+        <styleUrl>#icon-1453-labelson</styleUrl>
+        <Point>
+          <coordinates>
+            19.728291,52.5350396,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Armii Krajowej
+</name>
+        <styleUrl>#icon-1453-labelson-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.763597,52.5390204,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Punkty pomiarowe  - Energia/Woda</name>
+      <Placemark>
+        <name>Tumska 5 (ZI)</name>
+        <description>Nr PPE: PL 0037710000417625, nr licznika 71311187/19</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6902627,52.5435815,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 9 (ZI)</name>
+        <description>Nr PPE: PL 0037710000416615, nr licznika 71311016/4</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6914992,52.5450414,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 12 (ZI)</name>
+        <description>Nr PPE PL 0037710000416716. nr licznika 71419943/5</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6915206,52.5449272,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kolegialna 2 (ZI)</name>
+        <description>Nr PPE: PL0037710000416514,                              Nr licznika 71311498/2</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6908045,52.5440039,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jerozolimska 20 (ZI)</name>
+        <description>Nr PPE: PL0037710036423621,                               nr licznika 71311497/20</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6875054,52.5450446,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <description>Nr  PL0037710005561150                                       Nr licznika 71489341/23</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.7521197,52.5400971,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <description>Nr PL0037710005561251                                         Nr licznika  47195382/24</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.7566366,52.5397969,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lasek Brzozowy</name>
+        <styleUrl>#icon-1141-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7549897,52.5315317,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Narutowicza 6</name>
+        <description>Nr PL0037710005561453 Nr licznika 80768325/26    Szalet</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6889269,52.5424722,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bielska 66 </name>
+        <description>Cmentarz Komunalny Nr. PL0037710000415908 nr licznika </description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.7259951,52.5706642,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Królewiecka 11</name>
+        <description>Nr PL0037710005561352 Nr licznika 80757435/25</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6921563,52.5469905,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pl. Obrońców Warszawy</name>
+        <description>Nr PL0037710000415807                                        Nr licznika 71491766/29</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.693476,52.5420579,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jachowicza 40</name>
+        <description>Nr  PPE PL0037710113653506;                              Nr licznika 80696339/1</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6936691,52.5496393,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 14</name>
+        <description>Nr. PPE PL0037710000416918; Nr licznika 71419921/8</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6922314,52.5456596,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 13</name>
+        <description>Nr PL0037710000416817;                                        Nr licznika 71419923/7</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6928751,52.546387,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 9</name>
+        <description>Nr PL 0037710000689023                                       Nr licznika 71311407/3</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6913785,52.5446939,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Piekarska</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6835089,52.5445993,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stary Rynek</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6851933,52.5450299,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jachowicza</name>
+        <description>punkt do podlewania - skwer</description>
+        <styleUrl>#icon-1067</styleUrl>
+        <Point>
+          <coordinates>
+            19.7023809,52.5473657,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Narutowicza 6</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6889699,52.5424526,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Królewiecka 11</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6921295,52.546984,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bielska 66</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7259361,52.5707326,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Park Północny</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7523451,52.5401688,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lasek Brzozowy</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7551131,52.5315578,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pl Obrońców Warszawy</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.693433,52.5419894,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Jachowicza 40</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6936449,52.5496067,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 13</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6929395,52.5463609,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 14</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6922529,52.5456237,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 9</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6913034,52.5446613,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 5</name>
+        <description>Nr PL 0037710000688922; Nr licznika 71315085/2</description>
+        <styleUrl>#icon-1141</styleUrl>
+        <Point>
+          <coordinates>
+            19.6902037,52.5433596,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tumska 5</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.6901232,52.5433074,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pasaż Paderewskiego
+</name>
+        <styleUrl>#icon-1141-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7538095,52.5326151,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pasaż Paderewskiego
+</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.7534984,52.5326314,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rybaki
+</name>
+        <styleUrl>#icon-1067-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            19.688648,52.5393793,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Osiedla</name>
+      <Placemark>
+        <name>Osiedle Kochanowskiego</name>
+        <description>Wykaz ulic:Al. Jachowicza (nr parzyste od 16 do 44), Bielska (nr parzyste od 22 do 50), Mickiewicza (nr nieparzyste i nr parzyste od 2 do 12A), Obrońców Płocka 1920 r. (nr nieparzyste od 29 do końca i nr parzyste od 32 do końca), Obrońców Westerplatte, Północna, Przeskok, Sportowa, 21 Stycznia, Chopina (nr nieparzyste od 1 do 55 i nr parzyste od 2 do 52), Kochanowskiego, 11 Listopada (nr nieparzyste), Lotników, Łączna, Traugutta, Wschodnia, Żwirki i Wigury.</description>
+        <styleUrl>#poly-9FC3FF-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7035503,52.5503146,0
+                19.7040653,52.5506016,0
+                19.7105885,52.5521673,0
+                19.7092581,52.5530545,0
+                19.7105026,52.5540199,0
+                19.7093868,52.5544896,0
+                19.7075844,52.5554289,0
+                19.7065973,52.55629,0
+                19.705739,52.557151,0
+                19.7055244,52.5583512,0
+                19.7056961,52.5596818,0
+                19.6909332,52.5498187,0
+                19.702177,52.5477832,0
+                19.7035503,52.5500275,0
+                19.7035503,52.5503146,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Dworcowa</name>
+        <description>Wykaz ulic:Al. Jachowicza (nr parzyste od 2 do 14), Chopina (nr nieparzyste od 57 do 89 i nr parzyste od 56 do 66), Dworcowa, Lasockiego, 11 Listopada (nr parzyste), Mickiewicza (nr parzyste od 14 do końca), Reja, Obrońców Płocka 1920 r. (nr nieparzyste od 1 do 25 i nr parzyste od 2 do 30), Otolińska (nr nieparzyste od 1 do 19), Pasaż Wiścickiego, Salezjańska.</description>
+        <styleUrl>#poly-D698AD-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7105026,52.5540199,0
+                19.7092581,52.5530545,0
+                19.7105885,52.5521673,0
+                19.7040653,52.5506016,0
+                19.7035503,52.5503146,0
+                19.7035933,52.5498448,0
+                19.702177,52.5477832,0
+                19.7092152,52.5456954,0
+                19.7201157,52.5491142,0
+                19.7105026,52.5540199,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Góry</name>
+        <description>Wykaz ulic:Ciechomicka (nr parzyste od 2 do 28 i nr nieparzyste od 1 do 5), Ciechomskiego, Edukacyjna, Gajowa, Góry, Jaworowa, Kolejowa – bez numerów, Kutnowska, Łącka, Myśliwska, Nauczycielska, Nowoosiedlowa, Osiedlowa, Parkowa, Pedagogiczna, Podleśna, Przyszkolna, Przytulna, Ruczajowa, Semestralna, Wakacyjna, Wesółka, Wrzosowa, Wysoka, Zdrojowa.</description>
+        <styleUrl>#poly-62AF44-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6537685,52.521052,0
+                19.6481466,52.5235587,0
+                19.6448421,52.5230104,0
+                19.6451855,52.5224098,0
+                19.6469879,52.5208692,0
+                19.6397352,52.5141577,0
+                19.6505928,52.5129824,0
+                19.6535969,52.511781,0
+                19.654541,52.5106057,0
+                19.6551418,52.51024,0
+                19.6548843,52.510031,0
+                19.6529531,52.510031,0
+                19.64849,52.5085945,0
+                19.645915,52.5076019,0
+                19.6410656,52.5044673,0
+                19.6423531,52.5025864,0
+                19.642911,52.5009145,0
+                19.6486616,52.4989028,0
+                19.6453142,52.4968911,0
+                19.6502066,52.4945919,0
+                19.6544981,52.4912734,0
+                19.6640253,52.4876411,0
+                19.6692181,52.4949577,0
+                19.6722651,52.4985109,0
+                19.6745825,52.5020378,0
+                19.6889269,52.4970936,0
+                19.689678,52.4969237,0
+                19.6904182,52.4970479,0
+                19.6913624,52.4981713,0
+                19.6905899,52.4985109,0
+                19.6914482,52.4993208,0
+                19.6925211,52.4991118,0
+                19.6888304,52.5007838,0
+                19.6907616,52.502717,0
+                19.6844959,52.5045718,0
+                19.6846676,52.5039187,0
+                19.6835089,52.5042583,0
+                19.6811485,52.5052248,0
+                19.6800757,52.5046501,0
+                19.6718144,52.5092475,0
+                19.6728659,52.5105534,0
+                19.67381,52.5142621,0
+                19.6746683,52.5156202,0
+                19.6608925,52.518754,0
+                19.6587896,52.5191979,0
+                19.6537685,52.521052,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Dobrzyńska</name>
+        <description>Wykaz ulic:Gałczyńskiego (nr parzyste od 14 do 26 i nr nieparzyste od 9 do 11), Jaśminowa, Łukasiewicza (nr nieparzyste od 1 do 19), Miodowa (nr parzyste i nr nieparzyste od 1 do 19 i od 27 do 51), Mościckiego (nr parzyste), Pszczela, Zawidzkiego.</description>
+        <styleUrl>#poly-795046-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6825647,52.5509408,0
+                19.6832085,52.5526631,0
+                19.6826506,52.5556638,0
+                19.681921,52.5588991,0
+                19.680934,52.5606471,0
+                19.6783163,52.5640124,0
+                19.6769,52.5636472,0
+                19.675827,52.5638559,0
+                19.6754408,52.5631777,0
+                19.6757412,52.5627081,0
+                19.6754408,52.5620559,0
+                19.6762991,52.5611428,0
+                19.6756983,52.5607775,0
+                19.6752262,52.5603079,0
+                19.6747112,52.5595513,0
+                19.6744537,52.5587947,0
+                19.6742392,52.5581424,0
+                19.67484,52.5573336,0
+                19.6756983,52.5563682,0
+                19.6705914,52.5547505,0
+                19.6740675,52.5503407,0
+                19.6780586,52.5494534,0
+                19.6785736,52.5513845,0
+                19.6825647,52.5509408,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Międzytorze</name>
+        <description>Wykaz ulic:al. Piłsudskiego (nr nieparzyste), Banacha, Chopina – bez numerów, Gierzyńskiego, Heweliusza, Kolberga, Kołłątaja, Kopernika, Krzywickiego, Lachmana, Otolińska (nr parzyste od 2 do 20), Pasternakiewicza, Piaska, Rozego, Staszica, Stodółkiewicza, Dobrowolskiego, Gintera, Graniczna (nr parzyste od 22 do 48), Wilgi, Zagajnik</description>
+        <styleUrl>#poly-FFDD5E-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7317886,52.5518281,0
+                19.7251368,52.5504972,0
+                19.7201157,52.5491142,0
+                19.7092152,52.5456954,0
+                19.7169828,52.5438424,0
+                19.7216177,52.5428768,0
+                19.7292566,52.5405016,0
+                19.7343636,52.5389877,0
+                19.7338057,52.5427463,0
+                19.7317886,52.5518281,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Podolszyce Północ</name>
+        <description>Wykaz ulic:al. Armii Krajowej (nr nieparzyste i nr parzyste od 36 do 80), Baczyńskiego, gen. Grota – Roweckiego, Hubalczyków, Łączniczek, Obrońców Helu, Ofiar Katynia, Ossowskiego, Patriotów, Sucharskiego, Szarych Szeregów, Walecznych, Wyszogrodzka (nr nieparzyste od 103 do 161), Bliska, Boryszewska (nr parzyste od 2 do 48), Dziewiarska, Graniczna (nr nieparzyste od 13 do 55), Jędrzejewo – bez numerów, Kleeberga, Końcowa, Kutrzeby, Urodzajna, pl. Żołnierzy Września, Sikorskiego, Zbożowa, Żyzna (nr parzyste).</description>
+        <styleUrl>#poly-0BA9CC-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7343636,52.5389877,0
+                19.7425175,52.538805,0
+                19.7434187,52.5387789,0
+                19.7599411,52.5353333,0
+                19.7632027,52.5391443,0
+                19.7632027,52.5409714,0
+                19.764061,52.5431639,0
+                19.7621727,52.543738,0
+                19.7626877,52.545043,0
+                19.762001,52.5473396,0
+                19.7622585,52.5528196,0
+                19.7391701,52.5526109,0
+                19.7317886,52.5518281,0
+                19.7343636,52.5389877,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Zielony Jar</name>
+        <description>Wykaz Ulic:Andersa, al. Armii Krajowej (nr parzyste od 2 do 20), Batalionu Parasol, Batalionu Zośka, Bytnara, Chruściela, Dywizjonu 303, Monte Cassino, Sosabowskiego, Wańkowicza, Wyszogrodzka (od nr 163 do granicy miasta), Żyzna (nr nieparzyste).</description>
+        <styleUrl>#poly-009D57-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7661638,52.5527283,0
+                19.7618508,52.5527544,0
+                19.7619796,52.546635,0
+                19.7624946,52.5453562,0
+                19.7623658,52.5438033,0
+                19.7638464,52.5434771,0
+                19.764061,52.5431639,0
+                19.7633314,52.5416631,0
+                19.7633958,52.5401754,0
+                19.7630954,52.5392488,0
+                19.7598767,52.5352419,0
+                19.7642112,52.5341455,0
+                19.7654021,52.5337996,0
+                19.7663355,52.5336104,0
+                19.7667003,52.5340542,0
+                19.766829,52.5350853,0
+                19.7684383,52.5366907,0
+                19.7698116,52.5376043,0
+                19.7698545,52.5381525,0
+                19.7698116,52.5390138,0
+                19.7698331,52.5396925,0
+                19.7697687,52.5409584,0
+                19.767859,52.5429029,0
+                19.7677302,52.5435162,0
+                19.7677088,52.5457476,0
+                19.7685242,52.5465306,0
+                19.76861,52.5484878,0
+                19.7667217,52.5492446,0
+                19.765563,52.5494273,0
+                19.7651339,52.5504972,0
+                19.7656059,52.5510713,0
+                19.7661638,52.5527283,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Imielnica</name>
+        <description>Wykaz ulic:Brzoskwiniowa, Chmielna, Czereśniowa, Darniowa, Drozdowa, Harcerska (nr parzyste od 2 do 46 i nr nieparzyste od 3 do 39), Jabłoni, Jaskółcza, Jastrzębia, Kasztanowa, Kątowa, Leszczynowa, Lisia, Liściasta (nr parzyste), Lokalna, Łamana, Majowa, Motylowa, Morelowa, Orzechowa, Parcele, Podgórze, Pogodna, Porzeczkowa, Poziomkowa, Prosta, Sielska, Skrajna, Szpacza, św. Huberta, Śliwowa, Wetmańskiego, Widna, Wilcza (nr nieparzyste od 1 do 13), Wierzbowa (nr nieparzyste od 1 do 1C), Wiosenna, Wiśniowa, Wyszogrodzka (nr parzyste od 164 do 280), Zajęcza, Żurawia, Żywiczna.</description>
+        <styleUrl>#poly-F9F7A6-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7663355,52.5336104,0
+                19.7656488,52.5331927,0
+                19.7652197,52.532762,0
+                19.7648978,52.5312609,0
+                19.7644472,52.5305038,0
+                19.7628593,52.5288329,0
+                19.7629237,52.5284935,0
+                19.7612286,52.5279713,0
+                19.7603917,52.5273447,0
+                19.7596836,52.5266006,0
+                19.7596192,52.5260914,0
+                19.7592115,52.5251254,0
+                19.7598553,52.5237415,0
+                19.7617435,52.5234543,0
+                19.7656059,52.5227493,0
+                19.7702408,52.5220965,0
+                19.7846174,52.519668,0
+                19.785862,52.519433,0
+                19.7856474,52.5186234,0
+                19.7960329,52.5172916,0
+                19.7974062,52.5197985,0
+                19.7965049,52.5202555,0
+                19.7980928,52.5229581,0
+                19.7973633,52.5270053,0
+                19.7852611,52.52959,0
+                19.7768927,52.5312347,0
+                19.7718287,52.5323312,0
+                19.7663355,52.5336104,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Borowiczki</name>
+        <description>Wykaz ulic:Bałtycka, Basenowa, Białowieska, Borowicka, Botaniczna, Cedrowa, Chełmińska, Cisowa, Flisacka, Gmury, Gościniec bez numerów 19, 20, 22, Grabowa, Grabówka (nr parzyste od 12a do końca i nr nieparzyste od 13 do końca), Harcerska (nr parzyste od 48 do 106 i nr nieparzyste od 43 do 125), Jesionowa, Kaszubska, Korczaka, Kujawska, Kurpiowska, Liściasta – nr nieparzyste, Lipowa, Lubuska, Łomżyńska, Łowicka, Małopolska, Mazowiecka, Mazurska, Miedziana, Młyńska, Mokra, ks. Niedzielaka, Nowa, Odległa, Urbanowo, Piesza, Piaski, pl. Witosa, Pocztowa, Podlaska, Podwale, Pomorska, Powiśle, Raczkowizna, Roztocze, Rybna, Sarnia, Skierkowskiego, Srebrna, Śląska, Warmińska, Wiązowa, Wiejska, Wierzbowa (nr nieparzyste od 3 do końca i nr parzyste), Wilcza (nr parzyste i nr nieparzyste 15 i 15b), Wójtowa, Zakole, Zapłotek, Zarzeczna, Zgodna, Złota, Żelazna, Żuławska.</description>
+        <styleUrl>#poly-EE9C96-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7960329,52.5172916,0
+                19.7856474,52.5186234,0
+                19.785862,52.519433,0
+                19.7780943,52.5207125,0
+                19.7617435,52.5234543,0
+                19.7597265,52.5238982,0
+                19.7587395,52.5238721,0
+                19.7572374,52.5244987,0
+                19.7567225,52.5251515,0
+                19.7556925,52.5251254,0
+                19.753933,52.5244987,0
+                19.7516155,52.5248382,0
+                19.7495556,52.5252298,0
+                19.7465515,52.5272925,0
+                19.7391701,52.5306082,0
+                19.7363162,52.5315742,0
+                19.7342777,52.5321224,0
+                19.7315311,52.5318091,0
+                19.7313595,52.5314697,0
+                19.7303724,52.531783,0
+                19.7288704,52.5294595,0
+                19.7258234,52.5302166,0
+                19.7251797,52.5296161,0
+                19.7234631,52.5280757,0
+                19.723506,52.5273186,0
+                19.7226906,52.5263786,0
+                19.7269821,52.5241593,0
+                19.7353077,52.5194591,0
+                19.7429466,52.5169521,0
+                19.745779,52.5159597,0
+                19.7510147,52.5138704,0
+                19.7546625,52.5121989,0
+                19.7567654,52.511128,0
+                19.7599411,52.5081243,0
+                19.7616148,52.5080982,0
+                19.7617435,52.5074452,0
+                19.7627306,52.5076019,0
+                19.7639322,52.5072623,0
+                19.7651339,52.5076541,0
+                19.7783947,52.5076802,0
+                19.7802401,52.5118332,0
+                19.7925997,52.508934,0
+                19.7949171,52.5129041,0
+                19.793973,52.5130608,0
+                19.7960329,52.5172916,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Podolszyce Południe</name>
+        <description>Wykaz ulic:al. Jana Pawła II, Czerwonych Kosynierów, gen. Grzmot – Skotnickiego, Kombatantów, Paderewskiego, Pałacowa, Puchalskiego, Rogowskiego, Swojska, Szczęsnego, Synów Pułku, św. Wojciecha, Wilczyńskiego, Wiśniewskiego, Wyszogrodzka (nr parzyste od 108 do 154), Czwartaków, Gościniec nr 19, 20, 22, Graniczna (nr nieparzyste od 57 do 85), Mazura, Zubrzyckiego.</description>
+        <styleUrl>#poly-795046-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7343636,52.5389877,0
+                19.7342777,52.5321224,0
+                19.7386551,52.530817,0
+                19.7465515,52.5272925,0
+                19.7495556,52.5252298,0
+                19.753933,52.5244987,0
+                19.7556925,52.5251254,0
+                19.7567225,52.5251515,0
+                19.7572374,52.5244987,0
+                19.7587395,52.5238721,0
+                19.7597265,52.5238982,0
+                19.7592115,52.5251254,0
+                19.7598982,52.5269531,0
+                19.7612286,52.5279713,0
+                19.7629237,52.5284935,0
+                19.7628593,52.5288329,0
+                19.7648978,52.5312609,0
+                19.7652197,52.532762,0
+                19.7663355,52.5336104,0
+                19.7433758,52.5385701,0
+                19.7343636,52.5389877,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Wyszogrodzka</name>
+        <description>Wykaz ulic:Akacjowa, al. Kilińskiego (nr parzyste), Batorego, Błotna, Boczna, Brzozowa, Bukowa, Dębowa, Dolna, Działkowa, Fabryczna, Gęsia, Głowackiego, Gronowa, Jesienna, Jodłowa, Kacza, Kawieckiego, Klonowa, Lenartowicza, Letnia, Łąkowa, Maneżowa, Miła, Modrzewiowa, Niecała, Norbertańska, Oaza, Obejście, Otapa, Owocowa, Partyzantów, Paśniki, 4 Pułku Strzelców Konnych, 8 Pułku Artylerii Lekkiej, Pl. Zielony, Podchorążych, Południowa, Poprzeczna, Pszenna, Powstańców Styczniowych, Sadowa, Saperska, Sienna, Słoneczna, Słowicza, Strzelecka, Spółdzielcza, Świerkowa, Torowa, Ułańska, Urocza, Wesoła, Wiatraki, Wiślana, Wronia, Wspólna, Zalesie, Zakątek, Zaścianek, Zaułek, Zdziarskiego, {Żbia, {Żtnia, Agrestowa, al. Piłsudskiego (nr parzyste), Chabrowa, Dziedziniec, Filtrowa, Górna, Grabówka (nr parzyste do nr 10 i nr nieparzyste do nr 11), Graniczna (nr parzyste od 50 do 70), Imielnicka, Kalinowa, Malinowa, Ośnicka, Różana, Rzeczna, Studzienna, Widok, Wodna, Wyszogrodzka (nr nieparzyste od 1 do 91B i nr parzyste od 2 do 106), Źródlana.</description>
+        <styleUrl>#poly-7C3592-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7059536,52.5466089,0
+                19.7063398,52.5427202,0
+                19.7011471,52.5373433,0
+                19.698143,52.5380742,0
+                19.6964264,52.538022,0
+                19.6950531,52.5376043,0
+                19.6941519,52.5366385,0
+                19.6995163,52.5346285,0
+                19.7063398,52.5318352,0
+                19.7102022,52.530321,0
+                19.714365,52.5290156,0
+                19.7167683,52.5287023,0
+                19.7205448,52.5276058,0
+                19.7226906,52.5263786,0
+                19.723506,52.5273186,0
+                19.7234631,52.5280757,0
+                19.7258234,52.5302166,0
+                19.7288704,52.5294595,0
+                19.7303724,52.531783,0
+                19.7313595,52.5314697,0
+                19.7315311,52.5318091,0
+                19.7342777,52.5321224,0
+                19.7343636,52.5389877,0
+                19.7237635,52.5421982,0
+                19.7150517,52.5441034,0
+                19.7059536,52.5466089,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Kolegialna</name>
+        <description>Wykaz ulic:Al. Jachowicza (nr nieparzyste od 1 do 39), Królewiecka (nr parzyste od 18b do 30 i nr nieparzyste od 11 do 27a), Kupiecka, 1 Maja, 3 Maja, Misjonarska, pl. Nowy Rynek (nr parzyste), Padlewskiego, Pasaż, Piękna, Sienkiewicza (nr parzyste od 2 do 32 i nr nieparzyste od 3 do 43), Broniewskiego, al. Kilińskiego (nr nieparzyste), Błonie, Dojazd, Antolka Gradowskiego, Jakubowskiego, Kolegialna, Kościuszki, Krótka, Mostowa, pl. Dąbrowskiego, pl. Obrońców Warszawy, Rybaki, Stommy, Tumska (nr parzyste), Warszawska, Zacisze.</description>
+        <styleUrl>#poly-7CCFA9-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6944737,52.5491533,0
+                19.6931005,52.5466872,0
+                19.6894956,52.542681,0
+                19.6890235,52.5423678,0
+                19.6892166,52.5420416,0
+                19.6891522,52.5409323,0
+                19.6884441,52.5407235,0
+                19.6874356,52.5417545,0
+                19.6863413,52.5415848,0
+                19.6860623,52.5408279,0
+                19.6885514,52.5391313,0
+                19.6941519,52.5366385,0
+                19.6950531,52.5376043,0
+                19.6964264,52.538022,0
+                19.698143,52.5380742,0
+                19.7011471,52.5373433,0
+                19.7064042,52.5428115,0
+                19.7059536,52.5466089,0
+                19.702177,52.5477832,0
+                19.6944737,52.5491533,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Trzepowo</name>
+        <description>Wykaz ulic:Bielska (od nr 54 do granicy miasta), Długa (od Łukasiewicza wzdłuż granicy terenów PKN), Graniczna (nr parzyste od 2 do 20B i nr nieparzyste od 1 do 9a), Jędrzejewo, Krzywa, Otolińska (nr nieparzyste od 21 do 39), Okólna, Rolna, Sierpecka, Szkolna, Targowa.</description>
+        <styleUrl>#poly-7C3592-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7414875,52.5535503,0
+                19.7374535,52.5642994,0
+                19.7311879,52.5714988,0
+                19.7370243,52.5748894,0
+                19.7380543,52.5805225,0
+                19.7370243,52.5824522,0
+                19.7353077,52.58798,0
+                19.7334194,52.5926207,0
+                19.7336769,52.5955926,0
+                19.7000313,52.5956969,0
+                19.6999455,52.5941328,0
+                19.6996022,52.580001,0
+                19.6990872,52.575724,0
+                19.6934223,52.5758284,0
+                19.6929503,52.5716292,0
+                19.6922207,52.5708989,0
+                19.6759987,52.5712641,0
+                19.6759987,52.570299,0
+                19.6759129,52.5677428,0
+                19.6765566,52.5663081,0
+                19.678402,52.5639081,0
+                19.6793461,52.5644038,0
+                19.6805477,52.5642994,0
+                19.6821785,52.5640907,0
+                19.6838951,52.5640646,0
+                19.6849251,52.564169,0
+                19.6858263,52.5639342,0
+                19.6861267,52.5632037,0
+                19.6877146,52.5635951,0
+                19.6893454,52.5644298,0
+                19.6903754,52.5646125,0
+                19.6927357,52.5657603,0
+                19.6950102,52.5674297,0
+                19.6975851,52.5683949,0
+                19.6993447,52.5693861,0
+                19.7003317,52.5696208,0
+                19.7006321,52.5701947,0
+                19.7016192,52.5711076,0
+                19.7028208,52.5714467,0
+                19.7033787,52.5709511,0
+                19.7050095,52.5708207,0
+                19.706297,52.5705598,0
+                19.7065115,52.5712641,0
+                19.7073269,52.5710032,0
+                19.7076273,52.5703773,0
+                19.7078848,52.5696208,0
+                19.7094727,52.5686035,0
+                19.7101164,52.5685775,0
+                19.7104597,52.567508,0
+                19.7130776,52.5660211,0
+                19.7132492,52.5643516,0
+                19.7056103,52.5596818,0
+                19.7056103,52.5580381,0
+                19.7065115,52.55629,0
+                19.7074986,52.5554289,0
+                19.7200299,52.5491142,0
+                19.7317028,52.5518281,0
+                19.7414875,52.5526109,0
+                19.7414875,52.5535503,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Tysiąclecia
+</name>
+        <styleUrl>#poly-3F5BA9-1200-86-nodesc</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6946239,52.5523238,0
+                19.6884871,52.553211,0
+                19.6829939,52.5541504,0
+                19.6832085,52.5526631,0
+                19.6825647,52.5509408,0
+                19.6909332,52.5498187,0
+                19.6946239,52.5523238,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Winiary</name>
+        <description>Wykaz ulic:Biegańskiego, Chałubińskiego, Chemików, Długa (od ul. Zglenickiego do ul. Łukasiewicza), Dobrzyńska (nr nieparzyste od 103 do 115 i nr parzyste od 48 do 70), Dybowskiego, Garleja, Honorowych Dawców Krwi, Jabłczyńskiej, Judyma, Kamińskiej, Kobiałka, Łukasiewicza – bez numerów, Macieszy, Maszewska, Medyczna, Polskiego Czerwonego Krzyża, Sosnowa, Szpitalna, Śniadeckiego, Traktowa, Zamenhofa, Zglenickiego.</description>
+        <styleUrl>#poly-A61B4A-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6783163,52.5640124,0
+                19.6772004,52.5652385,0
+                19.675913,52.5671688,0
+                19.675913,52.5713684,0
+                19.676428,52.5776539,0
+                19.6580601,52.5779147,0
+                19.6553135,52.5785406,0
+                19.6523094,52.5786449,0
+                19.6522236,52.5869371,0
+                19.6493055,52.5869892,0
+                19.6488763,52.5843296,0
+                19.6467306,52.5703511,0
+                19.645916,52.5708927,0
+                19.6404658,52.5678898,0
+                19.639146,52.5686184,0
+                19.6380616,52.5679775,0
+                19.6373535,52.5681861,0
+                19.6368278,52.5674949,0
+                19.6368814,52.5670124,0
+                19.6363611,52.5667482,0
+                19.6360553,52.5662232,0
+                19.6351648,52.5648863,0
+                19.6322465,52.5564725,0
+                19.6323538,52.5559898,0
+                19.6369459,52.5553245,0
+                19.6426107,52.55462,0
+                19.6468593,52.5536415,0
+                19.6483613,52.5531849,0
+                19.6516014,52.5525847,0
+                19.6525669,52.5526499,0
+                19.6531463,52.5524542,0
+                19.6544767,52.5524673,0
+                19.6549917,52.5528326,0
+                19.6554423,52.552376,0
+                19.6559358,52.552376,0
+                19.6559787,52.5518149,0
+                19.6569228,52.551841,0
+                19.6583391,52.5519324,0
+                19.6590472,52.5537067,0
+                19.6599485,52.5544373,0
+                19.6609355,52.5551679,0
+                19.6609355,52.5566552,0
+                19.660678,52.5580641,0
+                19.6613647,52.5584294,0
+                19.6625663,52.558899,0
+                19.6630813,52.5595252,0
+                19.6649696,52.5605166,0
+                19.6657421,52.5599426,0
+                19.6659995,52.561221,0
+                19.6664287,52.5619515,0
+                19.6669437,52.5627863,0
+                19.6705486,52.563595,0
+                19.6720077,52.5636472,0
+                19.6737672,52.5634646,0
+                19.6747972,52.5643254,0
+                19.675398,52.5640124,0
+                19.6769,52.5636472,0
+                19.6783163,52.5640124,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Stare Miasto</name>
+        <description>Wykaz ulic:Chojnackiego, Grodzka, Jerozolimska, Kaczmarskiego, Kozia, Małachowskiego, Piekarska, pl. 13 Straconych – bez numerów, Sienkiewicza (nr nieparzyste od 45 do 67 i nr parzyste od 34 do 64), Staromiejska, pl. Stary Rynek, Synagogalna, Teatralna, Tumska (nr nieparzyste), Zduńska, al. Jachowicza (nr nieparzyste od 41 do 49), Al. Kobylińskiego (nr nieparzyste od 1 do 27), Bielska (nr nieparzyste od 1 do 49 i nr parzyste od 2 do 20), Kazimierza Wielkiego (nr nieparzyste od 1 do 35a i nr parzyste od 2 do 22), Królewiecka (nr parzyste od 2 do 18 i nr nieparzyste od 1 do 13), Kwiatka, Łukasiewicza – bez numerów, Nowowiejskiego, pl. Nowy Rynek (nr nieparzyste), Okrzei, Ostatnia, Pasaż im. Vuka Karadzica, pl. Jurgensa, pl. Narutowicza, al. Spacerowa, Topolowa (nr parzyste).</description>
+        <styleUrl>#poly-EE9C96-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6944737,52.5491533,0
+                19.6909332,52.5498187,0
+                19.6825647,52.5509408,0
+                19.6785736,52.5513845,0
+                19.6780586,52.5494534,0
+                19.6768569,52.5498188,0
+                19.6759987,52.548801,0
+                19.6761274,52.5485401,0
+                19.675312,52.5480573,0
+                19.6792173,52.5462696,0
+                19.6798611,52.545852,0
+                19.685483,52.5417806,0
+                19.6851397,52.5413369,0
+                19.6860623,52.5408279,0
+                19.6863413,52.5415848,0
+                19.6874356,52.5417545,0
+                19.6884441,52.5407235,0
+                19.6891522,52.5409323,0
+                19.6890235,52.5423678,0
+                19.690547,52.5439468,0
+                19.6931005,52.5466872,0
+                19.6944737,52.5491533,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Skarpa</name>
+        <description>Wykaz ulic:Dobrzyńska (nr nieparzyste od 1 do 101 i nr parzyste od 14 do 46), Jasna, Kazimierza Wielkiego (nr nieparzyste od 37 do 49 i nr parzyste od 38 do 52), Kwiatowa, Mała, Na Skarpie, Polna. Asnyka, Dąbrowskiej, Gałczyńskiego (nr nieparzyste od 1 do 7 i nr parzyste od 2 do 12), Konopnickiej, Kredytowa (nr nieparzyste od 21 do końca i nr parzyste od 16 do końca), Mehoffera, Miodowa (nr nieparzyste od 21 do 25a), Mościckiego (nr nieparzyste od 1 do 27), Nałkowskiej, Norwida, Parowa, Słowackiego, Środkowa, Tuwima, Wyspiańskiego, Zalewskiego.</description>
+        <styleUrl>#poly-FFDD5E-1200-66</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6583391,52.5519324,0
+                19.660635,52.5520107,0
+                19.66115,52.5519324,0
+                19.6643686,52.5512279,0
+                19.6689606,52.5498709,0
+                19.675312,52.5480573,0
+                19.6761274,52.5485401,0
+                19.6759987,52.548801,0
+                19.6768569,52.5498188,0
+                19.6740675,52.5503407,0
+                19.6705914,52.5547505,0
+                19.6756983,52.5563682,0
+                19.6742392,52.5581424,0
+                19.6744967,52.55916,0
+                19.6752262,52.5603079,0
+                19.6762991,52.5611428,0
+                19.6754408,52.5620559,0
+                19.6757412,52.5627081,0
+                19.6754408,52.5631777,0
+                19.675827,52.5638559,0
+                19.6747972,52.5643254,0
+                19.6735096,52.5634646,0
+                19.6709776,52.5636733,0
+                19.6669437,52.5627863,0
+                19.6659995,52.561221,0
+                19.6657421,52.5599426,0
+                19.6649696,52.5605166,0
+                19.6630813,52.5595252,0
+                19.6625663,52.558899,0
+                19.660678,52.5580641,0
+                19.6609355,52.5551679,0
+                19.6590472,52.5537067,0
+                19.6583391,52.5519324,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Pradolina Wisły</name>
+        <description>Wykaz ulic:Dobrzykowska (nr parzyste od 130 do 150 i nr nieparzyste od 63 do 67), Jordanowska, Na Stoku (nr parzyste od 2 do 4 i nr nieparzyste od1 do 3), Nadwiślańska, Nizinna, Przeprawa, Tokarska.</description>
+        <styleUrl>#poly-7C3592-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7271967,52.5185973,0
+                19.7262526,52.5176311,0
+                19.7244501,52.515124,0
+                19.7244501,52.5145494,0
+                19.7237206,52.5136614,0
+                19.718957,52.5091952,0
+                19.7168541,52.5060346,0
+                19.7156525,52.5039187,0
+                19.7116184,52.5055383,0
+                19.710331,52.5059301,0
+                19.7092581,52.5062959,0
+                19.7073268,52.5070795,0
+                19.7039366,52.5081504,0
+                19.6983576,52.5095348,0
+                19.6931648,52.5107101,0
+                19.6912337,52.5111281,0
+                19.6893454,52.5117549,0
+                19.6813631,52.5126951,0
+                19.6816206,52.5136354,0
+                19.67381,52.5142621,0
+                19.6731663,52.5116243,0
+                19.6728659,52.5105534,0
+                19.6718144,52.5092475,0
+                19.6721363,52.5090907,0
+                19.6800757,52.5046501,0
+                19.6811485,52.5052248,0
+                19.6846676,52.5039187,0
+                19.6844959,52.5045718,0
+                19.6907616,52.502717,0
+                19.6888304,52.5007838,0
+                19.6922207,52.4991379,0
+                19.6994305,52.4969433,0
+                19.7162533,52.4902543,0
+                19.7220469,52.4901759,0
+                19.7297716,52.4909076,0
+                19.7367239,52.4931025,0
+                19.7388268,52.4955847,0
+                19.7359085,52.4980145,0
+                19.7332049,52.5007055,0
+                19.7308445,52.5066093,0
+                19.7314024,52.5084116,0
+                19.7312737,52.5116243,0
+                19.7312737,52.5131913,0
+                19.730587,52.5152023,0
+                19.7290421,52.5170043,0
+                19.7271967,52.5185973,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Ciechomice</name>
+        <description>Wykaz ulic:Browarna, Chmielowa, Ciechomicka (nr parzyste od 30 do 188 i nr nieparzyste od 7 do 129), Grabińska, Herbaciana, Janówek, Jeziorna, Lawendowa, Letniskowa, Miętowa, Na Stoku – bez numerów, Nowociechomicka, Piwna, Rekreacyjna, Rumiankowa, św. Siostry Faustyny, Tęczowa, Tymiankowa, Wczasowa, Włościany, Ziołowa</description>
+        <styleUrl>#poly-F4EB37-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.6914482,52.4993731,0
+                19.6905899,52.4985632,0
+                19.6913624,52.4982236,0
+                19.6904182,52.4970479,0
+                19.689678,52.4969237,0
+                19.683466,52.498929,0
+                19.6745825,52.5020901,0
+                19.6722651,52.4985632,0
+                19.6692181,52.49501,0
+                19.6640253,52.4876934,0
+                19.6723938,52.484871,0
+                19.6832085,52.4775528,0
+                19.6866417,52.4776574,0
+                19.6942806,52.4780756,0
+                19.7011471,52.4790165,0
+                19.7028637,52.4800098,0
+                19.7063828,52.4843484,0
+                19.7069836,52.4904634,0
+                19.7162533,52.4903066,0
+                19.7053528,52.4946964,0
+                19.6933365,52.4987723,0
+                19.6914482,52.4993731,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Radziwie</name>
+        <description>Wykaz ulic:Cicha, Dobrzykowska (nr parzyste od 2 do 104 i nr nieparzyste od 1 do 51), Drzewna, Gąbińska, Górka, Gromadzka, Kapitańska, Kolejowa, Kościelna, Kotwiczna, Krakówka, Kręta, Leśna, Marynarska, Ogrodowa, Okopowa, Piaskowa, pl. Mościckiego, Popłacińska, Portowa, Przesmyk, Sannicka, Siewna, Sołdka, Spokojna, Stoczniowa, Strażacka, Sucha, Sukcesorska, Szkutnicza, Tartaczna, Teligi, Ukośna, Wąska, Wygon, Zagroda, Zielona.</description>
+        <styleUrl>#poly-DB4436-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.7271967,52.5185973,0
+                19.7228622,52.520138,0
+                19.7177124,52.5223315,0
+                19.709301,52.5242638,0
+                19.6990871,52.528859,0
+                19.6976281,52.5266463,0
+                19.6923923,52.5291723,0
+                19.6850538,52.5338975,0
+                19.6738315,52.5386484,0
+                19.6620083,52.5418067,0
+                19.6513224,52.5267181,0
+                19.6481466,52.5235587,0
+                19.6517944,52.5219398,0
+                19.659133,52.5190935,0
+                19.665699,52.517605,0
+                19.6746683,52.5156202,0
+                19.67381,52.5142621,0
+                19.6816206,52.5136354,0
+                19.6813631,52.5126951,0
+                19.6893454,52.5117549,0
+                19.6912337,52.5111281,0
+                19.7023487,52.5085422,0
+                19.708271,52.5065832,0
+                19.7156525,52.5039187,0
+                19.718957,52.5091952,0
+                19.7244501,52.5145494,0
+                19.7244501,52.515124,0
+                19.7271967,52.5185973,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <name>Osiedle Łukasiewicza</name>
+        <description>Wykaz ulic:Batalionów Chłopskich, Gawareckiego, Kossobudzkiego, Królowej Jadwigi, Łukasiewicza (nr parzyste od 22 do 30), Morykoniego, Orlińskiego, pl. Celebry Papieskiej, Płoskiego, al. Roguckiego, Tysiąclecia (nr parzyste), Wolskiego, Bielska (nr nieparzyste od 53 do 79), Gwardii Ludowej, Kostrogaj, Przemysłowa, Rembielińskiego, Rutskich, Wiadukt.</description>
+        <styleUrl>#poly-CDDC39-1200-76</styleUrl>
+        <Polygon>
+          <outerBoundaryIs>
+            <LinearRing>
+              <tessellate>1</tessellate>
+              <coordinates>
+                19.678402,52.5638951,0
+                19.6806335,52.5613646,0
+                19.6817493,52.559747,0
+                19.6821785,52.5584686,0
+                19.6824789,52.5569554,0
+                19.6829939,52.5541374,0
+                19.6946239,52.5523108,0
+                19.6991301,52.5551811,0
+                19.7056961,52.5596688,0
+                19.7132492,52.5641821,0
+                19.7130776,52.5660081,0
+                19.7104597,52.567495,0
+                19.7104597,52.5685905,0
+                19.7094727,52.5685905,0
+                19.7079277,52.5693992,0
+                19.7073269,52.5709902,0
+                19.7065115,52.5712511,0
+                19.706297,52.5705468,0
+                19.7050095,52.5708077,0
+                19.7033787,52.5709381,0
+                19.7028208,52.5714337,0
+                19.7016192,52.5710946,0
+                19.7003317,52.5696078,0
+                19.6993447,52.5693731,0
+                19.6946669,52.5672863,0
+                19.6929932,52.5658255,0
+                19.6909332,52.5647821,0
+                19.6893454,52.5644168,0
+                19.6877146,52.5635821,0
+                19.6861267,52.5631907,0
+                19.6858263,52.5639212,0
+                19.6849251,52.564156,0
+                19.6821785,52.5640777,0
+                19.6793461,52.5643908,0
+                19.678402,52.5638951,0
+              </coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

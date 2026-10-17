@@ -19,6 +19,9 @@ USE pgm;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS streets;
+DROP TABLE IF EXISTS places;
+DROP TABLE IF EXISTS place_categories;
 DROP TABLE IF EXISTS audit_logs;
 DROP TABLE IF EXISTS login_attempts;
 DROP TABLE IF EXISTS game_status_history;
@@ -375,4 +378,79 @@ CREATE TABLE audit_logs (
   CONSTRAINT fk_audit_user
     FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 12. PLACE_CATEGORIES – rodzaje miejsc referencyjnych (zabytek,
+--     przystanek, plac zabaw...). source_name – skąd pochodzą dane.
+-- ---------------------------------------------------------------------
+CREATE TABLE place_categories (
+  id           SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  slug         VARCHAR(60)       NOT NULL,
+  name         VARCHAR(80)       NOT NULL,
+  source_name  VARCHAR(120)      NULL,
+  position     SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+  is_active    TINYINT(1)        NOT NULL DEFAULT 1,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_place_categories_slug (slug),
+  KEY idx_place_categories_active_pos (is_active, position)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 13. PLACES – miejsca w Płocku z otwartych danych miasta (zabytki,
+--     szkoły, przystanki, stacje roweru miejskiego, obiekty komunalne,
+--     osiedla). Twórca gry może je wykorzystać jako gotowe punkty trasy;
+--     punkt w grze (waypoints) jest wtedy KOPIĄ – zmiana lub usunięcie
+--     miejsca nie zmienia istniejących gier.
+--     area_geojson – obrys obszaru (np. osiedla) jako GeoJSON Feature;
+--     latitude/longitude to wtedy przybliżony środek obszaru.
+--     source_ref – identyfikator obiektu w pliku źródłowym.
+--     Dane generuje bin/build-places-seed.php (sekcja w seed.sql).
+-- ---------------------------------------------------------------------
+CREATE TABLE places (
+  id            INT UNSIGNED       NOT NULL AUTO_INCREMENT,
+  category_id   SMALLINT UNSIGNED  NOT NULL,
+  name          VARCHAR(255)       NOT NULL,
+  address       VARCHAR(255)       NULL,
+  description   TEXT               NULL,
+  latitude      DECIMAL(10,7)      NOT NULL,
+  longitude     DECIMAL(10,7)      NOT NULL,
+  area_geojson  JSON               NULL,
+  source_ref    VARCHAR(100)       NULL,
+  is_active     TINYINT(1)         NOT NULL DEFAULT 1,
+  created_at    DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at    DATETIME           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+  KEY idx_places_category (category_id, is_active),
+  KEY idx_places_location (latitude, longitude),
+  FULLTEXT KEY ft_places_search (name, address),
+  CONSTRAINT chk_places_lat  CHECK (latitude  BETWEEN -90  AND 90),
+  CONSTRAINT chk_places_lng  CHECK (longitude BETWEEN -180 AND 180),
+  CONSTRAINT chk_places_name CHECK (CHAR_LENGTH(TRIM(name)) > 0),
+  CONSTRAINT fk_places_category
+    FOREIGN KEY (category_id) REFERENCES place_categories (id)
+    ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
+
+-- ---------------------------------------------------------------------
+-- 14. STREETS – słownik ulic Płocka (TERYT, kod ULIC) do przyszłej
+--     wyszukiwarki adresów. latitude/longitude – punkt leżący na ulicy
+--     (najbliższy środka jej zasięgu), min_/max_ – prostokąt zasięgu.
+-- ---------------------------------------------------------------------
+CREATE TABLE streets (
+  id             INT UNSIGNED   NOT NULL AUTO_INCREMENT,
+  ulic_code      CHAR(5)        NOT NULL,
+  name           VARCHAR(150)   NOT NULL,
+  latitude       DECIMAL(10,7)  NOT NULL,
+  longitude      DECIMAL(10,7)  NOT NULL,
+  min_latitude   DECIMAL(10,7)  NOT NULL,
+  min_longitude  DECIMAL(10,7)  NOT NULL,
+  max_latitude   DECIMAL(10,7)  NOT NULL,
+  max_longitude  DECIMAL(10,7)  NOT NULL,
+
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_streets_ulic (ulic_code),
+  KEY idx_streets_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_polish_ci;
