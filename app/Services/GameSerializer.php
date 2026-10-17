@@ -17,7 +17,7 @@ final class GameSerializer
         $game = Database::query(
             'SELECT id, owner_id, title, short_description, description, estimated_duration_minutes, difficulty,
                     status, completion_points, custom_category, available_from, available_until, is_sample,
-                    lock_version, published_at, updated_at
+                    lock_version, published_at, archived_at, updated_at
                FROM games WHERE id = ?',
             [$gameId]
         )->fetch();
@@ -71,6 +71,8 @@ final class GameSerializer
             'available_until'            => self::localDate($game['available_until']),
             'is_sample'                  => (bool) $game['is_sample'],
             'lock_version'               => (int) $game['lock_version'],
+            'published_at'               => $game['published_at'],
+            'archived_at'                => $game['archived_at'],
             'updated_at'                 => $game['updated_at'],
             'waypoints'                  => array_map(static function (array $wp) use ($tasksByWaypoint, $optionsByTask): array {
                 $task = $tasksByWaypoint[(int) $wp['id']] ?? null;

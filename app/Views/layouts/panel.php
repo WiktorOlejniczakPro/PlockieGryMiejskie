@@ -101,6 +101,12 @@ $navItems = [
     <div class="sidebar-backdrop" data-sidebar-close hidden></div>
 
     <main class="panel-main <?= e($mainClass ?? '') ?>" id="main">
+      <?php if (Auth::autoLoginEnabled()): ?>
+        <p class="demo-banner" role="note">
+          <strong>Tryb demonstracyjny:</strong> automatyczne logowanie jest włączone (AUTO_LOGIN_EMAIL w pliku .env).
+          Wyłącz je przed udostępnieniem panelu innym osobom.
+        </p>
+      <?php endif; ?>
       <?php View::partial('partials/alerts'); ?>
       <?= $content ?>
     </main>

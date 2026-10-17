@@ -84,7 +84,7 @@
       estimated_duration_minutes: g.estimated_duration_minutes, difficulty: g.difficulty,
       completion_points: g.completion_points, categories: (g.categories || []).slice(),
       custom_category: g.custom_category || "", available_from: g.available_from || "",
-      available_until: g.available_until || ""
+      available_until: g.available_until || "", published_at: g.published_at || null
     };
     state.waypoints = (g.waypoints || []).map(function (w) {
       return {
@@ -132,6 +132,12 @@
     return l >= 2 && l <= 4 && (t < 12 || t > 14) ? "punkty" : "punktów";
   }
 
+  function pluralTasks(n) {
+    if (n === 1) return "zadanie";
+    var l = n % 10, t = n % 100;
+    return l >= 2 && l <= 4 && (t < 12 || t > 14) ? "zadania" : "zadań";
+  }
+
   function announce(text) {
     var live = document.getElementById("editor-live");
     live.textContent = "";
@@ -166,6 +172,7 @@
       document.getElementById(tab.getAttribute("aria-controls")).hidden = !active;
       if (active && focusTab) tab.focus();
     });
+    if (name === "preview") renderPreview();
     if (name === "route") {
       if (!mapReady) initMap();
       window.setTimeout(function () { map.invalidateSize(); }, 0);
@@ -255,12 +262,31 @@
      ================================================================ */
   var map, routeLine, markers = {};
 
+  /*
+   * Trasa PIESZA po ulicach – wyznaczana przez serwer (usługa OSRM, profil pieszy).
+   * Wygląd jak w nawigacji: niebieska linia z ciemniejszym obrysem. Gdy trasy nie da się
+   * wyznaczyć (brak internetu, usługa niedostępna), zostaje przerywana linia prosta.
+   */
+  var walk = {
+    enabled: !!boot.map.routing,
+    outline: null, line: null, connectors: null,
+    cache: {},        // klucz współrzędnych -> wynik z serwera
+    pendingKey: "",   // trasa, o którą właśnie pytamy
+    failedKey: "",    // trasa, której nie udało się wyznaczyć (bez ponawiania w kółko)
+    error: "",
+    timer: null
+  };
+
   function initMap() {
     mapReady = true;
     // doubleClickZoom wyłączony: kliknięcie dodaje punkt, więc dwuklik dodawałby punkt i przybliżał mapę
     map = L.map("map", { zoomControl: true, doubleClickZoom: false }).setView([boot.map.lat, boot.map.lng], boot.map.zoom);
     L.tileLayer(boot.map.tileUrl, { maxZoom: 19, attribution: boot.map.attribution }).addTo(map);
-    routeLine = L.polyline([], { color: "#0b2545", weight: 3, opacity: 0.75, dashArray: "8 8" }).addTo(map);
+    routeLine = L.polyline([], { color: "#0b2545", weight: 3, opacity: 0.75, dashArray: "8 8", interactive: false }).addTo(map);
+    walk.connectors = L.layerGroup().addTo(map);
+    walk.outline = L.polyline([], { color: "#1a4fa0", weight: 9, opacity: 0.95, lineCap: "round", lineJoin: "round", interactive: false }).addTo(map);
+    walk.line = L.polyline([], { color: "#4a90f7", weight: 5, opacity: 1, lineCap: "round", lineJoin: "round", interactive: false }).addTo(map);
+    if (boot.map.routing && boot.map.routingAttribution) map.attributionControl.addAttribution(boot.map.routingAttribution);
 
     map.on("click", function (e) { addPoint(e.latlng.lat, e.latlng.lng); });
 
@@ -317,11 +343,127 @@
       if (!seen[key]) { map.removeLayer(markers[key]); delete markers[key]; }
     });
     updateRouteLine();
+    scheduleWalkingRoute();
+  }
+
+  /** Klucz trasy – zmienia się przy każdej zmianie położenia lub kolejności punktów. */
+  function routeKey() {
+    return state.waypoints.map(function (w) { return w.latitude.toFixed(6) + "," + w.longitude.toFixed(6); }).join(";");
+  }
+
+  /** Trasa piesza pasująca do obecnych punktów albo null (wtedy pokazujemy linię prostą). */
+  function walkingRoute() {
+    if (!walk.enabled || state.waypoints.length < 2) return null;
+    return walk.cache[routeKey()] || null;
   }
 
   function updateRouteLine() {
     if (!mapReady) return;
-    routeLine.setLatLngs(state.waypoints.map(function (w) { return [w.latitude, w.longitude]; }));
+    var r = walkingRoute();
+    walk.connectors.clearLayers();
+    if (r) {
+      routeLine.setLatLngs([]);
+      walk.outline.setLatLngs(r.geometry);
+      walk.line.setLatLngs(r.geometry);
+      // Kropkowany odcinek od punktu do najbliższej drogi (gdy punkt leży poza chodnikiem)
+      state.waypoints.forEach(function (w, i) {
+        var s = r.snapped && r.snapped[i];
+        if (!s || distance(w, { latitude: s[0], longitude: s[1] }) < 8) return;
+        L.polyline([[w.latitude, w.longitude], s], {
+          color: "#5f6b80", weight: 3, opacity: 0.9, dashArray: "1 7", lineCap: "round", interactive: false
+        }).addTo(walk.connectors);
+      });
+    } else {
+      walk.outline.setLatLngs([]);
+      walk.line.setLatLngs([]);
+      routeLine.setLatLngs(state.waypoints.map(function (w) { return [w.latitude, w.longitude]; }));
+    }
+  }
+
+  function setRouteStatus(kind, text) {
+    var el = document.getElementById("route-status");
+    el.setAttribute("data-state", kind);
+    el.textContent = text;
+  }
+
+  /** Planuje zapytanie o trasę pieszą – z opóźnieniem, żeby nie pytać przy każdej drobnej zmianie. */
+  function scheduleWalkingRoute() {
+    window.clearTimeout(walk.timer);
+    var key = routeKey();
+    if (!walk.enabled || state.waypoints.length < 2) {
+      setRouteStatus("", "");
+      return;
+    }
+    if (walk.cache[key]) {
+      setRouteStatus("ok", "");
+      return;
+    }
+    if (key === walk.failedKey) {
+      setRouteStatus("error", walk.error);
+      return;
+    }
+    if (key === walk.pendingKey) return;
+    setRouteStatus("loading", "Wyznaczam trasę pieszą…");
+    walk.timer = window.setTimeout(function () { fetchWalkingRoute(key); }, 700);
+  }
+
+  function fetchWalkingRoute(key) {
+    if (key !== routeKey()) return;
+    walk.pendingKey = key;
+    var points = state.waypoints.map(function (w) { return [w.latitude, w.longitude]; });
+
+    fetch(boot.urls.route, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
+      },
+      body: JSON.stringify({ points: points })
+    })
+      .then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (body) { return { ok: res.ok, body: body }; });
+      })
+      .then(function (r) {
+        if (r.ok && r.body.data && r.body.data.geometry && r.body.data.geometry.length > 1) {
+          walk.cache[key] = r.body.data;
+          walk.error = "";
+        } else {
+          walk.failedKey = key;
+          walk.error = (r.body.error && r.body.error.message) || "Nie udało się wyznaczyć trasy pieszej. Pokazano linię prostą.";
+        }
+      })
+      .catch(function () {
+        walk.failedKey = key;
+        walk.error = "Brak połączenia z serwerem – pokazano linię prostą.";
+      })
+      .then(function () {
+        if (walk.pendingKey === key) walk.pendingKey = "";
+        if (key !== routeKey()) {   // punkty zmieniły się w czasie zapytania
+          scheduleWalkingRoute();
+          return;
+        }
+        setRouteStatus(walk.cache[key] ? "ok" : "error", walk.cache[key] ? "" : walk.error);
+        updateRouteLine();
+        renderSummary();
+        updateMapNote();
+      });
+  }
+
+  function updateMapNote() {
+    var note = document.getElementById("map-note");
+    note.textContent = walkingRoute()
+      ? "Niebieska linia to trasa piesza po ulicach i chodnikach (dane OpenStreetMap). " +
+        "Kropkowane odcinki łączą punkt z najbliższą drogą. Gracz może wybrać inną drogę."
+      : "Linia łączy punkty w kolejności trasy – to schemat, nie trasa piesza. Długość podana jest w linii prostej.";
+  }
+
+  /** 340 s -> "6 min", 4000 s -> "1 h 7 min". */
+  function formatWalkTime(seconds) {
+    var min = Math.max(1, Math.round(seconds / 60));
+    if (min < 60) return min + " min";
+    return Math.floor(min / 60) + " h" + (min % 60 ? " " + (min % 60) + " min" : "");
   }
 
   function routeLength() {
@@ -333,9 +475,11 @@
   function renderSummary() {
     var n = state.waypoints.length;
     var summary = document.getElementById("route-summary");
-    summary.textContent = n === 0
-      ? "Brak punktów"
-      : n + " " + pluralPoints(n) + (n > 1 ? " · ok. " + formatDistance(routeLength()) + " w linii prostej" : "");
+    var r = walkingRoute();
+    var length = r
+      ? " · trasa piesza " + formatDistance(r.distance) + " · ok. " + formatWalkTime(r.duration) + " marszu"
+      : " · ok. " + formatDistance(routeLength()) + " w linii prostej";
+    summary.textContent = n === 0 ? "Brak punktów" : n + " " + pluralPoints(n) + (n > 1 ? length : "");
     document.getElementById("tab-route-count").textContent = n;
   }
 
@@ -775,13 +919,15 @@
     };
   }
 
+  /** Zapis gry. Zwraca Promise<boolean> – true, gdy zapis się udał. */
   function save() {
-    if (state.saving) return;
+    if (state.saving) return Promise.resolve(false);
+    if (state.game.status === "archived") return Promise.resolve(false);
 
     // Szybka kontrola w przeglądarce – pełną walidację i tak wykonuje serwer
     if (!state.game.title.trim()) {
       showErrors("Nie można zapisać gry.", [{ path: "title", field: "title", waypoint: null, message: "Podaj tytuł gry." }]);
-      return;
+      return Promise.resolve(false);
     }
 
     state.saving = true;
@@ -795,7 +941,7 @@
     var url = isNew ? boot.urls.create : boot.urls.game.replace("{id}", state.game.id);
     var selectedIndex = findIndex(state.selectedKey);
 
-    fetch(url, {
+    return fetch(url, {
       method: isNew ? "POST" : "PUT",
       credentials: "same-origin",
       headers: {
@@ -811,20 +957,23 @@
       .then(function (r) {
         if (r.res.ok && r.body.data) {
           onSaved(r.body.data, isNew, selectedIndex);
-        } else {
-          onSaveError(r.res.status, r.body);
+          return true;
         }
+        onSaveError(r.res.status, r.body);
+        return false;
       })
       .catch(function () {
         setSaveState("error", "Błąd zapisu");
         showErrors("Brak połączenia z serwerem. Zmiany NIE zostały zapisane – nie zamykaj strony i spróbuj ponownie.", []);
+        return false;
       })
-      .then(function () {
+      .then(function (ok) {
         state.saving = false;
-        saveBtn.disabled = false;
         saveBtn.removeAttribute("aria-busy");
         workspace.removeAttribute("inert");
         workspace.classList.remove("is-saving");
+        applyStatusUi();
+        return ok;
       });
   }
 
@@ -899,6 +1048,7 @@
     var time = new Date().toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit" });
     setSaveState("saved", "Zapisano o " + time);
     announce("Gra została zapisana.");
+    renderPreview();
 
     if (isNew) {
       var editUrl = boot.urls.editPage.replace("{id}", game.id);
@@ -964,6 +1114,10 @@
 
   /** Kliknięcie błędu: przejście do zakładki, punktu i pola, którego dotyczy. */
   function goToError(err) {
+    if (err.field === "waypoints") {
+      showTab("route");
+      return;
+    }
     if (err.waypoint === null || err.waypoint === undefined) {
       showTab("info");
       var el = document.querySelector('[data-game="' + err.field + '"]') ||
@@ -992,6 +1146,271 @@
     }
   });
 
+
+  /* ================================================================
+     8a. Podgląd i publikacja (statusy gry)
+     ================================================================ */
+  var DIFFICULTY_LABELS = { easy: "Łatwy", medium: "Średni", hard: "Trudny" };
+  var UNLOCK_LABELS = { always: "od razu", on_arrival: "po dotarciu na miejsce", after_previous: "po poprzednim zadaniu" };
+  var STATUS_DESC = {
+    draft: "Gra jest w przygotowaniu. Widzisz ją tylko w panelu – gracze jej nie widzą.",
+    published: "Gra jest opublikowana i dostępna dla graczy.",
+    hidden: "Gra jest czasowo ukryta – nie widać jej na stronie, ale możesz ją poprawiać i opublikować ponownie.",
+    archived: "Gra jest zarchiwizowana: tylko do odczytu i niewidoczna. Przywróć ją jako szkic, aby ją edytować."
+  };
+  // [status docelowy, napis, klasa przycisku, pytanie potwierdzające]
+  var STATUS_ACTIONS = {
+    draft: [["published", "Opublikuj grę", "btn-primary"],
+            ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
+    published: [["hidden", "Ukryj grę", "btn-outline", "Ukryć grę? Zniknie ze strony głównej, dopóki jej ponownie nie opublikujesz."],
+                ["draft", "Cofnij do szkicu", "btn-outline", "Cofnąć grę do szkicu? Zniknie ze strony głównej."],
+                ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu i zniknie ze strony."]],
+    hidden: [["published", "Opublikuj ponownie", "btn-primary"],
+             ["draft", "Cofnij do szkicu", "btn-outline"],
+             ["archived", "Archiwizuj", "btn-outline", "Zarchiwizować grę? Będzie tylko do odczytu."]],
+    archived: [["draft", "Przywróć jako szkic", "btn-primary"]]
+  };
+  var publishBtn = document.getElementById("btn-publish");
+  var statusBusy = false;
+
+  /** Ustawia przyciski i blokadę edycji zgodnie z obecnym statusem. */
+  function applyStatusUi() {
+    var st = state.game.status;
+    var archived = st === "archived";
+    publishBtn.hidden = !(st === "draft" || st === "hidden");
+    publishBtn.textContent = st === "hidden" ? "Opublikuj ponownie" : "Opublikuj";
+    publishBtn.disabled = statusBusy || state.saving;
+    saveBtn.disabled = archived || state.saving || statusBusy;
+    ["panel-info", "panel-route"].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (archived) el.setAttribute("inert", ""); else el.removeAttribute("inert");
+      el.classList.toggle("is-readonly", archived);
+    });
+  }
+
+  function dateTime(v) {
+    return v ? new Date(v.replace(" ", "T")).toLocaleString("pl-PL", { dateStyle: "medium", timeStyle: "short" }) : "";
+  }
+
+  /** Czy gra jest teraz widoczna na stronie głównej – i dlaczego nie. */
+  function visibility() {
+    var g = state.game, now = new Date();
+    if (!g.id) return [false, "Gra nie jest jeszcze zapisana."];
+    if (g.status !== "published") return [false, "Niewidoczna na stronie głównej – widać tam tylko gry opublikowane."];
+    if (g.available_from && new Date(g.available_from) > now) {
+      return [false, "Opublikowana, ale pojawi się na stronie głównej dopiero " + dateTime(g.available_from) + "."];
+    }
+    if (g.available_until && new Date(g.available_until) < now) {
+      return [false, "Opublikowana, ale termin dostępności minął " + dateTime(g.available_until) + " – zmień datę „Do”."];
+    }
+    return [true, "Widoczna na stronie głównej" + (g.available_until ? " do " + dateTime(g.available_until) : "") + "."];
+  }
+
+  /** Lista kontrolna – te same reguły co GameValidationService::forPublish na serwerze. */
+  function checklist() {
+    var g = state.game, items = [];
+    function add(ok, text, err) { items.push({ ok: ok, text: text, err: err || null }); }
+    function infoErr(field) { return { path: field, field: field, waypoint: null, message: "" }; }
+
+    add(!!g.title.trim(), "Tytuł gry", infoErr("title"));
+    add(!!(g.short_description.trim() || g.description.trim()), "Opis gry (krótki lub pełny)", infoErr("short_description"));
+    var other = $("[data-category][data-other]");
+    var otherId = other ? Number(other.value) : null;
+    if (otherId !== null && g.categories.indexOf(otherId) !== -1) {
+      add(!!g.custom_category.trim(), "Nazwa własnej kategorii „Inne”", infoErr("custom_category"));
+    }
+    add(state.waypoints.length > 0, "Co najmniej jeden punkt trasy",
+      { path: "waypoints", field: "waypoints", waypoint: null, message: "" });
+
+    var bad = [];
+    state.waypoints.forEach(function (w, i) {
+      var t = w.task, n = i + 1, err = null;
+      if (!w.name.trim()) err = ["name", "nazwa punktu"];
+      else if (t) {
+        var correct = (t.options || []).filter(function (o) { return o.is_correct; }).length;
+        var filled = (t.options || []).filter(function (o) { return (o.text || "").trim(); }).length;
+        if (!t.title.trim()) err = ["title", "tytuł zadania", true];
+        else if (!t.description.trim()) err = ["description", "treść zadania", true];
+        else if (CHOICE.indexOf(t.task_type) !== -1 && filled < 2) err = ["options", "co najmniej 2 odpowiedzi"];
+        else if (t.task_type === "single_choice" && correct !== 1) err = ["options", "dokładnie 1 poprawna odpowiedź"];
+        else if (t.task_type === "multiple_choice" && correct < 1) err = ["options", "poprawna odpowiedź"];
+        else if (t.task_type === "open_answer" && !t.expected_answer.trim() && !t.evaluation_instructions.trim()) {
+          err = ["expected_answer", "oczekiwana odpowiedź lub instrukcja oceny", true];
+        } else if ((t.task_type === "photo" || t.task_type === "video") && !t.media_requirement.trim()) {
+          err = ["media_requirement", "opis wymaganego zdjęcia lub filmu", true];
+        }
+      }
+      if (err) bad.push({ n: n, text: err[1], e: { path: "waypoints." + i + (err[2] ? ".task." : ".") + err[0], field: err[0], waypoint: i, message: "" } });
+    });
+    if (state.waypoints.length) {
+      add(!bad.length, bad.length
+        ? "Punkty i zadania kompletne – brakuje: " + bad.slice(0, 3).map(function (b) { return "punkt " + b.n + " (" + b.text + ")"; }).join(", ") +
+          (bad.length > 3 ? " i " + (bad.length - 3) + " więcej" : "")
+        : "Punkty i zadania kompletne", bad.length ? bad[0].e : null);
+    }
+    add(!!state.game.id && !state.dirty, "Wszystkie zmiany zapisane");
+    return items;
+  }
+
+  function renderPreview() {
+    if (!state.game) return;
+    var g = state.game, st = g.status;
+
+    var badge = document.getElementById("pv-status");
+    badge.className = "status status--" + st;
+    badge.textContent = STATUS_LABELS[st];
+    document.getElementById("pv-status-desc").textContent = STATUS_DESC[st] +
+      (st === "published" && g.published_at ? " Pierwsza publikacja: " + dateTime(g.published_at) + "." : "");
+    var vis = visibility(), visEl = document.getElementById("pv-visibility");
+    visEl.textContent = vis[1];
+    visEl.setAttribute("data-ok", String(vis[0]));
+    if (vis[0]) {
+      var a = document.createElement("a");
+      a.href = boot.urls.home; a.target = "_blank"; a.rel = "noopener"; a.textContent = " Zobacz stronę główną ↗";
+      visEl.appendChild(a);
+    }
+    document.getElementById("preview-unsaved").hidden = !state.dirty;
+
+    // Przyciski zmiany statusu
+    var box = document.getElementById("pv-actions");
+    box.textContent = "";
+    if (!g.id) {
+      var p = document.createElement("p");
+      p.className = "field__hint";
+      p.textContent = "Zapisz grę, aby móc ją opublikować.";
+      box.appendChild(p);
+    }
+    (g.id ? STATUS_ACTIONS[st] : []).forEach(function (a) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn-sm " + a[2];
+      b.textContent = a[1];
+      b.disabled = statusBusy;
+      b.addEventListener("click", function () { changeStatus(a[0], a[3]); });
+      box.appendChild(b);
+    });
+
+    // Lista kontrolna
+    var list = document.getElementById("pv-checklist");
+    list.textContent = "";
+    checklist().forEach(function (it) {
+      var li = document.createElement("li");
+      li.className = it.ok ? "is-ok" : "is-missing";
+      if (!it.ok && it.err && st !== "archived") {
+        var btn = document.createElement("button");
+        btn.type = "button"; btn.className = "link-btn"; btn.textContent = it.text;
+        btn.addEventListener("click", function () { goToError(it.err); });
+        li.appendChild(btn);
+      } else {
+        li.textContent = it.text;
+      }
+      list.appendChild(li);
+    });
+
+    // Karta jak na stronie głównej
+    document.getElementById("pv-title").textContent = g.title.trim() || "Bez tytułu";
+    var shortEl = document.getElementById("pv-short");
+    shortEl.textContent = g.short_description.trim();
+    shortEl.hidden = !g.short_description.trim();
+    document.getElementById("pv-difficulty").textContent = DIFFICULTY_LABELS[g.difficulty] || "—";
+    var mins = Number(g.estimated_duration_minutes) || 0;
+    document.getElementById("pv-duration").textContent = !mins ? "—"
+      : mins < 60 ? mins + " min" : Math.floor(mins / 60) + " h" + (mins % 60 ? " " + (mins % 60) + " min" : "");
+    document.getElementById("pv-count").textContent = state.waypoints.length;
+    var cats = $all("[data-category]").filter(function (cb) { return g.categories.indexOf(Number(cb.value)) !== -1; })
+      .map(function (cb) {
+        return cb.hasAttribute("data-other") && g.custom_category.trim()
+          ? g.custom_category.trim() : cb.closest("label").textContent.trim();
+      });
+    var catsEl = document.getElementById("pv-cats");
+    catsEl.textContent = cats.join(", ");
+    catsEl.hidden = !cats.length;
+    document.getElementById("pv-card").setAttribute("data-difficulty", g.difficulty);
+
+    // Przebieg gry
+    var maxPts = 0, tasks = 0;
+    var route = document.getElementById("pv-route");
+    route.textContent = "";
+    state.waypoints.forEach(function (w) {
+      var li = document.createElement("li");
+      var name = document.createElement("strong");
+      name.textContent = w.name.trim() || "Punkt bez nazwy";
+      li.appendChild(name);
+      var meta = document.createElement("span");
+      meta.className = "pv-route__task";
+      if (w.task) {
+        tasks += 1;
+        maxPts += Number(w.task.max_points) || 0;
+        meta.textContent = (TASK_LABELS[w.task.task_type] || "") + ": " + (w.task.title.trim() || "bez tytułu") +
+          " · " + (w.task.max_points || 0) + " pkt · odblokowanie " + (UNLOCK_LABELS[w.task.unlock_mode] || "");
+      } else {
+        meta.textContent = "Bez zadania";
+      }
+      li.appendChild(meta);
+      route.appendChild(li);
+    });
+    var n = state.waypoints.length, r = walkingRoute();
+    document.getElementById("pv-summary").textContent = !n ? "Gra nie ma jeszcze punktów trasy." :
+      n + " " + pluralPoints(n) + " · " + tasks + " " + pluralTasks(tasks) + " · do zdobycia " + (maxPts + (Number(g.completion_points) || 0)) +
+      " pkt (w tym " + (Number(g.completion_points) || 0) + " za ukończenie)" +
+      (n > 1 ? (r ? " · trasa piesza " + formatDistance(r.distance) : " · ok. " + formatDistance(routeLength()) + " w linii prostej") : "");
+  }
+
+  /** Zmiana statusu na serwerze. Niezapisane zmiany są najpierw zapisywane. */
+  function changeStatus(target, question) {
+    if (statusBusy || state.saving) return;
+    if (question && !window.confirm(question)) return;
+
+    var ready = (state.dirty || !state.game.id) ? save() : Promise.resolve(true);
+    ready.then(function (ok) {
+      if (!ok) return;
+      statusBusy = true;
+      applyStatusUi();
+      renderPreview();
+      setSaveState("saving", "Zmieniam status…");
+
+      return fetch(boot.urls.status.replace("{id}", state.game.id), {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-CSRF-Token": csrfMeta ? csrfMeta.content : ""
+        },
+        body: JSON.stringify({ status: target, lock_version: state.game.lock_version })
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (body) { return { res: res, body: body }; });
+        })
+        .then(function (r) {
+          statusBusy = false;
+          if (r.res.ok && r.body.data) {
+            onSaved(r.body.data, false, findIndex(state.selectedKey));
+            setSaveState("saved", "Status: " + STATUS_LABELS[r.body.data.status]);
+            announce("Nowy status gry: " + STATUS_LABELS[r.body.data.status] + ".");
+            showTab("preview");
+          } else {
+            onSaveError(r.res.status, r.body);
+            setSaveState("error", "Status nie został zmieniony");
+          }
+        })
+        .catch(function () {
+          statusBusy = false;
+          setSaveState("error", "Status nie został zmieniony");
+          showErrors("Brak połączenia z serwerem. Status gry się nie zmienił.", []);
+        })
+        .then(function () {
+          applyStatusUi();
+          renderPreview();
+        });
+    });
+  }
+
+  publishBtn.addEventListener("click", function () {
+    showTab("preview");
+    changeStatus("published");
+  });
+
   /* ================================================================
      9. Ochrona przed utratą zmian
      ================================================================ */
@@ -1008,6 +1427,6 @@
   fillInfoForm();
   renderList();
   renderSummary();
-  showTab(boot.game ? "route" : "info");
+  showTab(!boot.game ? "info" : (boot.game.status === "archived" ? "preview" : "route"));
   if (!boot.game) document.getElementById("f-title").focus();
 })();

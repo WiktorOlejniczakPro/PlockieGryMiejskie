@@ -151,9 +151,6 @@ use App\Models\Game;
         <?php foreach ($games as $game): ?>
           <li>
             <article class="game-card" data-difficulty="<?= e($game['difficulty']) ?>">
-              <?php if ($game['is_sample']): ?>
-                <span class="badge badge--sample">Gra przykładowa</span>
-              <?php endif; ?>
               <h3><?= e(Game::displayTitle($game)) ?></h3>
               <?php if ($game['short_description']): ?>
                 <p class="game-card__desc"><?= e($game['short_description']) ?></p>

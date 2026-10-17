@@ -31,7 +31,12 @@ Pozycje menu z przyszłych etapów są widoczne w panelu z etykietą „wkrótce
 Minimum do zapisania szkicu: tytuł gry, nazwy punktów, poprawne współrzędne oraz tytuł i treść zadania (jeśli zadanie jest włączone).
 Puste wiersze odpowiedzi w pytaniach zamkniętych są pomijane przy zapisie.
 
-Linia na mapie łączy punkty w kolejności trasy. To schemat, a nie trasa piesza, dlatego długość jest podana „w linii prostej”.
+**Trasa piesza po ulicach.** Nad mapą jest przełącznik „Trasa piesza po ulicach” (domyślnie włączony). Panel wyznacza wtedy
+najkrótszą drogę dla pieszych przez wszystkie punkty – po ulicach, chodnikach i ścieżkach z OpenStreetMap – i rysuje ją
+niebieską linią jak w nawigacji, z długością i czasem marszu. Kropkowane odcinki łączą punkt z najbliższą drogą.
+Trasę liczy publiczny serwer OSRM fundacji FOSSGIS (`ROUTING_URL` w `.env`). Zapytania idą przez serwer PHP, który pilnuje
+limitu 1 zapytania na sekundę i zapamiętuje policzone trasy w `storage/cache/routes`. Gdy usługa jest niedostępna albo
+przełącznik jest wyłączony, mapa pokazuje przerywaną linię prostą (schemat) z długością „w linii prostej”.
 Mapa wymaga internetu (kafelki OpenStreetMap). Biblioteka Leaflet jest dołączona do projektu, więc nie zależy od CDN.
 
 ## Wymagania
@@ -107,6 +112,33 @@ C:\xampp\php\php.exe -S localhost:8000 -t public public\index.php
 ```
 
 Potem otwórz `http://localhost:8000`.
+
+## Kreator nagród
+
+Menu panelu → **Kreator nagród**. Administrator przygotowuje tu katalog nagród, które gracze wymieniają na punkty:
+
+- **kody rabatowe** – procentowe (np. −10%) lub kwotowe (np. −15 zł), opcjonalnie z minimalną wartością zakupów,
+- **karty podarunkowe** – bon o wartości w złotówkach.
+
+Dla każdej nagrody ustawiasz sklep, koszt w punktach, limit na gracza, termin ważności i warunki, a podgląd pokazuje, jak nagrodę zobaczy gracz.
+Każda nagroda ma **pulę kodów** (wklejasz je – każdy w osobnej linii); jeden kod trafia do jednego gracza. Kody są w panelu domyślnie zamaskowane.
+Twórcy gier widzą listę nagród tylko do odczytu. Samą wymianę punktów obsłuży przyszła aplikacja mobilna.
+
+**Masz już bazę z wcześniejszego etapu?** Nie importuj `schema.sql` od nowa – w phpMyAdmin zaimportuj tylko
+`database/migracje/2026-10-17-nagrody.sql`. Doda tabele nagród i 4 przykładowe nagrody, nie ruszając gier ani kont.
+
+## Tryb demonstracyjny – bez ekranu logowania
+
+Na pokaz (np. dla jury) panel może być stale zalogowany na jedno konto:
+
+1. Utwórz konto skryptem `bin/create-admin.php` (jeśli jeszcze go nie masz).
+2. W pliku `.env` wpisz jego adres: `AUTO_LOGIN_EMAIL=admin@example.org`
+3. Odśwież stronę – panel otworzy się od razu, a `/logowanie` przekieruje do panelu.
+
+- W panelu widać żółty pasek „Tryb demonstracyjny”, żeby nikt nie zapomniał go wyłączyć.
+- Kliknięcie „Wyloguj” wyłącza automatyczne logowanie do zamknięcia przeglądarki.
+- Przy `APP_ENV=production` ustawienie jest ignorowane.
+- **Wyłączenie:** wyczyść wartość (`AUTO_LOGIN_EMAIL=`). Każdy, kto otworzy stronę w trybie demo, ma pełny dostęp do tego konta – nie zostawiaj go na serwerze dostępnym z internetu.
 
 ## Najczęstsze problemy
 

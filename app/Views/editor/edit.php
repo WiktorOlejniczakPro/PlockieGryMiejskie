@@ -19,7 +19,6 @@ $status = $game['status'] ?? 'draft';
       <div class="editor-bar__heading">
         <h1 id="editor-heading"><?= e($isNew ? 'Nowa gra' : $game['title']) ?></h1>
         <span class="status status--<?= e($status) ?>" id="editor-status"><?= e(label('status', $status)) ?></span>
-        <?php if (!$isNew && $game['is_sample']): ?><span class="badge badge--sample">Przykład</span><?php endif; ?>
       </div>
     </div>
 
@@ -53,7 +52,9 @@ $status = $game['status'] ?? 'draft';
       <span class="editor-tab__num">2</span> Trasa, punkty i zadania
       <span class="editor-tab__count" id="tab-route-count">0</span>
     </button>
-    <span class="editor-tab is-disabled" aria-disabled="true"><span class="editor-tab__num">3</span> Podgląd i publikacja <span class="soon-tag">wkrótce</span></span>
+    <button type="button" role="tab" class="editor-tab" id="tab-preview" aria-controls="panel-preview" data-tab="preview">
+      <span class="editor-tab__num">3</span> Podgląd i publikacja
+    </button>
   </div>
 
   <div class="editor-workspace" id="editor-workspace">
@@ -170,8 +171,11 @@ $status = $game['status'] ?? 'draft';
         </aside>
 
         <div class="route-map">
+          <div class="map-toolbar" id="map-toolbar">
+            <span class="route-status" id="route-status" role="status" aria-live="polite"></span>
+          </div>
           <div id="map" class="map" role="region" aria-label="Mapa trasy. Kliknij, aby dodać punkt. Punkty można przeciągać."></div>
-          <p class="map-note">
+          <p class="map-note" id="map-note">
             Linia łączy punkty w kolejności trasy – to schemat, nie trasa piesza.
             Długość podana jest w linii prostej.
           </p>
@@ -184,6 +188,67 @@ $status = $game['status'] ?? 'draft';
             <p>Kliknij punkt na liście lub na mapie, aby edytować jego opis i zadanie.</p>
           </div>
         </aside>
+      </div>
+    </section>
+
+    <!-- ===== 3. Podgląd i publikacja ===== -->
+    <section class="editor-panel" id="panel-preview" role="tabpanel" aria-labelledby="tab-preview" hidden>
+      <p class="preview-unsaved" id="preview-unsaved" hidden>
+        Masz niezapisane zmiany – podgląd je pokazuje, ale gracze zobaczą je dopiero po zapisaniu.
+        Zmiana statusu najpierw zapisze grę.
+      </p>
+      <div class="preview-grid">
+        <div class="preview-col">
+          <div class="card status-card">
+            <h2>Status gry</h2>
+            <div class="status-card__now">
+              <span class="status" id="pv-status"></span>
+              <p id="pv-status-desc"></p>
+            </div>
+            <p class="visibility" id="pv-visibility" data-ok="false"></p>
+            <div class="status-actions" id="pv-actions"></div>
+            <details class="status-help">
+              <summary>Co oznaczają statusy?</summary>
+              <dl>
+                <div><dt><span class="status status--draft">Szkic</span></dt>
+                  <dd>Gra w przygotowaniu. Widzisz ją tylko w panelu, można ją zapisywać niekompletną.</dd></div>
+                <div><dt><span class="status status--published">Opublikowana</span></dt>
+                  <dd>Widoczna na stronie głównej (a później w aplikacji), jeśli trwa termin dostępności. Każdy zapis musi zostawić grę kompletną.</dd></div>
+                <div><dt><span class="status status--hidden">Ukryta</span></dt>
+                  <dd>Czasowo zdjęta ze strony – np. na czas remontu na trasie. Możesz ją poprawiać i opublikować ponownie.</dd></div>
+                <div><dt><span class="status status--archived">Zarchiwizowana</span></dt>
+                  <dd>Gra zakończona, tylko do odczytu i niewidoczna. Można ją przywrócić jako szkic.</dd></div>
+              </dl>
+            </details>
+          </div>
+
+          <div class="card">
+            <h2 class="preview-h2">Gotowość do publikacji</h2>
+            <ul class="checklist" id="pv-checklist"></ul>
+          </div>
+        </div>
+
+        <div class="preview-col">
+          <div class="card">
+            <h2 class="preview-h2">Tak gra wygląda na stronie głównej</h2>
+            <article class="pv-card" id="pv-card">
+              <h3 id="pv-title"></h3>
+              <p class="pv-card__desc" id="pv-short"></p>
+              <dl class="pv-card__meta">
+                <div><dt>Poziom</dt><dd id="pv-difficulty"></dd></div>
+                <div><dt>Czas gry</dt><dd id="pv-duration"></dd></div>
+                <div><dt>Punkty trasy</dt><dd id="pv-count"></dd></div>
+              </dl>
+              <p class="pv-card__cats" id="pv-cats"></p>
+            </article>
+          </div>
+
+          <div class="card">
+            <h2 class="preview-h2">Przebieg gry</h2>
+            <p class="pv-summary" id="pv-summary"></p>
+            <ol class="pv-route" id="pv-route"></ol>
+          </div>
+        </div>
       </div>
     </section>
   </div>
