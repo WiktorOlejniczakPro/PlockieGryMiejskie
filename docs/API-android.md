@@ -138,12 +138,16 @@ Filtry listy gier: `category` – slug kategorii (np. `historyczna`), `difficult
 ## Sklep punktów
 
 - **Saldo** = suma najlepszych wyników z każdej gry (ponowne przejście tej samej gry nie dodaje punktów) − koszt wymian.
-- `GET /rewards` – pole `affordable` (czy gracza stać), `available` i `stock_left` (null = bez limitu), `is_sample`
-  (nagroda demonstracyjna – bez wartości handlowej, aplikacja pokazuje etykietę „Przykład”).
+- Nagrody pochodzą z **Kreatora nagród** w panelu: `reward_type` = `discount_code` (kod rabatowy) albo `gift_card`
+  (karta podarunkowa), `value_label` (np. „−10%”, „−15 zł”, „50 zł”), `partner_name`, `partner_url`, `min_order_amount`, `terms`.
+- `GET /rewards` – tylko aktywne i w terminie ważności; `affordable` (czy gracza stać), `stock_left` (wolne kody w puli),
+  `per_player_limit` i `player_limit_left` (ile razy gracz może jeszcze odebrać), `available` (są kody i limit nie jest wyczerpany),
+  `is_sample` (nagroda przykładowa – fikcyjny sklep, kod DEMO- bez wartości handlowej).
 - `POST /rewards/{id}/redeem` z `{"idempotency_key": "<UUID>"}` – aplikacja generuje klucz raz na kliknięcie;
   ponowienie z tym samym kluczem zwraca tę samą wymianę i nie pobiera punktów drugi raz.
-  Błędy: 422 za mało punktów, 409 nagroda się skończyła, 404 nagroda niedostępna.
-- Wymiana ma `code` (np. `PGM-7K3D-Q9XM`) i `status`: `issued` / `used` (oznaczony w panelu) / `cancelled`.
+  Błędy: 422 za mało punktów, 409 limit na gracza wyczerpany albo skończyły się kody, 404 nagroda niedostępna.
+- Wymiana ma `code` – kod z puli wpisanej w panelu (widzi go tylko gracz, który go odebrał), `redemption_instructions`
+  (minimalna kwota zakupów + warunki) i `status`: `issued` / `used` / `cancelled`.
 
 ## Dotarcie do punktu
 

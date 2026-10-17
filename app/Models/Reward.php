@@ -7,7 +7,8 @@ use App\Core\Database;
 
 /**
  * Nagrody wymieniane przez graczy na punkty (tabele rewards i reward_codes).
- * Panel przygotowuje katalog i pule kodów; wymianę obsłuży aplikacja mobilna.
+ * Panel przygotowuje katalog i pule kodów; gracze wymieniają punkty w aplikacji
+ * (RewardService) – każdy dostaje jeden wolny kod z puli.
  */
 final class Reward
 {
@@ -81,8 +82,11 @@ final class Reward
     public static function codes(int $rewardId): array
     {
         return Database::query(
-            "SELECT id, code, status, redeemed_at, created_at FROM reward_codes
-              WHERE reward_id = ? ORDER BY status = 'redeemed', id",
+            "SELECT c.id, c.code, c.status, c.redeemed_at, c.created_at, p.nickname AS player_nickname
+               FROM reward_codes c
+               LEFT JOIN reward_redemptions x ON x.reward_code_id = c.id
+               LEFT JOIN players p ON p.id = x.player_id
+              WHERE c.reward_id = ? ORDER BY c.status = 'redeemed', c.id",
             [$rewardId]
         )->fetchAll();
     }

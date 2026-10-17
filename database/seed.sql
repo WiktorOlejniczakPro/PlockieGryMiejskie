@@ -259,23 +259,45 @@ VALUES (@g4, NULL, NULL,        'draft',     'Dane demonstracyjne'),
        (@g4, NULL, 'published', 'archived',  'Dane demonstracyjne');
 
 -- =====================================================================
--- 3e. NAGRODY PRZYKŁADOWE w sklepie punktów (is_sample = 1)
---     Wyłącznie do testów i pokazu – BEZ wartości handlowej. Prawdziwe
---     nagrody dodaje administrator w panelu (Nagrody).
+-- 3e. NAGRODY PRZYKŁADOWE (Kreator nagród → sklep w aplikacji)
+--     is_sample = 1: sklepy FIKCYJNE z dopiskiem „(przykład)”, kody DEMO-…
+--     nie są prawdziwymi kodami rabatowymi i nie mają wartości handlowej.
+--     Prawdziwe nagrody i kody dodaje administrator w panelu.
 -- =====================================================================
-INSERT INTO rewards (title, description, reward_type, partner_name, cost_points, stock,
-                     redemption_instructions, is_active, is_sample)
-VALUES
-  ('[PRZYKŁAD] Naklejka PGM', 'Pamiątkowa naklejka Płockich Gier Miejskich.', 'item',
-   'Dane demonstracyjne PGM', 10, 50, 'Przykład – nagroda testowa, nie do odbioru.', 1, 1),
-  ('[PRZYKŁAD] Kupon 5%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
-   'Dane demonstracyjne PGM', 100, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
-  ('[PRZYKŁAD] Kupon 10%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
-   'Dane demonstracyjne PGM', 200, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
-  ('[PRZYKŁAD] Kupon 15%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
-   'Dane demonstracyjne PGM', 300, NULL, 'Przykład – kod nie ma wartości handlowej.', 1, 1),
-  ('[PRZYKŁAD] Kupon 30%', 'Przykładowy kupon zniżkowy do testów sklepu.', 'discount',
-   'Dane demonstracyjne PGM', 600, 10, 'Przykład – kod nie ma wartości handlowej.', 1, 1);
+-- Przykładowe nagrody (is_sample = 1). Sklepy są FIKCYJNE – oznaczone „(przykład)”.
+-- Kody zaczynają się od „DEMO-” i nie są prawdziwymi kodami rabatowymi.
+INSERT INTO rewards (reward_type, title, partner_name, description, discount_kind, value_amount,
+                     min_order_amount, cost_points, per_player_limit, terms, valid_until, is_active, is_sample)
+VALUES ('discount_code', 'Rabat 10% na książki', 'Księgarnia przy Tumskiej (przykład)',
+        'Zniżka na wszystkie książki o historii Płocka i Mazowsza.', 'percent', 10.00,
+        50.00, 20, 1, 'Kod jednorazowy. Nie łączy się z innymi promocjami.', '2026-12-31', 1, 1);
+SET @r1 := LAST_INSERT_ID();
+INSERT INTO reward_codes (reward_id, code) VALUES
+  (@r1, 'DEMO-KSIAZKI-0001'), (@r1, 'DEMO-KSIAZKI-0002'), (@r1, 'DEMO-KSIAZKI-0003'),
+  (@r1, 'DEMO-KSIAZKI-0004'), (@r1, 'DEMO-KSIAZKI-0005');
+
+INSERT INTO rewards (reward_type, title, partner_name, description, discount_kind, value_amount,
+                     min_order_amount, cost_points, per_player_limit, terms, is_active, is_sample)
+VALUES ('discount_code', '15 zł zniżki na sprzęt sportowy', 'Sklep sportowy Nad Wisłą (przykład)',
+        'Rabat kwotowy na rowery, akcesoria i odzież sportową.', 'amount', 15.00,
+        100.00, 40, 1, 'Minimalna wartość zakupów: 100 zł.', 1, 1);
+SET @r2 := LAST_INSERT_ID();
+INSERT INTO reward_codes (reward_id, code) VALUES
+  (@r2, 'DEMO-SPORT-A1'), (@r2, 'DEMO-SPORT-A2'), (@r2, 'DEMO-SPORT-A3');
+
+INSERT INTO rewards (reward_type, title, partner_name, description, value_amount,
+                     cost_points, per_player_limit, terms, is_active, is_sample)
+VALUES ('gift_card', 'Karta podarunkowa 50 zł', 'Kawiarnia Na Skarpie (przykład)',
+        'Karta do wykorzystania na kawę, ciasta i lody z widokiem na Wisłę.', 50.00,
+        60, 2, 'Karta ważna 6 miesięcy od wydania.', 1, 1);
+SET @r3 := LAST_INSERT_ID();
+INSERT INTO reward_codes (reward_id, code) VALUES (@r3, 'DEMO-KAWA-5001'), (@r3, 'DEMO-KAWA-5002');
+
+INSERT INTO rewards (reward_type, title, partner_name, description, value_amount,
+                     cost_points, per_player_limit, terms, is_active, is_sample)
+VALUES ('gift_card', 'Karta podarunkowa 100 zł do kina', 'Kino Przykładowe (przykład)',
+        'Bilety i przekąski w kinie. Nieaktywna – czeka na dostarczenie kodów.', 100.00,
+        120, 1, NULL, 0, 1);
 
 -- =====================================================================
 -- 4. MIEJSCA I ULICE PŁOCKA – dane referencyjne do edytora gier

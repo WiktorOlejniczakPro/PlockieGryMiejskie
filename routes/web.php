@@ -14,7 +14,7 @@ use App\Controllers\Api\PlaceApi;
 use App\Controllers\Api\PlayerApi;
 use App\Controllers\Api\PublicGameApi;
 use App\Controllers\Api\RewardApi;
-use App\Controllers\AuthController;
+use App\Controllers\Api\RouteApi;
 use App\Controllers\DashboardController;
 use App\Controllers\GameController;
 use App\Controllers\HomeController;
@@ -24,9 +24,6 @@ use App\Controllers\RewardController;
 $router->get('/', [HomeController::class, 'index']);
 
 // --- Logowanie ------------------------------------------------------------
-$router->get('/logowanie', [AuthController::class, 'showLogin'], ['guest']);
-$router->post('/logowanie', [AuthController::class, 'login'], ['guest']);
-$router->post('/wyloguj', [AuthController::class, 'logout'], ['auth']);
 
 // --- Panel twórcy (wymaga zalogowania) ------------------------------------
 $router->get('/panel', [DashboardController::class, 'index'], ['auth']);
@@ -37,14 +34,18 @@ $router->get('/panel/nagrody', [RewardController::class, 'index'], ['auth']);
 $router->get('/panel/nagrody/nowa', [RewardController::class, 'create'], ['auth']);
 $router->post('/panel/nagrody', [RewardController::class, 'store'], ['auth']);
 $router->get('/panel/nagrody/{id}/edycja', [RewardController::class, 'edit'], ['auth']);
-$router->post('/panel/nagrody/{id}', [RewardController::class, 'update'], ['auth']);
-$router->post('/panel/nagrody/wymiany/{id}/wykorzystana', [RewardController::class, 'markUsed'], ['auth']);
+$router->put('/panel/nagrody/{id}', [RewardController::class, 'update'], ['auth']);
+$router->delete('/panel/nagrody/{id}', [RewardController::class, 'destroy'], ['auth']);
+$router->post('/panel/nagrody/{id}/status', [RewardController::class, 'toggle'], ['auth']);
+$router->post('/panel/nagrody/{id}/kody', [RewardController::class, 'addCodes'], ['auth']);
+$router->delete('/panel/nagrody/{id}/kody/{codeId}', [RewardController::class, 'deleteCode'], ['auth']);
 
 // --- API panelu (wymaga zalogowania, JSON) -------------------------------
 $router->get('/api/v1/admin/games/{id}', [AdminGameApi::class, 'show'], ['auth']);
 $router->post('/api/v1/admin/games', [AdminGameApi::class, 'store'], ['auth']);
 $router->put('/api/v1/admin/games/{id}', [AdminGameApi::class, 'update'], ['auth']);
 $router->post('/api/v1/admin/games/{id}/status', [AdminGameApi::class, 'changeStatus'], ['auth']);
+$router->post('/api/v1/admin/route', [RouteApi::class, 'walking'], ['auth']);
 
 // --- API aplikacji mobilnej (JSON) ----------------------------------------
 // Publiczne: tylko gry opublikowane, bez poprawnych odpowiedzi.

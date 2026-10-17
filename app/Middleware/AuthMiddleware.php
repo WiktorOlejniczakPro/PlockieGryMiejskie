@@ -6,9 +6,8 @@ namespace App\Middleware;
 use App\Core\Auth;
 use App\Core\HttpException;
 use App\Core\Request;
-use App\Core\Session;
 
-/** Dostęp tylko dla zalogowanych. Strony -> przekierowanie do logowania, API -> 401. */
+/** Panel działa tylko wtedy, gdy w .env wskazano istniejące, aktywne konto. */
 final class AuthMiddleware
 {
     public function handle(Request $request): void
@@ -16,13 +15,7 @@ final class AuthMiddleware
         if (Auth::check()) {
             return;
         }
-        if ($request->isApi()) {
-            throw new HttpException(401);
-        }
-        if ($request->method === 'GET') {
-            Session::set('_intended', $request->path);
-        }
-        Session::flash('info', 'Zaloguj się, aby przejść do panelu.');
-        redirect('/logowanie');
+        throw new HttpException(500, 'Brak konta dla panelu. Utwórz konto skryptem bin/create-admin.php '
+            . 'i wpisz jego adres e-mail w pliku .env jako AUTO_LOGIN_EMAIL.');
     }
 }
