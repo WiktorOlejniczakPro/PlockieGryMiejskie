@@ -98,18 +98,15 @@ Hasło trafia do bazy wyłącznie jako hash. W kodzie projektu nie ma żadnych d
 
 Konto twórcy gier (bez uprawnień administratora) tworzy się tak samo, z dopiskiem `--role=creator`.
 
-### 6. Wpisz konto panelu w `.env`
+### 6. Konto panelu – nic nie trzeba robić
 
-Panel działa **bez ekranu logowania** – zawsze na koncie, którego e-mail wpiszesz w `.env`:
-
-```
-AUTO_LOGIN_EMAIL=demo@gmail.com
-```
-
-(to musi być konto utworzone w kroku 5; do Kreatora nagród potrzebna jest rola administratora).
+Panel działa **bez ekranu logowania**. `seed.sql` zakłada konto administratora `demo@gmail.com`,
+a w `.env` jest `AUTO_LOGIN_EMAIL=demo@gmail.com`. Gdy tego konta nie ma, panel bierze pierwszego aktywnego
+administratora, a gdy w bazie nie ma żadnego – sam go zakłada (`admin@pgm.local`). Skrypt `bin/create-admin.php`
+jest potrzebny tylko do dodania kolejnych kont.
 Sprawdzenie: `C:\xampp\php\php.exe bin\sprawdz-konto.php` pokaże, które konto panel ładuje.
 
-> Każdy, kto otworzy stronę, ma pełny dostęp do panelu tego konta – używaj lokalnie lub na pokazie,
+> Każdy, kto otworzy stronę, ma pełny dostęp do panelu – używaj lokalnie lub na pokazie,
 > nie na serwerze dostępnym z internetu.
 
 ### 7. Otwórz aplikację

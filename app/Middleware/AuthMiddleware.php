@@ -15,7 +15,7 @@ final class AuthMiddleware
         if (Auth::check()) {
             return;
         }
-        throw new HttpException(500, 'Brak konta dla panelu. Utwórz konto skryptem bin/create-admin.php '
-            . 'i wpisz jego adres e-mail w pliku .env jako AUTO_LOGIN_EMAIL.');
+        throw new HttpException(500, 'Brak konta dla panelu – sprawdź połączenie z bazą (plik .env) i czy zaimportowano schema.sql. '
+            . 'Diagnostyka: C:\xampp\php\php.exe bin\sprawdz-konto.php');
     }
 }

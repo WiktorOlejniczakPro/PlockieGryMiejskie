@@ -55,6 +55,13 @@ VALUES ('Dane demonstracyjne PGM', 'Konto', 'Demonstracyjne',
         'demo@pgm.invalid', '!disabled', 'creator', 'suspended');
 SET @demo_owner := LAST_INSERT_ID();
 
+-- Konto administratora PANELU. Panel działa bez ekranu logowania – zawsze na
+-- koncie z AUTO_LOGIN_EMAIL w .env (domyślnie to), więc konto nie ma hasła.
+INSERT INTO users (organization_name, first_name, last_name, email,
+                   password_hash, role, account_status)
+VALUES ('Urząd Miasta Płocka', 'Administrator', 'PGM', 'demo@gmail.com',
+        '!panel-bez-logowania', 'admin', 'active');
+
 -- =====================================================================
 -- 3a. GRA 1 – opublikowana, łatwa, obszar: okrąg
 -- =====================================================================
