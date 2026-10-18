@@ -24,7 +24,8 @@ i ścieżkach rowerowych (OSRM na danych OpenStreetMap, pieszo / rowerem).
      i dopisz biblioteki z `gradle/libs.versions.toml` (Retrofit, OkHttp, osmdroid, lifecycle-viewmodel-compose).
 3. Adres serwera wybiera się sam (`Config.kt`):
    - emulator → `http://10.0.2.2/pgm/public/api/v1/`,
-   - telefon na kablu USB → `http://127.0.0.1:8080/...` po poleceniu `adb reverse tcp:8080 tcp:80`,
+   - telefon na kablu USB → `http://127.0.0.1:8080/...` po poleceniu `adb reverse tcp:8080 tcp:80`
+     (najprościej: dwuklik `polacz-telefon.bat` po zainstalowaniu aplikacji),
    - gdy żaden adres nie odpowiada, aplikacja pokazuje ekran pomocy z polem na adres (np. IP komputera w Wi-Fi).
 
 Tryb demo (pozycja ustawiana przytrzymaniem palca na mapie) działa tylko na emulatorze.

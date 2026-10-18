@@ -133,21 +133,39 @@ object ApiClient {
 }
 
 /**
- * Czy pod tym adresem odpowiada API PGM (szybki test, 3 s).
+ * Sprawdza, czy pod tym adresem odpowiada API PGM (szybki test, 3–4 s).
+ * @return null = działa, inaczej krótka przyczyna po polsku (do ekranu pomocy).
  * Wywoływać poza wątkiem głównym.
  */
-fun probeServer(baseUrl: String): Boolean = try {
+fun probeServerError(baseUrl: String): String? = try {
     val http = OkHttpClient.Builder()
         .connectTimeout(3, TimeUnit.SECONDS)
         .readTimeout(4, TimeUnit.SECONDS)
         .build()
     val request = okhttp3.Request.Builder().url(baseUrl + "categories").header("Accept", "application/json").build()
     http.newCall(request).execute().use { response ->
-        response.isSuccessful && (response.body?.string()?.trimStart()?.startsWith("{") == true)
+        val body = response.body?.string()?.trimStart().orEmpty()
+        when {
+            response.isSuccessful && body.startsWith("{") -> null
+            response.code == 404 -> "serwer działa, ale nie ma tu PGM (404) – zły folder?"
+            response.code >= 500 -> "błąd serwera ${response.code} – sprawdź bazę (sprawdz-konto.php)"
+            !body.startsWith("{") -> "odpowiada inna strona niż API PGM (kod ${response.code})"
+            else -> "kod ${response.code}"
+        }
     }
+} catch (e: java.net.ConnectException) {
+    "odmowa połączenia – brak przekierowania (adb reverse) albo Apache wyłączony"
+} catch (e: java.net.SocketTimeoutException) {
+    "brak odpowiedzi (przekroczony czas) – zapora Windows albo inna sieć"
+} catch (e: java.net.UnknownHostException) {
+    "nieznany adres"
+} catch (e: java.net.UnknownServiceException) {
+    "Android blokuje połączenie bez https (cleartext)"
 } catch (e: Exception) {
-    false
+    e.javaClass.simpleName + (e.message?.let { ": $it" } ?: "")
 }
+
+fun probeServer(baseUrl: String): Boolean = probeServerError(baseUrl) == null
 
 /** Błąd do pokazania graczowi. code = kod HTTP (0 = brak połączenia). */
 class ApiError(message: String, val code: Int) : Exception(message)

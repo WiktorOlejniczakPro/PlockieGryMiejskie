@@ -88,8 +88,9 @@ fun ConnectionHelpScreen(vm: AppViewModel, modifier: Modifier = Modifier) {
 
         if (vm.triedUrls.isNotEmpty()) {
             Text("Sprawdzone adresy:", style = MaterialTheme.typography.labelMedium)
-            for (url in vm.triedUrls) {
+            for ((url, error) in vm.triedUrls) {
                 Text("✗ $url", style = MaterialTheme.typography.bodySmall, fontFamily = FontFamily.Monospace)
+                Text("   $error", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             }
         }
     }

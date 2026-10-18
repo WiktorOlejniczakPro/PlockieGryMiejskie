@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
 import pl.plock.pgm.data.probeServer
+import pl.plock.pgm.data.probeServerError
 import pl.plock.pgm.Config
 import pl.plock.pgm.data.ApiClient
 import pl.plock.pgm.data.NavRoute
@@ -68,7 +69,8 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     /** Brak połączenia przy starcie – ekran pokazuje pomoc i pole na adres serwera. */
     var connectionProblem by mutableStateOf(false)
         private set
-    var triedUrls by mutableStateOf<List<String>>(emptyList())
+    /** Sprawdzone adresy serwera i przyczyna błędu przy każdym (ekran pomocy). */
+    var triedUrls by mutableStateOf<List<Pair<String, String>>>(emptyList())
         private set
     var connecting by mutableStateOf(false)
         private set
@@ -200,9 +202,16 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                 // nie ma odpowiedzi pod zapamiętanym adresem – szukamy działającego
                 if (probe && !withContext(Dispatchers.IO) { probeServer(serverUrl) }) {
                     val candidates = (listOf(serverUrl) + Config.candidateUrls()).distinct()
-                    val found = withContext(Dispatchers.IO) { candidates.firstOrNull { probeServer(it) } }
+                    val results = mutableListOf<Pair<String, String>>()
+                    val found = withContext(Dispatchers.IO) {
+                        candidates.firstOrNull { url ->
+                            val error = probeServerError(url)
+                            if (error != null) results += url to error
+                            error == null
+                        }
+                    }
                     if (found == null) {
-                        triedUrls = candidates
+                        triedUrls = results
                         connectionProblem = true
                         startupError = "Nie mogę połączyć się z serwerem PGM."
                         return@launch
@@ -225,7 +234,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
                     return@launch
                 }
                 if (error.code == 0) {
-                    triedUrls = listOf(serverUrl)
+                    triedUrls = listOf(serverUrl to error.message.orEmpty())
                     connectionProblem = true
                 }
                 startupError = error.message
