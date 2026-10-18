@@ -55,6 +55,10 @@ data class MapFocus(
  * (połączenie schematyczne), trasa prowadzenia po drogach ([navRoute]),
  * pozycja gracza i promień docelowego punktu. Przytrzymanie palca – onLongPress.
  *
+ * Wydajność: warstwy mapy są tworzone tylko wtedy, gdy zmienią się ich dane
+ * (punkty, trasa, cel). Nowa pozycja GPS tylko przesuwa kropkę gracza –
+ * bez przebudowy znaczników, linii i ikon.
+ *
  * @param drawRoute   łączyć punkty linią w kolejności numerów (trasa gry)
  * @param fitToPoints przy pierwszym wyświetleniu dopasować widok do wszystkich punktów
  */
@@ -75,6 +79,9 @@ fun OsmMap(
 ) {
     // stan mapy przetrwa przerysowania (nie jest stanem Compose – nie wywołuje rekompozycji)
     val memory = remember { MapMemory() }
+    // zawsze aktualne funkcje kliknięć (znaczniki nie są tworzone od nowa przy każdej zmianie)
+    memory.onPointClick = onPointClick
+    memory.onLongPress = onLongPress
 
     AndroidView(
         // clipToBounds: kafelki mapy nie wychodzą poza jej obszar przy przesuwaniu
@@ -84,6 +91,7 @@ fun OsmMap(
                 setTileSource(TileSourceFactory.MAPNIK)
                 setMultiTouchControls(interactive)
                 isClickable = interactive
+                isTilesScaledToDpi = true
                 zoomController.setVisibility(CustomZoomButtonsController.Visibility.NEVER)
                 minZoomLevel = 11.0
                 maxZoomLevel = 19.0
@@ -93,88 +101,118 @@ fun OsmMap(
                 setScrollableAreaLimitDouble(BoundingBox(52.75, 20.05, 52.35, 19.35))
                 controller.setZoom(16.0)
                 controller.setCenter(GeoPoint(Config.PLOCK_LAT, Config.PLOCK_LNG))
+                memory.events = MapEventsOverlay(object : MapEventsReceiver {
+                    override fun singleTapConfirmedHelper(p: GeoPoint): Boolean = false
+                    override fun longPressHelper(p: GeoPoint): Boolean {
+                        val handler = memory.onLongPress ?: return false
+                        handler(p.latitude, p.longitude)
+                        return true
+                    }
+                })
                 onResume()
                 memory.map = this
             }
         },
         update = { map ->
-            map.overlays.clear()
+            var layersChanged = false
 
-            map.overlays.add(MapEventsOverlay(object : MapEventsReceiver {
-                override fun singleTapConfirmedHelper(p: GeoPoint): Boolean = false
-                override fun longPressHelper(p: GeoPoint): Boolean {
-                    val handler = onLongPress ?: return false
-                    handler(p.latitude, p.longitude)
-                    return true
-                }
-            }))
-
-            val routePoints = points.filter { it.state != PointState.PLACE && it.state != PointState.PLACE_SELECTED }
-                .sortedBy { it.number }
-                .map { GeoPoint(it.latitude, it.longitude) }
-            if (drawRoute && routePoints.size > 1) {
-                map.overlays.add(Polyline(map).apply {
-                    setPoints(routePoints)
-                    outlinePaint.color = Color.parseColor("#1E6FD9")
-                    outlinePaint.strokeWidth = 8f
-                    outlinePaint.alpha = if (navRoute != null) 90 else 170
-                })
-            }
-
-            if (navRoute != null && navRoute.size > 1) {
-                val line = navRoute.map { GeoPoint(it.first, it.second) }
-                // biała obwódka + zielona linia – dobrze widać na każdym tle
-                map.overlays.add(Polyline(map).apply {
-                    setPoints(line)
-                    outlinePaint.color = Color.WHITE
-                    outlinePaint.strokeWidth = dp(map.context, 9f)
-                    outlinePaint.strokeCap = Paint.Cap.ROUND
-                    outlinePaint.strokeJoin = Paint.Join.ROUND
-                    setOnClickListener { _, _, _ -> false }
-                })
-                map.overlays.add(Polyline(map).apply {
-                    setPoints(line)
-                    outlinePaint.color = Color.parseColor("#12A150")
-                    outlinePaint.strokeWidth = dp(map.context, 5.5f)
-                    outlinePaint.strokeCap = Paint.Cap.ROUND
-                    outlinePaint.strokeJoin = Paint.Join.ROUND
-                    setOnClickListener { _, _, _ -> false }
-                })
-            }
-
-            val target = points.firstOrNull { it.state == PointState.TARGET }
-            if (target != null && targetRadiusM != null) {
-                map.overlays.add(Polygon(map).apply {
-                    setPoints(Polygon.pointsAsCircle(GeoPoint(target.latitude, target.longitude), targetRadiusM.toDouble()))
-                    fillPaint.color = Color.argb(40, 30, 111, 217)
-                    outlinePaint.color = Color.argb(140, 30, 111, 217)
-                    outlinePaint.strokeWidth = 3f
-                    setOnClickListener { _, _, _ -> false }
-                })
-            }
-
-            // zaznaczony punkt rysujemy na końcu – będzie na wierzchu
-            for (point in points.sortedBy { it.state == PointState.PLACE_SELECTED || it.state == PointState.TARGET }) {
-                map.overlays.add(Marker(map).apply {
-                    position = GeoPoint(point.latitude, point.longitude)
-                    icon = BitmapDrawable(map.resources, memory.icon(map.context, point))
-                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
-                    setInfoWindow(null)
-                    setOnMarkerClickListener { _, _ ->
-                        onPointClick(point.id)
-                        true
+            // 1) punkty trasy / miejsca – znaczniki tylko po zmianie listy
+            if (points != memory.points) {
+                memory.points = points
+                memory.markers = points
+                    .sortedBy { it.state == PointState.PLACE_SELECTED || it.state == PointState.TARGET } // zaznaczony na wierzchu
+                    .map { point ->
+                        Marker(map).apply {
+                            position = GeoPoint(point.latitude, point.longitude)
+                            icon = BitmapDrawable(map.resources, memory.icon(map.context, point))
+                            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                            setInfoWindow(null)
+                            setOnMarkerClickListener { _, _ ->
+                                memory.onPointClick(point.id)
+                                true
+                            }
+                        }
                     }
-                })
+                val routePoints = points.filter { it.state != PointState.PLACE && it.state != PointState.PLACE_SELECTED }
+                    .sortedBy { it.number }
+                    .map { GeoPoint(it.latitude, it.longitude) }
+                memory.schematic = if (drawRoute && routePoints.size > 1) {
+                    Polyline(map).apply {
+                        setPoints(routePoints)
+                        outlinePaint.color = Color.parseColor("#1E6FD9")
+                        outlinePaint.strokeWidth = 8f
+                        setOnClickListener { _, _, _ -> false }
+                    }
+                } else null
+                layersChanged = true
+            }
+            memory.schematic?.outlinePaint?.alpha = if (navRoute != null) 90 else 170
+
+            // 2) promień celu – tylko po zmianie celu albo promienia
+            val target = points.firstOrNull { it.state == PointState.TARGET }
+            val radiusKey = if (target != null && targetRadiusM != null) Triple(target.latitude, target.longitude, targetRadiusM) else null
+            if (radiusKey != memory.radiusKey) {
+                memory.radiusKey = radiusKey
+                memory.radius = radiusKey?.let { (lat, lng, r) ->
+                    Polygon(map).apply {
+                        setPoints(Polygon.pointsAsCircle(GeoPoint(lat, lng), r.toDouble()))
+                        fillPaint.color = Color.argb(40, 30, 111, 217)
+                        outlinePaint.color = Color.argb(140, 30, 111, 217)
+                        outlinePaint.strokeWidth = 3f
+                        setOnClickListener { _, _, _ -> false }
+                    }
+                }
+                layersChanged = true
             }
 
+            // 3) trasa prowadzenia – tylko po wyznaczeniu nowej
+            if (navRoute !== memory.navRoute) {
+                memory.navRoute = navRoute
+                memory.nav = if (navRoute != null && navRoute.size > 1) {
+                    val line = navRoute.map { GeoPoint(it.first, it.second) }
+                    // biała obwódka + zielona linia – dobrze widać na każdym tle
+                    listOf(Color.WHITE to 9f, Color.parseColor("#12A150") to 5.5f).map { (color, width) ->
+                        Polyline(map).apply {
+                            setPoints(line)
+                            outlinePaint.color = color
+                            outlinePaint.strokeWidth = dp(map.context, width)
+                            outlinePaint.strokeCap = Paint.Cap.ROUND
+                            outlinePaint.strokeJoin = Paint.Join.ROUND
+                            setOnClickListener { _, _, _ -> false }
+                        }
+                    }
+                } else emptyList()
+                layersChanged = true
+            }
+
+            // 4) gracz – ten sam znacznik, tylko nowa pozycja
             if (player != null) {
-                map.overlays.add(Marker(map).apply {
-                    position = GeoPoint(player.latitude, player.longitude)
-                    icon = BitmapDrawable(map.resources, memory.playerIcon(map.context, player.simulated))
+                val marker = memory.playerMarker ?: Marker(map).apply {
                     setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
                     setInfoWindow(null)
                     setOnMarkerClickListener { _, _ -> true }
-                })
+                    memory.playerMarker = this
+                    layersChanged = true
+                }
+                if (memory.playerSimulated != player.simulated) {
+                    memory.playerSimulated = player.simulated
+                    marker.icon = BitmapDrawable(map.resources, memory.playerIcon(map.context, player.simulated))
+                }
+                marker.position = GeoPoint(player.latitude, player.longitude)
+            } else if (memory.playerMarker != null) {
+                memory.playerMarker = null
+                memory.playerSimulated = null
+                layersChanged = true
+            }
+
+            if (layersChanged) {
+                map.overlays.clear()
+                memory.events?.let { map.overlays.add(it) }
+                memory.schematic?.let { map.overlays.add(it) }
+                memory.radius?.let { map.overlays.add(it) }
+                map.overlays.addAll(memory.nav)
+                map.overlays.addAll(memory.markers)
+                memory.playerMarker?.let { map.overlays.add(it) }
             }
 
             if (focus != null && focus.key != memory.focusKey) {
@@ -222,11 +260,28 @@ fun OsmMap(
     }
 }
 
-/** Pamięć mapy: wycentrowanie, ostatnie przesunięcie i gotowe ikony (rysowane raz). */
+/**
+ * Pamięć mapy: gotowe warstwy (tworzone tylko po zmianie danych), wycentrowanie,
+ * ostatnie przesunięcie i ikony (rysowane raz).
+ */
 private class MapMemory {
     var map: MapView? = null
     var centered = false
     var focusKey = Int.MIN_VALUE
+    var onPointClick: (Int) -> Unit = {}
+    var onLongPress: ((Double, Double) -> Unit)? = null
+
+    var events: MapEventsOverlay? = null
+    var points: List<MapPoint>? = null
+    var markers: List<Marker> = emptyList()
+    var schematic: Polyline? = null
+    var radiusKey: Triple<Double, Double, Int>? = null
+    var radius: Polygon? = null
+    var navRoute: List<Pair<Double, Double>>? = null
+    var nav: List<Polyline> = emptyList()
+    var playerMarker: Marker? = null
+    var playerSimulated: Boolean? = null
+
     private val icons = HashMap<String, Bitmap>()
 
     fun icon(context: Context, point: MapPoint): Bitmap {

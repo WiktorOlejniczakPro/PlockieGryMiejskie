@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -61,13 +62,19 @@ class LocationTracker(context: Context) {
     fun start() {
         if (running || !hasPermission()) return
         running = true
-        for (provider in listOf(LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER)) {
+        // „fused” (Android 12+) łączy GPS, Wi-Fi i czujniki – zwykle najszybciej daje dokładną pozycję
+        val providers = buildList {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) add(LocationManager.FUSED_PROVIDER)
+            add(LocationManager.GPS_PROVIDER)
+            add(LocationManager.NETWORK_PROVIDER)
+        }
+        for (provider in providers) {
             try {
                 if (!manager.allProviders.contains(provider)) continue
                 manager.getLastKnownLocation(provider)
                     ?.takeIf { System.currentTimeMillis() - it.time < 2 * 60_000 }
                     ?.let { update(it, live = false) }
-                manager.requestLocationUpdates(provider, 1000L, 0f, listener, Looper.getMainLooper())
+                manager.requestLocationUpdates(provider, 1000L, 1f, listener, Looper.getMainLooper())
             } catch (e: Exception) {
                 // np. tylko „przybliżona” lokalizacja (brak zgody na GPS) albo brak dostawcy –
                 // aplikacja działa dalej z tym, co jest dostępne
@@ -95,14 +102,28 @@ class LocationTracker(context: Context) {
     private fun update(location: Location, live: Boolean) {
         val now = System.currentTimeMillis()
         val accuracy = if (location.hasAccuracy()) location.accuracy else 50f
-        val fromGps = location.provider == LocationManager.GPS_PROVIDER
+        val fromGps = location.provider == LocationManager.GPS_PROVIDER || location.provider == "fused"
         // dopóki GPS podaje pozycję (ostatnie 15 s), pozycja z sieci jej nie zastępuje
         if (!fromGps && now - lastGpsAt < 15_000) return
         if (fromGps && live) lastGpsAt = now
+        // drobne „drgania” pomiaru (< 1 m, ta sama dokładność) nie odświeżają ekranu częściej niż co 5 s
+        val current = _location.value
+        if (live && current != null && !current.simulated && now - current.timeMs < 5_000 &&
+            Math.abs(current.accuracyM - accuracy) < 3f &&
+            distance(current.latitude, current.longitude, location.latitude, location.longitude) < 1.0
+        ) {
+            return
+        }
         _location.value = PlayerLocation(
             location.latitude, location.longitude, accuracy,
             // świeży pomiar = teraz (zegar GPS bywa przesunięty); ostatnia znana = jej czas
             timeMs = if (live) now else minOf(location.time, now),
         )
+    }
+
+    private fun distance(lat1: Double, lng1: Double, lat2: Double, lng2: Double): Double {
+        val out = FloatArray(1)
+        Location.distanceBetween(lat1, lng1, lat2, lng2, out)
+        return out[0].toDouble()
     }
 }

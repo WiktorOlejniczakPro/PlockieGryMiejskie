@@ -21,6 +21,7 @@ import pl.plock.pgm.data.NavRoute
 import pl.plock.pgm.data.RouteMode
 import pl.plock.pgm.data.RoutingClient
 import pl.plock.pgm.data.distanceFrom
+import pl.plock.pgm.data.straightRoute
 import pl.plock.pgm.data.Balance
 import pl.plock.pgm.data.DailyLimit
 import pl.plock.pgm.data.Redemption
@@ -251,6 +252,7 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
 
     fun back() {
         stopRoute()
+        routeDismissed = false
         route = when (val current = route) {
             is Route.Play -> {
                 locationTracker.stop()
@@ -527,16 +529,25 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
     /** Każde nowe wyznaczenie trasy – ekran dopasowuje do niej mapę. */
     var routeVersion by mutableStateOf(0)
         private set
+    /** Gracz zamknął prowadzenie krzyżykiem – nie włączamy go ponownie automatycznie. */
+    var routeDismissed by mutableStateOf(false)
+        private set
     private var routeJob: Job? = null
     private var routeFrom: PlayerLocation? = null
     private var routeAt = 0L
 
     /** „Prowadź” – wyznacza trasę od gracza do celu i rysuje ją na mapie. */
-    fun startRoute(from: PlayerLocation?, toLat: Double, toLng: Double, name: String, mode: RouteMode = routeMode) {
+    fun startRoute(
+        from: PlayerLocation?, toLat: Double, toLng: Double, name: String,
+        mode: RouteMode = routeMode,
+        /** automatyczne wyznaczenie (start gry, nowy cel) – bez komunikatów o błędach */
+        silent: Boolean = false,
+    ) {
         if (from == null) {
-            message = "Szukam Twojej pozycji GPS – spróbuj za chwilę."
+            if (!silent) message = "Szukam Twojej pozycji GPS – spróbuj za chwilę."
             return
         }
+        routeDismissed = false
         routeMode = mode
         routeJob?.cancel()
         routeLoading = true
@@ -549,7 +560,11 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                message = "Nie udało się wyznaczyć trasy (sprawdź internet w telefonie)."
+                // bez serwera tras – linia prosta do celu; followRoute spróbuje ponownie za 20 s
+                val hadRoute = navRoute?.approximate == false
+                navRoute = straightRoute(mode, from.latitude, from.longitude, toLat, toLng, name)
+                if (!hadRoute) routeVersion++
+                if (!silent) message = "Brak trasy po drogach (sprawdź internet w telefonie) – pokazuję kierunek w linii prostej."
             } finally {
                 routeLoading = false
             }
@@ -561,7 +576,9 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         startRoute(from, r.targetLat, r.targetLng, r.targetName, mode)
     }
 
-    fun stopRoute() {
+    /** @param byUser krzyżyk na pasku trasy – trasa nie wróci sama przy kolejnym punkcie */
+    fun stopRoute(byUser: Boolean = false) {
+        if (byUser) routeDismissed = true
         routeJob?.cancel()
         routeLoading = false
         navRoute = null
@@ -575,9 +592,14 @@ class AppViewModel(application: Application) : AndroidViewModel(application) {
         val r = navRoute ?: return
         if (location == null || routeLoading) return
         if (System.currentTimeMillis() - routeAt < 20_000) return
+        if (r.approximate) {
+            // linia prosta – ponowna próba wyznaczenia trasy po drogach
+            startRoute(location, r.targetLat, r.targetLng, r.targetName, silent = true)
+            return
+        }
         val off = r.distanceFrom(location.latitude, location.longitude)
         if (off > 40 + location.accuracyM.coerceAtMost(30f)) {
-            startRoute(location, r.targetLat, r.targetLng, r.targetName)
+            startRoute(location, r.targetLat, r.targetLng, r.targetName, silent = true)
         }
     }
 

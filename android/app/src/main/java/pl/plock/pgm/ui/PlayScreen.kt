@@ -152,9 +152,16 @@ fun PlayScreen(vm: AppViewModel, snackbar: SnackbarHostState) {
     // a włączone prowadzenie wyznacza trasę do nowego celu
     LaunchedEffect(target?.id) {
         if (target != null && focusKey > 0) focusOn(target.latitude, target.longitude)
+    }
+    // Trasa do bieżącego punktu wyznacza się sama, gdy tylko jest pozycja GPS
+    // (i po każdym zaliczonym punkcie). Krzyżyk na pasku trasy ją wyłącza.
+    val hasLocation = location != null
+    LaunchedEffect(target?.id, hasLocation, isCurrent) {
+        val loc = latestLocation ?: return@LaunchedEffect
+        if (target == null || !isCurrent || session.isCompleted || vm.routeDismissed) return@LaunchedEffect
         val r = vm.navRoute
-        if (target != null && r != null && (r.targetLat != target.latitude || r.targetLng != target.longitude)) {
-            vm.startRoute(location, target.latitude, target.longitude, target.name)
+        if (r == null || r.targetLat != target.latitude || r.targetLng != target.longitude) {
+            vm.startRoute(loc, target.latitude, target.longitude, target.name, silent = true)
         }
     }
     LaunchedEffect(session.isCompleted) { if (session.isCompleted) vm.stopRoute() }

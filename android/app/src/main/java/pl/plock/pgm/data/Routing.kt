@@ -32,7 +32,21 @@ data class NavRoute(
     val targetLat: Double,
     val targetLng: Double,
     val targetName: String,
+    /** true = linia prosta (serwer tras nie odpowiedział) – aplikacja spróbuje ponownie */
+    val approximate: Boolean = false,
 )
+
+/** Zastępcza „trasa” w linii prostej, gdy serwer tras jest niedostępny (czas: marsz ok. 4,5 km/h). */
+fun straightRoute(mode: RouteMode, fromLat: Double, fromLng: Double, toLat: Double, toLng: Double, targetName: String): NavRoute {
+    val r = 6371008.8
+    val dLat = Math.toRadians(toLat - fromLat)
+    val dLng = Math.toRadians(toLng - fromLng)
+    val a = Math.sin(dLat / 2).let { it * it } +
+        Math.cos(Math.toRadians(fromLat)) * Math.cos(Math.toRadians(toLat)) * Math.sin(dLng / 2).let { it * it }
+    val distance = 2 * r * Math.asin(Math.sqrt(a).coerceAtMost(1.0))
+    val speed = if (mode == RouteMode.BIKE) 4.2 else 1.25
+    return NavRoute(listOf(fromLat to fromLng, toLat to toLng), distance, distance / speed, mode, toLat, toLng, targetName, approximate = true)
+}
 
 interface RoutingApi {
     /** OSRM: współrzędne w kolejności długość,szerokość; „driving” to stała część adresu tego serwera. */

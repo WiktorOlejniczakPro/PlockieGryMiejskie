@@ -42,16 +42,17 @@ fun RouteBar(vm: AppViewModel, location: PlayerLocation?, modifier: Modifier = M
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
-                            "do: ${route.targetName}",
+                            if (route.approximate) "w linii prostej do: ${route.targetName} (szukam trasy po drogach…)"
+                            else "do: ${route.targetName}",
                             style = MaterialTheme.typography.labelSmall,
-                            maxLines = 1,
+                            maxLines = 2,
                         )
                     } else {
                         Text("Wyznaczam trasę…", fontWeight = FontWeight.SemiBold)
                     }
                 }
                 if (vm.routeLoading) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
-                IconButton(onClick = { vm.stopRoute() }) { PgmIcon(PgmIcons.CLOSE, "Zakończ prowadzenie", Modifier.size(20.dp)) }
+                IconButton(onClick = { vm.stopRoute(byUser = true) }) { PgmIcon(PgmIcons.CLOSE, "Zakończ prowadzenie", Modifier.size(20.dp)) }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 for (mode in RouteMode.entries) {
