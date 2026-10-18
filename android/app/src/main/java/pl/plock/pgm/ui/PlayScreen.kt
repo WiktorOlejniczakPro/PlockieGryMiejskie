@@ -64,7 +64,7 @@ import pl.plock.pgm.location.PlayerLocation
 
 /** Powyżej tej dokładności (m) nie zgłaszamy dotarcia – pomiar jest zbyt niepewny. */
 private const val MAX_ACCURACY_M = 50f
-private const val LOW_ACCURACY_MESSAGE = "Nie możemy jeszcze dokładnie określić Twojej lokalizacji. Poczekaj chwilę i spróbuj ponownie."
+private const val LOW_ACCURACY_MESSAGE = "Słaby GPS – poczekaj chwilę"
 
 /** Rozgrywka: mapa z trasą, pozycja gracza i panel bieżącego punktu. */
 @Composable
@@ -231,9 +231,9 @@ fun PlayScreen(vm: AppViewModel, snackbar: SnackbarHostState) {
                     Switch(checked = vm.demoMode, onCheckedChange = { vm.toggleDemoMode(it) })
                 } else if (location != null) {
                     Text(
-                        "GPS: dokładność ±${location.accuracyM.toInt()} m",
+                        if (location.accuracyM <= MAX_ACCURACY_M) "GPS ±${location.accuracyM.toInt()} m" else "Słaby GPS",
                         style = MaterialTheme.typography.labelSmall,
-                        color = if (location.accuracyM <= MAX_ACCURACY_M) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.tertiary,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 RouteBar(vm, location, Modifier.padding(top = 6.dp))
@@ -255,22 +255,17 @@ fun PlayScreen(vm: AppViewModel, snackbar: SnackbarHostState) {
             SmallFloatingActionButton(onClick = { listOpen = true }) { PgmIcon(PgmIcons.LIST, "Lista punktów") }
         }
 
-        // Emulator / gracz daleko od Płocka – podpowiedź z trybem demo
+        // Gracz daleko od Płocka – mała etykieta (na emulatorze z przyciskiem trybu demo)
         if (farAway && !session.isCompleted) {
             Surface(
-                modifier = Modifier.align(Alignment.CenterStart).padding(start = 12.dp, end = 72.dp),
-                shape = RoundedCornerShape(12.dp),
-                color = MaterialTheme.colorScheme.tertiaryContainer,
-                shadowElevation = 4.dp,
+                modifier = Modifier.align(Alignment.CenterStart).padding(start = 12.dp),
+                shape = RoundedCornerShape(50),
+                color = MaterialTheme.colorScheme.surface,
+                shadowElevation = 2.dp,
             ) {
-                Column(Modifier.padding(12.dp)) {
-                    Text(
-                        if (vm.demoAvailable) "Twoja pozycja jest daleko od Płocka (emulator domyślnie „stoi” w Kalifornii)."
-                        else "Twoja pozycja jest daleko od Płocka – punkty zaliczysz dopiero na miejscu.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onTertiaryContainer,
-                    )
-                    if (vm.demoAvailable) TextButton(onClick = { vm.toggleDemoMode(true) }) { Text("Włącz tryb demo") }
+                Row(Modifier.padding(horizontal = 10.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text("Poza Płockiem", style = MaterialTheme.typography.labelSmall)
+                    if (vm.demoAvailable) TextButton(onClick = { vm.toggleDemoMode(true) }) { Text("Demo") }
                 }
             }
         }
@@ -385,17 +380,15 @@ private fun WaypointPanel(
                 CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
                 Text(if (vm.demoMode) "Przytrzymaj palec na mapie, aby ustawić pozycję." else "Szukam sygnału GPS…")
             }
-            location.accuracyM > MAX_ACCURACY_M -> Text(
-                LOW_ACCURACY_MESSAGE + " (dokładność: ${location.accuracyM.toInt()} m)",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.tertiary,
-            )
             distance != null -> Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     "Do celu: ${distanceLabel(distance)} (podejdź na ${waypoint.arrivalRadiusM} m)",
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.weight(1f),
                 )
+                if (location.accuracyM > MAX_ACCURACY_M) {
+                    Text("Słaby GPS", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
                 val routed = vm.navRoute?.let { it.targetLat == waypoint.latitude && it.targetLng == waypoint.longitude } == true
                 if (!routed) {
                     TextButton(onClick = onNavigate, enabled = !vm.routeLoading) {
